@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+
+    // Authentication Activity Colors
+    <color name="my_city_title">#FFFFFF</color>
+    <color name="email_button">#8BC34A</color>
+    <color name="twitter_button">#327bdb</color>
+    <color name="facebook_button">#3b5998</color>
+    <color name="google_button">#db3236</color>
+</resources>

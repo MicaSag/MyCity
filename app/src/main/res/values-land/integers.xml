@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Authentication ACTIVITY -->
+    <item name="guidelineH01" type="integer" format="float">0.05</item>
+    <item name="guidelineH02" type="integer" format="float">0.55</item>
+    <item name="guidelineV01" type="integer" format="float">0.33</item>
+    <item name="guidelineV02" type="integer" format="float">0.66</item>
+    <item name="scaleX" type="integer" format="float">1.00</item>
+
+</resources>

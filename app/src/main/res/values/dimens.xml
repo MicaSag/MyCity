@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- COMMON SIZE -->
+    <!-- Text -->
+    <dimen name="size_text_title">21sp</dimen>
+    <dimen name="size_text">20sp</dimen>
+    <dimen name="size_prize">25sp</dimen>
+
+    <!-- CUSTOM SIZE -->
+    <!-- AUTHENTICATION ACTIVITY DIMENS -->
+    <dimen name="title_size">50sp</dimen>
+    <dimen name="button_text_size">50sp</dimen>
+    <dimen name="dialog_major_size">35%</dimen>
+    <dimen name="dialog_minor_size">55%</dimen>
+
+
+</resources>

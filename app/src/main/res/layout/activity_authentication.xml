@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_authentication_constraint_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".controllers.activities.AuthenticationActivity">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- BACKGROUND PICTURE -->
+        <ImageView
+            android:id="@+id/activity_authentication_background_picture"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleX="@integer/scaleX"
+            android:scaleY="1"
+            android:gravity="center"
+            android:background="@drawable/screen_town_hall"/>
+
+        <!-- MAIN CONTAINER -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/activity_authentication_guideline_horizontal_01"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="@integer/guidelineH01" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/activity_authentication_guideline_horizontal_02"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="@integer/guidelineH02" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/activity_authentication_guideline_vertical_01"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="@integer/guidelineV01" />
+
+            <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/activity_authentication_guideline_vertical_02"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="@integer/guidelineV02" />
+
+            <!-- TITLE MY CITY -->
+            <TextView
+                android:id="@+id/activity_authentication_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/activity_authentication_guideline_horizontal_01"
+                android:text="@string/app_name"
+                android:textSize="@dimen/title_size"
+                android:textStyle="bold"
+                android:gravity="center|top"
+                android:textColor="@color/my_city_title"/>
+
+            <!-- BUTTONS CONTAINER -->
+            <!-- BUTTON EMAIL LOGIN -->
+            <Button
+                android:id="@+id/activity_authentication_email_login_button"
+                style="@style/FirebaseUI.Button.AccountChooser.EmailButton"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/button_height_size"
+                app:layout_constraintStart_toStartOf="@+id/activity_authentication_guideline_vertical_01"
+                app:layout_constraintEnd_toStartOf="@+id/activity_authentication_guideline_vertical_02"
+                app:layout_constraintTop_toBottomOf="@+id/activity_authentication_guideline_horizontal_02"
+                android:background="@drawable/button_email_radius_primary_color"
+                android:text="@string/email_login"
+                android:textAlignment="center"
+                android:textStyle="normal"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/button_text_size" />
+
+            <!-- BUTTON TWITTER LOGIN -->
+            <Button
+                android:id="@+id/activity_authentication_twitter_login_button"
+                style="@style/FirebaseUI.Button.AccountChooser.TwitterButton"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/button_height_size"
+                app:layout_constraintEnd_toEndOf="@+id/activity_authentication_email_login_button"
+                app:layout_constraintStart_toStartOf="@+id/activity_authentication_email_login_button"
+                app:layout_constraintTop_toBottomOf="@+id/activity_authentication_email_login_button"
+                android:background="@drawable/button_twitter_radius_primary_color"
+                android:text="@string/twitter_login"
+                android:textAlignment="center"
+                android:textStyle="normal"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/button_text_size" />
+
+            <!-- BUTTON FACEBOOK LOGIN -->
+            <Button
+                android:id="@+id/activity_authentication_facebook_login_button"
+                style="@style/FirebaseUI.Button.AccountChooser.FacebookButton"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/button_height_size"
+                app:layout_constraintEnd_toEndOf="@+id/activity_authentication_twitter_login_button"
+                app:layout_constraintStart_toStartOf="@+id/activity_authentication_twitter_login_button"
+                app:layout_constraintTop_toBottomOf="@+id/activity_authentication_twitter_login_button"
+                android:background="@drawable/button_facebook_radius_primary_color"
+                android:text="@string/facebook_login"
+                android:textAlignment="center"
+                android:textStyle="normal"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/button_text_size" />
+
+            <!-- BUTTON GOOGLE LOGIN -->
+            <Button
+                android:id="@+id/activity_authentication_google_login_button"
+                style="@style/FirebaseUI.Button.AccountChooser.GoogleButton"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/button_height_size"
+                app:layout_constraintEnd_toEndOf="@+id/activity_authentication_facebook_login_button"
+                app:layout_constraintStart_toStartOf="@+id/activity_authentication_facebook_login_button"
+                app:layout_constraintTop_toBottomOf="@+id/activity_authentication_facebook_login_button"
+                android:background="@drawable/button_google_radius_primary_color"
+                android:text="@string/google_login"
+                android:textAlignment="center"
+                android:textStyle="normal"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/button_text_size" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+    </FrameLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
