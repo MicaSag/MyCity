@@ -2,7 +2,10 @@ package com.lastproject.mycity.room.models;
 
 import android.content.ContentValues;
 
-import com.google.type.LatLng;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+import com.google.android.gms.maps.model.LatLng;
 import com.lastproject.mycity.utils.Converters;
 
 import org.threeten.bp.LocalDateTime;
@@ -13,9 +16,9 @@ import java.util.ArrayList;
  * Created by Michaël SAGOT on 11/12/2019.
  */
 
-public class Event {
+@Entity public class Event {
 
-    private long id;
+    @PrimaryKey(autoGenerate = true) private long id;
     private String title;
     private String description;
     private ArrayList<String> photos;
@@ -28,8 +31,7 @@ public class Event {
     public Event() {
     }
 
-    public Event(long id, String title, String description, ArrayList<String> photos, LatLng location, LocalDateTime startDate, LocalDateTime endDate) {
-        this.id = id;
+    public Event(String title, String description, ArrayList<String> photos, LatLng location, LocalDateTime startDate, LocalDateTime endDate) {
         this.title = title;
         this.description = description;
         this.photos = photos;
@@ -44,8 +46,7 @@ public class Event {
         return id;
     }
 
-    public String getTitle() {
-        return title;
+    public String getTitle() { return title;
     }
 
     public String getDescription() {
@@ -124,7 +125,7 @@ public class Event {
         if (values.containsKey("photos")) event.setPhotos(Converters.fromString(values.getAsString("photos")));
         if (values.containsKey("location")) event.setLocation(Converters.fromStringToLatLng(values.getAsString("location")));
         if (values.containsKey("startDate")) event.setStartDate(Converters.fromTimestamp(values.getAsLong("startDate")));
-        if (values.containsKey("endDate")) event.setStartDate(Converters.fromTimestamp(values.getAsLong("endDate")));
+        if (values.containsKey("endDate")) event.setEndDate(Converters.fromTimestamp(values.getAsLong("endDate")));
 
         return event;
     }

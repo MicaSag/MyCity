@@ -4,9 +4,9 @@ import android.util.Log;
 
 import androidx.room.TypeConverter;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.google.type.LatLng;
 
 import org.threeten.bp.Instant;
 import org.threeten.bp.LocalDateTime;

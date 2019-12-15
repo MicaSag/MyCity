@@ -85,6 +85,15 @@ dependencies {
     // Add Support Library for execute network requests with the Streams
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
 
+    // Google Maps Utils
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+
+    // Google Maps Location
+    implementation 'com.google.android.gms:play-services-location:17.0.0'
+
+    // TESTING
+    androidTestImplementation 'androidx.arch.core:core-testing:2.1.0'
+
     // For use FireBase
     apply plugin: 'com.google.gms.google-services'
 }
