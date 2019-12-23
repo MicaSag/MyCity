@@ -1,7 +1,6 @@
 package com.lastproject.mycity.controllers.fragments;
 
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,24 +8,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.Toolbar;
 
 import androidx.fragment.app.DialogFragment;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.lifecycle.Observer;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.lastproject.mycity.R;
 import com.lastproject.mycity.controllers.activities.AuthenticationActivity;
-import com.lastproject.mycity.firestore.helpers.UserHelper;
-import com.lastproject.mycity.firestore.models.User;
+import com.lastproject.mycity.models.views.AuthenticationViewModel;
 import com.lastproject.mycity.utils.Toolbox;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
-import butterknife.OnItemSelected;
 
 /**
  * Created by Michaël SAGOT on 08/12/2019.
@@ -40,6 +35,10 @@ public class UserProfileChoiceDialogFragment extends DialogFragment {
     // For Design
     @BindView(R.id.fragment_user_profile_choice_tf_mayor_id) TextInputLayout mMayorID;
     @BindView(R.id.fragment_user_profile_choice_rb_mayor) RadioButton mRadioButtonMayor;
+
+
+    // Declare ViewModel
+    private AuthenticationViewModel mAuthenticationViewModel;
 
     public UserProfileChoiceDialogFragment() {
         // Required empty public constructor
@@ -63,16 +62,50 @@ public class UserProfileChoiceDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        // Initialize View
-        this.init();
-
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_user_profile_choice_dialog, container, false);
 
         // Get & serialise all views
         ButterKnife.bind(this, view);
 
+        // Configure ViewModel
+        configureViewModel();
+
+        // Initialize View
+        this.init();
+
         return view;
+    }
+    // ---------------------------------------------------------------------------------------------
+    //                                        VIEW MODEL
+    // ---------------------------------------------------------------------------------------------
+    // Configure ViewModel
+    private void configureViewModel() {
+
+        mAuthenticationViewModel = ((AuthenticationActivity) getActivity()).getAuthenticationViewModel();
+
+        mAuthenticationViewModel.getRegistrationStatus().observe(this, new Observer<AuthenticationViewModel.RegistrationStatus>() {
+            @Override
+            public void onChanged(AuthenticationViewModel.RegistrationStatus registrationStatus) {
+                if (registrationStatus == null)  {
+                    return;
+                }
+
+                switch (registrationStatus) {
+                    case REGISTRATION_OK:
+                        Log.d(TAG, "onChanged: REGISTRATION_OK");
+                        Toolbox.showSnackBar(((AuthenticationActivity)getActivity()).getConstraintLayout(),
+                                getString(R.string.registration_succeed));
+                        break;
+
+                    case REGISTRATION_ERROR:
+                        Log.d(TAG, "onChanged: REGISTRATION_ERROR");
+                        Toolbox.showSnackBar(((AuthenticationActivity)getActivity()).getConstraintLayout(),
+                                getString(R.string.registration_error));
+                        break;
+                }
+            }
+        });
     }
     // --------------------------------------------------------------------------------------------
     //                                    INITIALIZATION
@@ -97,27 +130,15 @@ public class UserProfileChoiceDialogFragment extends DialogFragment {
     public void onCreateClick(View view) {
         Log.d(TAG, "onCreateClick: ");
 
-        createUserInFireStore();
-
-        Toolbox.showSnackBar(((AuthenticationActivity)getActivity()).getConstraintLayout(),
-                    getString(R.string.connection_succeed));
-    }
-
-    private void createUserInFireStore() {
-        Log.d(TAG, "createUserInFireStore: ");
-
-        /*Activity act = ((AuthenticationActivity)getActivity());
-
-        String urlPicture = (.getPhotoUrl() != null)
-                ? this.getCurrentUser().getPhotoUrl().toString() : null;
-        String userName = this.getCurrentUser().getDisplayName();
-        String uid = this.getCurrentUser().getUid();
-        String email = this.getCurrentUser().getEmail();
-        String phoneNumber = this.getCurrentUser().getPhoneNumber();
-
-        // Not Mayor by default but Citizen
-        UserHelper.createUser(uid, userName, false, urlPicture, email, phoneNumber)
-                .addOnFailureListener(this.onFailureListener());*/
+        // Create Mayor in FireStore
+        if (mRadioButtonMayor.isChecked()){
+            // Assigns the role of mayor to the user
+            mAuthenticationViewModel.updateMayorUserByCodeID("123456",
+                    mAuthenticationViewModel.getCurrentUser().getUid());
+        } else {
+            // Create Citizen in FireStore
+            mAuthenticationViewModel.createUser(false);
+        }
     }
     // --------------------------------------------------------------------------------------------
     //                                        UI

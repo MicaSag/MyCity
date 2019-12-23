@@ -1,18 +1,11 @@
-package com.lastproject.mycity.firestore.models.views;
-
-import androidx.lifecycle.ViewModel;
+package com.lastproject.mycity.firebase.authentication.helpers;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class AuthenticationViewModel extends ViewModel {
+public class AuthenticationHelper {
 
-    // For debugging Mode
-    private static final String TAG = AuthenticationViewModel.class.getSimpleName();
-
-    public AuthenticationViewModel() {
-
-    }
+    // --- GET ---
 
     // Return Current User
     public FirebaseUser getCurrentUser(){
@@ -24,5 +17,3 @@ public class AuthenticationViewModel extends ViewModel {
         return (this.getCurrentUser() != null);
     }
 }
-
-

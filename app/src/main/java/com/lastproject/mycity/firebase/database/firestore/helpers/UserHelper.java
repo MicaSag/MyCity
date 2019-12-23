@@ -1,13 +1,11 @@
-package com.lastproject.mycity.firestore.helpers;
+package com.lastproject.mycity.firebase.database.firestore.helpers;
 
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.lastproject.mycity.firestore.models.User;
-
-import java.util.Map;
+import com.lastproject.mycity.firebase.database.firestore.models.User;
 
 public class UserHelper {
 
@@ -44,18 +42,6 @@ public class UserHelper {
 
     public static Task<Void> updateUserName(String userName, String uid) {
         return UserHelper.getUsersCollection().document(uid).update("userName", userName);
-    }
-
-    public static Task<Void> updateRestaurantIdentifier(String uid, String restaurantIdentifier) {
-        return UserHelper.getUsersCollection().document(uid).update("restaurantIdentifier", restaurantIdentifier);
-    }
-
-    public static Task<Void> updateRestaurantName(String uid, String restaurantName) {
-        return UserHelper.getUsersCollection().document(uid).update("restaurantName", restaurantName);
-    }
-
-    public static Task<Void> updateListRestaurantLiked(String uid, Map<String, String> listRestaurantLiked) {
-        return UserHelper.getUsersCollection().document(uid).update("listRestaurantLiked", listRestaurantLiked);
     }
 
     // --- DELETE ---

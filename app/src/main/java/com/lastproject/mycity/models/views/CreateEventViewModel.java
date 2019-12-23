@@ -1,4 +1,4 @@
-package com.lastproject.mycity.models;
+package com.lastproject.mycity.models.views;
 
 import androidx.lifecycle.ViewModel;
 

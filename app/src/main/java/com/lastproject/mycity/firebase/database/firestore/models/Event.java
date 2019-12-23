@@ -1,4 +1,4 @@
-package com.lastproject.mycity.firestore.models;
+package com.lastproject.mycity.firebase.database.firestore.models;
 
 import org.threeten.bp.LocalDateTime;
 
@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class Event {
 
     private long id;
-    private String name;
+    private String title;
     private String description;
     private ArrayList<String> photos;
     private ArrayList<String> address;
@@ -19,7 +19,7 @@ public class Event {
     public Event() { }
 
     public Event(String name, String description, ArrayList<String> photos, ArrayList<String> address, LocalDateTime startDate, LocalDateTime endDate) {
-        this.name = name;
+        this.title = name;
         this.description = description;
         this.photos = photos;
         this.address = address;
@@ -33,8 +33,8 @@ public class Event {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
     public String getDescription() {
@@ -67,8 +67,8 @@ public class Event {
         this.id = id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public void setDescription(String description) {

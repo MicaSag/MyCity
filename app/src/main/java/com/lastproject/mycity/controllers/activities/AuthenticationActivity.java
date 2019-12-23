@@ -7,6 +7,7 @@ import android.view.View;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
@@ -14,9 +15,11 @@ import com.firebase.ui.auth.IdpResponse;
 import com.lastproject.mycity.R;
 import com.lastproject.mycity.controllers.bases.BaseActivity;
 import com.lastproject.mycity.controllers.fragments.UserProfileChoiceDialogFragment;
-import com.lastproject.mycity.firestore.helpers.UserHelper;
-import com.lastproject.mycity.firestore.models.User;
-import com.lastproject.mycity.firestore.models.views.AuthenticationViewModel;
+import com.lastproject.mycity.firebase.database.firestore.helpers.UserHelper;
+import com.lastproject.mycity.firebase.database.firestore.models.User;
+import com.lastproject.mycity.injections.Injection;
+import com.lastproject.mycity.injections.ViewModelFactory;
+import com.lastproject.mycity.models.views.AuthenticationViewModel;
 import com.lastproject.mycity.network.retrofit.models.Insee;
 
 import java.util.Arrays;
@@ -36,7 +39,7 @@ public class AuthenticationActivity extends BaseActivity
     private static final String TAG = AuthenticationActivity.class.getSimpleName();
 
     // Declare AuthenticationViewModel
-    public AuthenticationViewModel mAuthenticationViewModel;
+    private AuthenticationViewModel mAuthenticationViewModel;
 
     // Adding @BindView in order to indicate to ButterKnife to get & serialise it
     @BindView(R.id.activity_authentication_constraint_layout) ConstraintLayout mConstraintLayout;
@@ -72,7 +75,21 @@ public class AuthenticationActivity extends BaseActivity
 
         super.onCreate(savedInstanceState);
 
-        AuthenticationViewModel mAuthenticationViewModel = new AuthenticationViewModel();
+        // Configure ViewModel
+        this.configureViewModel();
+    }
+    // ---------------------------------------------------------------------------------------------
+    //                                        VIEW MODEL
+    // ---------------------------------------------------------------------------------------------
+    // Configure ViewModel
+    private void configureViewModel(){
+        ViewModelFactory modelFactory = Injection.provideViewModelFactory(this);
+        mAuthenticationViewModel = ViewModelProviders.of(this, modelFactory)
+                .get(AuthenticationViewModel.class);
+    }
+
+    public AuthenticationViewModel getAuthenticationViewModel() {
+        return mAuthenticationViewModel;
     }
     // ---------------------------------------------------------------------------------------------
     //                                          ACTIONS
@@ -129,7 +146,7 @@ public class AuthenticationActivity extends BaseActivity
     // ----------------------------
     // Launch Google Sign-In
     private void startGoogleSignInActivity(){
-        Log.d(TAG, "startSignInActivity: ");
+        Log.d(TAG, "startGoogleSignInActivity: ");
 
         startActivityForResult(
                 AuthUI.getInstance()
@@ -167,7 +184,8 @@ public class AuthenticationActivity extends BaseActivity
     // Launch Twitter Sign-In
     private void startTwitterSignInActivity(){
         Log.d(TAG, "startSignInActivity: ");
-        /*startActivityForResult(
+
+        startActivityForResult(
                 AuthUI.getInstance()
                         .createSignInIntentBuilder()
                         .setTheme(R.style.LoginTheme)
@@ -176,7 +194,7 @@ public class AuthenticationActivity extends BaseActivity
                         .setIsSmartLockEnabled(false, true) // Email list possible
                         .setLogo(R.drawable.screen_town_hall)
                         .build(),
-                RC_SIGN_IN);*/
+                RC_SIGN_IN);
     }
 
     // -----------------------------
@@ -233,19 +251,20 @@ public class AuthenticationActivity extends BaseActivity
         Log.d(TAG, "checkUserRegistrationInFireStore: ");
 
         // Retrieves the information of the user according to his ID in FireStore Database
-        UserHelper.getUser(this.getCurrentUser().getUid()).addOnSuccessListener(documentSnapshot -> {
+        mAuthenticationViewModel.getUser(
+                mAuthenticationViewModel.getCurrentUser().getUid()).addOnSuccessListener(documentSnapshot -> {
             User user = documentSnapshot.toObject(User.class);
 
-            // Does the user already exist in the database FireStore ?
+            // Does the user already exist in the database Cloud FireStore ?
             if (user == null) {
                 // User not exist in Cloud FireStore (user is null)
-                Log.d(TAG, "createUserInFireStore: User not exist in Cloud FireStore (user is null)");
+                Log.d(TAG, "checkUserRegistrationInFireStore: User not exist in Cloud FireStore (user is null)");
 
                 // Ask the new user if he is a citizen or a mayor.
                 this.openUserTypeChoiceDialog();
             }
             else{
-                Log.d(TAG, "createUserInFireStore: User exist in Cloud Firestore");
+                Log.d(TAG, "checkUserRegistrationInFireStore: User exist in Cloud Firestore");
 
                 // Start presentation activity
                 startPresentationActivity();
