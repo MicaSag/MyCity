@@ -1,5 +1,10 @@
 apply plugin: 'com.android.application'
 
+Properties properties = new Properties()
+properties.load(project.rootProject.file("local.properties").newDataInputStream())
+def GOOGLE_STATIC_MAP_API_KEY = properties.getProperty("GoogleStaticMapApiKey")
+def GOOGLE_MAPS_API_KEY = properties.getProperty("GoogleMapsApiKey")
+
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -10,6 +15,15 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        // Google Static Map Api Key
+        // --> For source
+        buildConfigField("String", "google_static_map_api", '"' + GOOGLE_STATIC_MAP_API_KEY + '"')
+        // Google Maps Api Key
+        // --> For source
+        buildConfigField("String", "google_maps_api", '"' + GOOGLE_MAPS_API_KEY + '"')
+        // --> For Manifest
+        manifestPlaceholders = [googleMapsApiKey: properties.getProperty("GoogleMapsApiKey")]
     }
     buildTypes {
         release {

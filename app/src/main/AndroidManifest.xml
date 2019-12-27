@@ -1,18 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.lastproject.mycity">
 
+    <!-- Using by Network Provider Wifi or Data phone -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- Using By Network Provider and Gps Provider -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!-- Using for make internet requests (necessary for Glide) -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- Used to store files -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
+        android:name=".MainApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".controllers.activities.CreateEventActivity"></activity>
-        <activity android:name=".controllers.activities.PresentationActivity" />
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
+
+        <!-- GOOGLE Maps APi Key -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${googleMapsApiKey}" />
+
+        <!-- 0 => ENTRY Activity : AUTHENTICATION -->
         <activity
             android:name=".controllers.activities.AuthenticationActivity"
             android:theme="@style/AppThemeFirebase">
@@ -22,6 +36,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- 1 => MAYOR Activity -->
+        <activity android:name=".controllers.activities.MayorActivity"></activity>
+
+        <activity android:name=".controllers.activities.PresentationActivity" />
+
     </application>
 
 </manifest>

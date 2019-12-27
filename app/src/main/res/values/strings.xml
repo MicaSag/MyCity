@@ -10,7 +10,7 @@
     <!-- Common TEXT -->
     <string name="common_not_network">Not Network Connection</string>
 
-    <!-- Authentication ACTIVITY -->
+    <!-- AUTHENTICATION ACTIVITY -->
     <string name="main_activity_description">My City in my pocket</string>
     <string name="email_login">Sign in with Email</string>
     <string name="facebook_login">Sign in with Facebook</string>
@@ -23,21 +23,20 @@
     <string name="error_unknown_error">An unknown error occurred&#8230;</string>
     <string name="error_developer_error">Developer Error&#8230;</string>
     <string name="connection_succeed">Successful authentication !</string>
-    <string name="registration_succeed">Successful registration !</string>
-    <string name="registration_error">Error registration !</string>
-    <string name="mayor_id_wrong">Wrong Mayor ID !</string>
     <string name="button_login_text_logged">View Profile</string>
     <string name="button_login_text_not_logged">Connection</string>
+    <!-- Registration -->
+    <string name="registration_succeed">Successful registration !</string>
+    <string name="registration_mayor_update_user_failed">Mayor update User FAILED !</string>
+    <string name="registration_mayor_wrong_code_id">WRONG Mayor Code ID !</string>
+    <string name="registration_error">Error registration !</string>
+    <string name="mayor_id_wrong">Wrong Mayor ID !</string>
 
-    <!-- Device is not a tablet by default -->
-    <bool name="is_tablet">false</bool>
+    <!-- Used in NavigationDrawer -->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <!-- Display Modes -->
-    <bool name="is_portrait">false</bool>
-    <bool name="is_landscape">false</bool>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
+    <bool name="is_w1280">false</bool>
 
 </resources>

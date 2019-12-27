@@ -17,6 +17,8 @@ import com.lastproject.mycity.utils.Converters;
 
 import org.threeten.bp.LocalDateTime;
 
+import java.util.Arrays;
+
 @Database(entities = {Event.class}, version = 1, exportSchema = false)
 @TypeConverters({Converters.class})
 public abstract class MyCityDatabase extends RoomDatabase {
@@ -44,29 +46,21 @@ public abstract class MyCityDatabase extends RoomDatabase {
 
     // ---
 
-    private static Callback prepopulateDatabase(){
+    private static Callback prepopulateDatabase() {
         return new Callback() {
 
             @Override
             public void onCreate(@NonNull SupportSQLiteDatabase db) {
                 super.onCreate(db);
 
-                ContentValues contentValues = new ContentValues();
-                contentValues.put("title", "Broquante");
-                contentValues.put("description", "Jolie petite merde devenements pour se faire emmerder par des cons");
-                contentValues.put("photos", "[" +
-                        "\"/sdcard/Android/data/com.openclassrooms.realestatemanager/files/Pictures/house6/house_6_outside.jpg\"," +
-                        "\"/sdcard/Android/data/com.openclassrooms.realestatemanager/files/Pictures/house6/house_6_facade.jpg\"," +
-                        "\"/sdcard/Android/data/com.openclassrooms.realestatemanager/files/Pictures/house6/house_6_living_room.jpg\"," +
-                        "\"/sdcard/Android/data/com.openclassrooms.realestatemanager/files/Pictures/house6/house_6_dining_room.jpg\"," +
-                        "\"/sdcard/Android/data/com.openclassrooms.realestatemanager/files/Pictures/house6/house_6_kitchen.jpg\"," +
-                        "\"/sdcard/Android/data/com.openclassrooms.realestatemanager/files/Pictures/house6/house_6_bedroom.jpg\"," +
-                        "\"/sdcard/Android/data/com.openclassrooms.realestatemanager/files/Pictures/house6/house_6_bathroom.jpg\"," +
-                        "\"/sdcard/Android/data/com.openclassrooms.realestatemanager/files/Pictures/house6/house_6_swimming_pool.jpg\"]");
-                contentValues.put("startDate", Converters.dateToTimestamp(LocalDateTime.now().withDayOfMonth(2).withYear(2019).withMonth(4)));
-                contentValues.put("endDate", Converters.dateToTimestamp(LocalDateTime.now().withDayOfMonth(17).withYear(2019).withMonth(4)));
-
-                db.insert("Event", OnConflictStrategy.IGNORE, contentValues);
+                /// ADD EVENTS //
+                db.insert("Event", OnConflictStrategy.IGNORE, TestData.event1());
+                db.insert("Event", OnConflictStrategy.IGNORE, TestData.event2());
+                db.insert("Event", OnConflictStrategy.IGNORE, TestData.event3());
+                db.insert("Event", OnConflictStrategy.IGNORE, TestData.event4());
+                db.insert("Event", OnConflictStrategy.IGNORE, TestData.event5());
+                db.insert("Event", OnConflictStrategy.IGNORE, TestData.event6());
+                db.insert("Event", OnConflictStrategy.IGNORE, TestData.event7());
             }
         };
     }

@@ -1,0 +1,250 @@
+package com.lastproject.mycity.controllers.activities;
+
+import android.os.Bundle;
+import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.ViewModelProviders;
+
+import com.google.android.material.navigation.NavigationView;
+import com.lastproject.mycity.R;
+import com.lastproject.mycity.adapter.eventslist.EventsListAdapter;
+import com.lastproject.mycity.controllers.bases.BaseActivity;
+import com.lastproject.mycity.controllers.fragments.EventDetailsFragment;
+import com.lastproject.mycity.controllers.fragments.EventsListFragment;
+import com.lastproject.mycity.injections.Injection;
+import com.lastproject.mycity.injections.ViewModelFactory;
+import com.lastproject.mycity.models.views.MayorViewModel;
+import com.lastproject.mycity.repositories.CurrentEventDataRepository;
+import com.lastproject.mycity.room.models.Event;
+
+import java.util.List;
+
+import butterknife.BindView;
+
+
+/**
+ * Created by Michaël SAGOT on 24/12/2019.
+ */
+
+public class MayorActivity  extends BaseActivity
+                            implements  EventsListAdapter.OnEventClick,
+                                        NavigationView.OnNavigationItemSelectedListener {
+    // For Debug
+    private static final String TAG = MayorActivity.class.getSimpleName();
+
+    // Declare MayorViewModel
+    private MayorViewModel mMayorViewModel;
+
+    // Fragments Declarations
+    private EventDetailsFragment mEventDetailsFragment;
+    private EventsListFragment mEventsListFragment;
+
+    // Adding @BindView in order to indicate to ButterKnife to get & serialise it
+    public @BindView(R.id.toolbar) Toolbar mToolBar;
+    public @BindView(R.id.activity_mayor_root) ConstraintLayout mConstraintLayout;
+    public @BindView(R.id.activity_mayor_drawer_layout) DrawerLayout mDrawerLayout;
+    public @BindView(R.id.activity_mayor_nav_view) NavigationView mNavigationView;
+
+
+    // ---------------------------------------------------------------------------------------------
+    //                                DECLARATION BASE METHODS
+    // ---------------------------------------------------------------------------------------------
+    // BASE METHOD Implementation
+    // Get the activity layout
+    // CALLED BY BASE METHOD 'onCreate(...)'
+    @Override
+    protected int getActivityLayout() {
+        return R.layout.activity_mayor;
+    }
+
+    // BASE METHOD Implementation
+    // Get the coordinator layout
+    // CALLED BY BASE METHOD
+    @Override
+    public View getConstraintLayout() {
+        return mConstraintLayout;
+    }
+
+    // ---------------------------------------------------------------------------------------------
+    //                                        ENTRY POINT
+    // ---------------------------------------------------------------------------------------------
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+
+        // Configure the Navigation Drawer
+        this.configureDrawerLayout();
+        this.configureNavigationView();
+        this.configureNavigationMenuItem();
+
+        // Configure ViewModel
+        this.configureViewModel();
+
+        // Configuring Events List Fragment (left position on Tablet)
+        this.configureAndShowEventsListFragment();
+
+        // Configuring Event Details Fragment (right position on Tablet)
+        this.configureAndShowEventDetailsFragment();
+    }
+    // ---------------------------------------------------------------------------------------------
+    //                                        VIEW MODEL
+    // ---------------------------------------------------------------------------------------------
+    // Configure ViewModel
+    private void configureViewModel(){
+        ViewModelFactory modelFactory = Injection.provideViewModelFactory(this);
+        mMayorViewModel = ViewModelProviders.of(this, modelFactory)
+                .get(MayorViewModel.class);
+    }
+
+    public MayorViewModel getMayorViewModel() {return mMayorViewModel;}
+
+    // ---------------------------------------------------------------------------------------------
+    //                                        FRAGMENTS
+    // ---------------------------------------------------------------------------------------------
+    private void configureAndShowEventsListFragment() {
+        // Get FragmentManager (Support) and Try to find existing instance of fragment in FrameLayout container
+        mEventsListFragment = (EventsListFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.fragment_events_list);
+
+        if (mEventsListFragment == null) {
+            // Create new events list fragment
+            mEventsListFragment = EventsListFragment.newInstance();
+            // Add it to FrameLayout container
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.fragment_events_list, mEventsListFragment)
+                    .commit();
+        }
+    }
+    private void configureAndShowEventDetailsFragment() {
+        // Get FragmentManager (Support) and Try to find existing instance of fragment in FrameLayout container
+        mEventDetailsFragment = (EventDetailsFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.fragment_event_details);
+
+        // We only add DetailsFragment for wight 1280 (If found frame_layout_detail)
+        if (mEventDetailsFragment == null && getResources().getBoolean(R.bool.is_w1280)) {
+            // Create new main fragment
+            mEventDetailsFragment = EventDetailsFragment.newInstance();
+            // Add it to FrameLayout container
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.fragment_event_details, mEventDetailsFragment)
+                    .commit();
+        }
+    }
+    // ---------------------------------------------------------------------------------------------
+    //                                     NAVIGATION DRAWER
+    // ---------------------------------------------------------------------------------------------
+    // >> CONFIGURATION <-------
+    // Configure Drawer Layout and connects him the ToolBar and the NavigationView
+    private void configureDrawerLayout() {
+        Log.d(TAG, "configureDrawerLayout: ");
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolBar,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mDrawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+    }
+
+    // Configure NavigationView
+    private void configureNavigationView() {
+        Log.d(TAG, "configureNavigationView: ");
+        // Subscribes to listen the navigationView
+        mNavigationView.setNavigationItemSelectedListener(this);
+        // Mark as selected the menu item
+        this.mNavigationView.getMenu().getItem(0).setChecked(true);
+    }
+
+    // Configure NavigationView
+    private void configureNavigationMenuItem() {
+        //Disable tint icons
+        this.mNavigationView.setItemIconTintList(null);
+    }
+    // ---------------------------------------------------------------------------------------------
+    //                                          ACTIONS
+    // ---------------------------------------------------------------------------------------------
+    @Override
+    public void onEventClick(Event event) {
+        Log.d(TAG, "onEventClick: ");
+        CurrentEventDataRepository.getInstance().setCurrentEventId(event.getEventId());
+
+        // If wight < 1280 then call DetailsEstateActivity
+        /*Log.d(TAG, "onEstateClick: is_w1280 = "+getResources().getBoolean(R.bool.is_w1280));
+        if (!getResources().getBoolean(R.bool.is_w1280))
+            Utils.startActivity(this, DetailsEstateActivity.class);*/
+    }
+
+    @Override
+    public void onBackPressed() {
+        Log.d(TAG, "onBackPressed: ");
+        // Close the menu so open and if the touch return is pushed
+        if (this.mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            this.mDrawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        Log.d(TAG, "onNavigationItemSelected: ");
+
+        // Handle Navigation Item Click
+        int id = item.getItemId();
+/*
+        switch (id) {
+            case R.id.activity_real_estate_manager_map:
+                Utils.startActivity(this,MapActivity.class);
+                break;
+            case R.id.activity_real_estate_manager_search:
+                // Create a intent for call Activity
+                Intent searchIntent = new Intent(this, SearchEstateActivity.class);
+                // Go to SearchEstateActivity
+                startActivityForResult(searchIntent, SEARCH_ACTIVITY_REQUEST_CODE);
+                break;
+            default:
+                break;
+        }*/
+        // Close menu drawer
+        this.mDrawerLayout.closeDrawer(GravityCompat.START);
+
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //Handle actions on menu items
+        /*switch (item.getItemId()) {
+            case R.id.menu_activity_real_estate_manager_search:
+                // Create a intent for call Activity
+                Intent searchIntent = new Intent(this, SearchEstateActivity.class);
+
+                // Go to SearchEstateActivity
+                startActivityForResult(searchIntent, SEARCH_ACTIVITY_REQUEST_CODE);
+                return true;
+            case R.id.menu_activity_real_estate_manager_edit:
+                // Create a intent for call Activity
+                Intent updateIntent = new Intent(this, UpdateEstateActivity.class);
+
+                // Go to CreateEstateActivity
+                startActivityForResult(updateIntent, UPDATE_ACTIVITY_REQUEST_CODE);
+                return true;
+            case R.id.menu_activity_real_estate_manager_add:
+                // Create a intent for call Activity
+                Intent createIntent = new Intent(this, CreateEstateActivity.class);
+
+                // Go to CreateEstateActivity
+                startActivityForResult(createIntent, CREATE_ACTIVITY_REQUEST_CODE);
+            default:
+                return super.onOptionsItemSelected(item);
+        }*/
+        return true;
+    }
+    // ---------------------------------------------------------------------------------------------
+    //                                          UI
+    // ---------------------------------------------------------------------------------------------
+}

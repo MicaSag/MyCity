@@ -4,6 +4,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 import com.lastproject.mycity.firebase.database.firestore.helpers.UserHelper;
+import com.lastproject.mycity.firebase.database.firestore.models.User;
 
 public class UserDataFireStoreRepository {
 
@@ -26,9 +27,9 @@ public class UserDataFireStoreRepository {
 
     // --- CREATE ---
 
-    public Task<Void> createUser(String uid, String userName, Boolean isMayor, String urlPicture, String email, String phoneNumber) {
+    public Task<Void> createUser(User user) {
 
-        return UserHelper.createUser(uid, userName, isMayor, urlPicture, email, phoneNumber);
+        return UserHelper.createUser(user);
     }
 
     // --- DELETE ---

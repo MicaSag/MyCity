@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/Widget.MaterialComponents.CardView"
+    android:id="@+id/view_older_event_mcv"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="1dp"
+    app:cardCornerRadius="0dp"
+    >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/view_older_event_cl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/view_older_event_guideline_horizontal_30"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.3" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/view_older_event_guideline_vertical_60"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.6" />
+
+        <!-- (1) <<<<<<<<  FIRST SECTION    >>>>>>>>  -->
+        <!-- (1)(1) FIRST COLUMN -->
+        <!-- (1)(1) TITLE -->
+        <TextView
+            android:id="@+id/view_older_event_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center|top"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="TITRE DE L'EVENEMENT"
+            android:textSize="20sp"
+            android:textStyle="normal"
+            android:textColor="@color/colorAccent"
+            />
+
+        <!-- (2) <<<<<<<<  SECOND SECTION    >>>>>>>>  -->
+        <!-- (2)(1) FIRST COLUMN -->
+        <!-- (2)(1)(1) START DATE -->
+        <TextView
+            android:id="@+id/view_older_event_start_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/view_older_event_guideline_horizontal_30"
+            app:layout_constraintStart_toStartOf="parent"
+            android:text="Start Date"
+            android:textSize="20sp"
+            android:textStyle="normal"
+            android:textColor="@color/colorAccent"
+            />
+        <!-- (2)(1)(2) END DATE -->
+        <TextView
+            android:id="@+id/view_older_event_end_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/view_older_event_start_date"
+            app:layout_constraintStart_toStartOf="parent"
+            android:text="End Date"
+            android:textSize="20sp"
+            android:textStyle="normal"
+            android:textColor="@color/colorAccent"
+            />
+        <FrameLayout
+            android:id="@+id/view_older_event_fl_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/view_older_event_guideline_horizontal_30"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/view_older_event_guideline_vertical_60">
+            <!-- Image of the Estate -->
+            <ImageView
+                android:id="@+id/view_older_event_image"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="start"
+                android:scaleType="fitXY" />
+        </FrameLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

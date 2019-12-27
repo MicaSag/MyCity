@@ -1,5 +1,6 @@
 package com.lastproject.mycity.room.dao;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
@@ -20,12 +21,12 @@ public interface EventDao {
     @Query("SELECT * FROM Event")
     LiveData<List<Event>> getEvents();
 
-    @Query("SELECT * FROM Event where id = :id")
-    LiveData<Event> getEvent(long id);
+    @Query("SELECT * FROM Event where eventId = :eventId")
+    LiveData<Event> getEvent(@NonNull String eventId);
 
     @Update
     int updateEvent(Event event);
 
-    @Query("DELETE FROM Event WHERE id = :id")
-    int deleteEvent(long id);
+    @Query("DELETE FROM Event WHERE eventId = :eventId")
+    int deleteEvent(@NonNull String eventId);
 }

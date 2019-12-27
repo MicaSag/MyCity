@@ -5,7 +5,10 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.lastproject.mycity.models.views.AuthenticationViewModel;
+import com.lastproject.mycity.models.views.CitizenViewModel;
 import com.lastproject.mycity.models.views.CreateEventViewModel;
+import com.lastproject.mycity.models.views.DetailsEventViewModel;
+import com.lastproject.mycity.models.views.MayorViewModel;
 import com.lastproject.mycity.repositories.EventDataRoomRepository;
 import com.lastproject.mycity.repositories.MayorDataFireStoreRepository;
 import com.lastproject.mycity.repositories.UserDataAuthenticationRepository;
@@ -42,6 +45,27 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
             return (T) new AuthenticationViewModel( this.userDataAuthenticationSource,
                                                     this.userDataFireStoreSource,
                                                     this.mayorDataFireStoreSource,
+                                                    this.executor);
+        }
+        if (modelClass.isAssignableFrom(MayorViewModel.class)) {
+            return (T) new MayorViewModel(  this.userDataAuthenticationSource,
+                                            this.userDataFireStoreSource,
+                                            this.mayorDataFireStoreSource,
+                                            this.eventDataRoomSource,
+                                            this.executor);
+        }
+        if (modelClass.isAssignableFrom(CitizenViewModel.class)) {
+            return (T) new CitizenViewModel(this.userDataAuthenticationSource,
+                                            this.userDataFireStoreSource,
+                                            this.mayorDataFireStoreSource,
+                                            this.eventDataRoomSource,
+                                            this.executor);
+        }
+        if (modelClass.isAssignableFrom(DetailsEventViewModel.class)) {
+            return (T) new DetailsEventViewModel(   this.userDataAuthenticationSource,
+                                                    this.userDataFireStoreSource,
+                                                    this.mayorDataFireStoreSource,
+                                                    this.eventDataRoomSource,
                                                     this.executor);
         }
         if (modelClass.isAssignableFrom(CreateEventViewModel.class)) {

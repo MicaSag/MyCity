@@ -15,7 +15,6 @@ import com.firebase.ui.auth.IdpResponse;
 import com.lastproject.mycity.R;
 import com.lastproject.mycity.controllers.bases.BaseActivity;
 import com.lastproject.mycity.controllers.fragments.UserProfileChoiceDialogFragment;
-import com.lastproject.mycity.firebase.database.firestore.helpers.UserHelper;
 import com.lastproject.mycity.firebase.database.firestore.models.User;
 import com.lastproject.mycity.injections.Injection;
 import com.lastproject.mycity.injections.ViewModelFactory;
@@ -251,7 +250,7 @@ public class AuthenticationActivity extends BaseActivity
         Log.d(TAG, "checkUserRegistrationInFireStore: ");
 
         // Retrieves the information of the user according to his ID in FireStore Database
-        mAuthenticationViewModel.getUser(
+        mAuthenticationViewModel.getUserInFireStore(
                 mAuthenticationViewModel.getCurrentUser().getUid()).addOnSuccessListener(documentSnapshot -> {
             User user = documentSnapshot.toObject(User.class);
 
@@ -264,20 +263,30 @@ public class AuthenticationActivity extends BaseActivity
                 this.openUserTypeChoiceDialog();
             }
             else{
-                Log.d(TAG, "checkUserRegistrationInFireStore: User exist in Cloud Firestore");
+                Log.d(TAG, "checkUserRegistrationInFireStore: User exist in Cloud FireStore");
 
-                // Start presentation activity
-                startPresentationActivity();
+                // Save the User in Model
+                mAuthenticationViewModel.setUserInModel(user);
+
+                // Start Mayor Activity or Citizen Activity
+                startInterface();
             }
         });
     }
     // ---------------------------------------------------------------------------------------------
     //                                      CALL ACTIVITY
     // ---------------------------------------------------------------------------------------------
-    private void startPresentationActivity(){
-        Log.d(TAG, "startPresentationActivity: ");
+    public void startInterface(){
+        Log.d(TAG, "startInterface: ");
 
-        Intent intent = new Intent(this, PresentationActivity.class);
+        Intent intent;
+        if (mAuthenticationViewModel.getUserInModel().getMayor()) {
+            // Call Mayor Activity
+            intent = new Intent(this, MayorActivity.class);
+        }else{
+            // Call Citizen Activity
+            intent = new Intent(this, PresentationActivity.class);
+        }
         startActivity(intent);
     }
 

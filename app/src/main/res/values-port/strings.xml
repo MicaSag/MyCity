@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <!-- Display Mode -->
-    <bool name="is_portrait">true</bool>
-
-</resources>

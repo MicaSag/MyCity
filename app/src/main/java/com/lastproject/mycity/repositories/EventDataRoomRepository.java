@@ -17,14 +17,14 @@ public class EventDataRoomRepository {
 
     public LiveData<List<Event>> getEvents(){ return this.eventDao.getEvents(); }
 
-    public LiveData<Event> getEvent(long eventId){ return this.eventDao.getEvent(eventId); }
+    public LiveData<Event> getEvent(String eventId){ return this.eventDao.getEvent(eventId); }
 
     // --- CREATE ---
 
     public void createEvent(Event event){ eventDao.createEvent(event); }
 
     // --- DELETE ---
-    public void deleteEvent(long eventId){ eventDao.deleteEvent(eventId); }
+    public void deleteEvent(String eventId){ eventDao.deleteEvent(eventId); }
 
     // --- UPDATE ---
     public void updateItem(Event event){ eventDao.updateEvent(event); }

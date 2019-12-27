@@ -15,6 +15,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.lastproject.mycity.firebase.database.firestore.models.User;
 import com.lastproject.mycity.repositories.MayorDataFireStoreRepository;
 import com.lastproject.mycity.repositories.UserDataAuthenticationRepository;
 import com.lastproject.mycity.repositories.UserDataFireStoreRepository;
@@ -33,12 +34,17 @@ public class AuthenticationViewModel extends ViewModel {
     private final Executor executor;
 
     // Data
+    // - Registration Status
     private MutableLiveData<RegistrationStatus> registrationStatus = new MutableLiveData<>();
-
     public enum RegistrationStatus {
         REGISTRATION_OK,
-        REGISTRATION_ERROR
+        REGISTRATION_ERROR,
+        REGISTRATION_MAYOR_UPDATE_USER_FAILED,
+        REGISTRATION_MAYOR_WRONG_CODE_ID
     }
+    // - Current User in the model
+    private User userInModel;
+
 
     public AuthenticationViewModel(UserDataAuthenticationRepository userDataAuthenticationSource,
                                    UserDataFireStoreRepository userDataFireStoreSource,
@@ -48,6 +54,16 @@ public class AuthenticationViewModel extends ViewModel {
         this.userDataFireStoreSource = userDataFireStoreSource;
         this.mayorDataFireStoreSource = mayorDataFireStoreSource;
         this.executor = executor;
+    }
+
+    // --- USER SAVED IN MODEL ---
+    //
+    public User getUserInModel() {
+        return userInModel;
+    }
+
+    public void setUserInModel(User userInModel) {
+        this.userInModel = userInModel;
     }
 
     // --- REGISTRATION STATUS ---
@@ -71,7 +87,7 @@ public class AuthenticationViewModel extends ViewModel {
     // --- FIRE BASE : FIRE STORE ---
     //
     // Get a user in Fire Store
-    public Task<DocumentSnapshot> getUser(String uid){
+    public Task<DocumentSnapshot> getUserInFireStore(String uid){
         return this.userDataFireStoreSource.getUser(uid);
     }
 
@@ -79,19 +95,18 @@ public class AuthenticationViewModel extends ViewModel {
     public void createUser(boolean isMayor) {
         Log.d(TAG, "createUser: ");
 
-        String urlPicture = (this.getCurrentUser().getPhotoUrl() != null)
-            ?this.getCurrentUser().getPhotoUrl().toString() :null;
-        String userName = this.getCurrentUser().getDisplayName();
-        String userID = this.getCurrentUser().getUid();
-        String email = this.getCurrentUser().getEmail();
-        String phoneNumber = this.getCurrentUser().getPhoneNumber();
+        // Create new User
+        User user = new User(   this.getCurrentUser().getUid(),
+                                this.getCurrentUser().getDisplayName(),
+                                isMayor,
+                                this.getCurrentUser().getPhotoUrl().toString(),
+                                this.getCurrentUser().getEmail(),
+                                this.getCurrentUser().getPhoneNumber());
 
-        this.userDataFireStoreSource.createUser(userID,
-                                                userName,
-                                                isMayor,
-                                                urlPicture,
-                                                email,
-                                                phoneNumber);
+        // -- Save It In Fire Store
+        this.userDataFireStoreSource.createUser(user);
+        // -- Save It In Model
+        this.setUserInModel(user);
 
         registrationStatus.setValue(RegistrationStatus.REGISTRATION_OK);
     }
@@ -111,6 +126,7 @@ public class AuthenticationViewModel extends ViewModel {
         return mayorDataFireStoreSource.updateMayorUserID(mayorID,userID);
     }
 
+    // Update Mayor User by CodeID
     public void updateMayorUserByCodeID(String codeID, String userID){
         Log.d(TAG, "updateMayorUserByCodeID: ");
 
@@ -131,7 +147,7 @@ public class AuthenticationViewModel extends ViewModel {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
                                             Log.d(TAG, "Error getting documents: " + e.getMessage());
-                                            registrationStatus.setValue(RegistrationStatus.REGISTRATION_ERROR);
+                                            registrationStatus.setValue(RegistrationStatus.REGISTRATION_MAYOR_UPDATE_USER_FAILED);
                                         }
                                     })      .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
@@ -146,7 +162,7 @@ public class AuthenticationViewModel extends ViewModel {
                             }
                             else {
                                 Log.d(TAG, "task.getResult().size() == 0");
-                                registrationStatus.setValue(RegistrationStatus.REGISTRATION_ERROR);
+                                registrationStatus.setValue(RegistrationStatus.REGISTRATION_MAYOR_WRONG_CODE_ID);
                             }
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());

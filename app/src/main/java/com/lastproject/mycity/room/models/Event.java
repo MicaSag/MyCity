@@ -2,6 +2,7 @@ package com.lastproject.mycity.room.models;
 
 import android.content.ContentValues;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -18,10 +19,11 @@ import java.util.ArrayList;
 
 @Entity public class Event {
 
-    @PrimaryKey(autoGenerate = true) private long id;
+    @PrimaryKey @NonNull private String eventId;
     private String title;
     private String description;
     private ArrayList<String> photos;
+    private ArrayList<String> address;
     private LatLng location;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
@@ -31,10 +33,13 @@ import java.util.ArrayList;
     public Event() {
     }
 
-    public Event(String title, String description, ArrayList<String> photos, LatLng location, LocalDateTime startDate, LocalDateTime endDate) {
+    public Event(String eventId, String title, String description, ArrayList<String> photos, ArrayList<String> address,
+                 LatLng location, LocalDateTime startDate, LocalDateTime endDate) {
+        this.eventId = eventId;
         this.title = title;
         this.description = description;
         this.photos = photos;
+        this.address = address;
         this.location = location;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -42,8 +47,9 @@ import java.util.ArrayList;
 
     // --- GETTER ---
 
-    public long getId() {
-        return id;
+
+    public String getEventId() {
+        return eventId;
     }
 
     public String getTitle() { return title;
@@ -55,6 +61,10 @@ import java.util.ArrayList;
 
     public ArrayList<String> getPhotos() {
         return photos;
+    }
+
+    public ArrayList<String> getAddress() {
+        return address;
     }
 
     public LatLng getLocation() {
@@ -71,8 +81,9 @@ import java.util.ArrayList;
 
         // --- SETTER ---
 
-    public void setId(long id) {
-        this.id = id;
+
+    public void setEventId(String eventId) {
+        this.eventId = eventId;
     }
 
     public void setTitle(String title) {
@@ -85,6 +96,10 @@ import java.util.ArrayList;
 
     public void setPhotos(ArrayList<String> photos) {
         this.photos = photos;
+    }
+
+    public void setAddress(ArrayList<String> address) {
+        this.address = address;
     }
 
     public void setLocation(LatLng location) {
@@ -104,10 +119,11 @@ import java.util.ArrayList;
     @Override
     public String toString() {
         return "Event{" +
-                "id=" + id +
+                "eventId='" + eventId + '\'' +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", photos=" + photos +
+                ", address=" + address +
                 ", location=" + location +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
@@ -119,10 +135,11 @@ import java.util.ArrayList;
     public static Event fromContentValues(ContentValues values) {
 
         final Event event = new Event();
-        if (values.containsKey("id")) event.setId(values.getAsLong("id"));
+        if (values.containsKey("eventId")) event.setEventId(values.getAsString("eventId"));
         if (values.containsKey("title")) event.setTitle(values.getAsString("title"));
         if (values.containsKey("description")) event.setDescription(values.getAsString("description"));
         if (values.containsKey("photos")) event.setPhotos(Converters.fromString(values.getAsString("photos")));
+        if (values.containsKey("address")) event.setAddress(Converters.fromString(values.getAsString("address")));
         if (values.containsKey("location")) event.setLocation(Converters.fromStringToLatLng(values.getAsString("location")));
         if (values.containsKey("startDate")) event.setStartDate(Converters.fromTimestamp(values.getAsLong("startDate")));
         if (values.containsKey("endDate")) event.setEndDate(Converters.fromTimestamp(values.getAsLong("endDate")));
