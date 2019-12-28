@@ -30,7 +30,7 @@ public class MayorHelper {
     // --- CREATE ---
 
     public static Task<Void> createMayor(String userID, String inseeID, String codeID) {
-        Mayor mayorToCreate = new Mayor(userID, inseeID, codeID);
+        Mayor mayorToCreate = new Mayor(null,userID, inseeID, codeID);
         return MayorHelper.getMayorsCollection()
                 .document()
                 .set(mayorToCreate);

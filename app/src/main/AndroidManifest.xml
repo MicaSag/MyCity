@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.lastproject.mycity">
-
     <!-- Using by Network Provider Wifi or Data phone -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- Using By Network Provider and Gps Provider -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!-- Using for make internet requests (necessary for Glide) -->
@@ -38,10 +37,28 @@
         </activity>
 
         <!-- 1 => MAYOR Activity -->
-        <activity android:name=".controllers.activities.MayorActivity"></activity>
+        <activity   android:name=".controllers.activities.MayorActivity"
+                    android:label="MAYOR Interface"/>
 
-        <activity android:name=".controllers.activities.PresentationActivity" />
+        <!-- 2 => CITIZEN Activity -->
+        <activity   android:name=".controllers.activities.CitizenActivity"
+                    android:label="CITIZEN Interface"/>
 
+        <!-- 3 => EVENTS Activity -->
+        <activity   android:name=".controllers.activities.EventsActivity"
+                    android:label="EVENT Interface"/>
+        <!-- 3.1 => A child of the Events Activity -->
+        <!-- DETAILS EVENT Activity -->
+        <activity
+            android:name=".controllers.activities.DetailsEventActivity"
+            android:label="Details Event"
+            android:parentActivityName=".controllers.activities.EventsActivity">
+
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".controllers.activities.EventsActivity" />
+        </activity>
     </application>
 
 </manifest>

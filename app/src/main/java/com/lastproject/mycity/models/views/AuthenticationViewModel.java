@@ -3,7 +3,6 @@ package com.lastproject.mycity.models.views;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -15,6 +14,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.lastproject.mycity.firebase.database.firestore.models.Mayor;
 import com.lastproject.mycity.firebase.database.firestore.models.User;
 import com.lastproject.mycity.repositories.MayorDataFireStoreRepository;
 import com.lastproject.mycity.repositories.UserDataAuthenticationRepository;
@@ -44,6 +44,8 @@ public class AuthenticationViewModel extends ViewModel {
     }
     // - Current User in the model
     private User userInModel;
+    // - Current Mayor in the model
+    private Mayor mayorInModel;
 
 
     public AuthenticationViewModel(UserDataAuthenticationRepository userDataAuthenticationSource,
@@ -54,9 +56,11 @@ public class AuthenticationViewModel extends ViewModel {
         this.userDataFireStoreSource = userDataFireStoreSource;
         this.mayorDataFireStoreSource = mayorDataFireStoreSource;
         this.executor = executor;
+
+
     }
 
-    // --- USER SAVED IN MODEL ---
+    // --- USER IN MODEL ---
     //
     public User getUserInModel() {
         return userInModel;
@@ -66,9 +70,19 @@ public class AuthenticationViewModel extends ViewModel {
         this.userInModel = userInModel;
     }
 
+    // --- MAYOR IN MODEL ---
+    //
+    public Mayor getMayorInModel() {
+        return mayorInModel;
+    }
+
+    public void setMayorInModel(Mayor mayorInModel) {
+        this.mayorInModel = mayorInModel;
+    }
+
     // --- REGISTRATION STATUS ---
     //
-    public LiveData<RegistrationStatus> getRegistrationStatus() {
+    public MutableLiveData<RegistrationStatus> getRegistrationStatus() {
         return registrationStatus;
     }
 
@@ -96,10 +110,14 @@ public class AuthenticationViewModel extends ViewModel {
         Log.d(TAG, "createUser: ");
 
         // Create new User
+        String uri;
+        if (this.getCurrentUser().getPhotoUrl() != null)
+            uri =  this.getCurrentUser().getPhotoUrl().toString();
+        else uri = "";
         User user = new User(   this.getCurrentUser().getUid(),
                                 this.getCurrentUser().getDisplayName(),
                                 isMayor,
-                                this.getCurrentUser().getPhotoUrl().toString(),
+                                uri,
                                 this.getCurrentUser().getEmail(),
                                 this.getCurrentUser().getPhoneNumber());
 
@@ -107,8 +125,6 @@ public class AuthenticationViewModel extends ViewModel {
         this.userDataFireStoreSource.createUser(user);
         // -- Save It In Model
         this.setUserInModel(user);
-
-        registrationStatus.setValue(RegistrationStatus.REGISTRATION_OK);
     }
 
     // Get a Mayor in Fire Store (by CodeID)
@@ -117,6 +133,14 @@ public class AuthenticationViewModel extends ViewModel {
 
         // retrieve  query results
         return mayorDataFireStoreSource.getMayorByCodeID(codeID).get();
+    }
+
+    // Get a Mayor in Fire Store (by UserID)
+    public Task<QuerySnapshot> getMayorByUserID(String userID){
+        Log.d(TAG, "getMayorByUserID: ");
+
+        // retrieve  query results
+        return mayorDataFireStoreSource.getMayorByUserID(userID).get();
     }
 
     // Update userID of a Mayor
@@ -141,23 +165,41 @@ public class AuthenticationViewModel extends ViewModel {
                                 for (QueryDocumentSnapshot document : task.getResult()) {
                                     Log.d(TAG, document.getId() + " => " + document.getData());
 
-                                    // UPDATE Mayor
-                                    updateMayorUserID(document.getId(),userID)
-                                            .addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            Log.d(TAG, "Error getting documents: " + e.getMessage());
-                                            registrationStatus.setValue(RegistrationStatus.REGISTRATION_MAYOR_UPDATE_USER_FAILED);
-                                        }
-                                    })      .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void aVoid) {
-                                            Log.d(TAG, "onSuccess getting documents: ");
+                                    // If the code corresponds to the mayor document being read,
+                                    // then we update userID of the Mayor document
+                                    // As a precaution, only the first document found will be updated, 
+                                    // the others will be ignored (break instruction)
+                                    Log.d(TAG, "onComplete: document.get("+codeID+") = "+document.get("codeID"));
+                                    if (document.get("codeID").toString().equals(codeID)) {
+                                        Log.d(TAG, "onComplete: UPDATE MAYOR with UserID");
+                                        // UPDATE Mayor
+                                        updateMayorUserID(document.getId(), userID)
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        Log.d(TAG, "Error getting documents: " + e.getMessage());
+                                                        registrationStatus.setValue(RegistrationStatus.REGISTRATION_MAYOR_UPDATE_USER_FAILED);
+                                                    }
+                                                }).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Log.d(TAG, "onSuccess getting documents: ");
 
-                                            // create the user in fireStore as mayor
-                                            createUser(true);
-                                        }
-                                    });
+                                                // save Mayor in the Model
+                                                Mayor mayor = new Mayor(document.getId(),
+                                                                        document.get("userID").toString(),
+                                                                        document.get("inseeID").toString(),
+                                                                        document.get("codeID").toString());
+                                                setMayorInModel(mayor);
+
+                                                // create the user in fireStore as mayor
+                                                createUser(true);
+
+                                                registrationStatus.setValue(RegistrationStatus.REGISTRATION_OK);
+                                            }
+                                        });
+                                        break;
+                                    }
                                 }
                             }
                             else {

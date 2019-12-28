@@ -14,8 +14,7 @@
         android:id="@+id/activity_mayor_root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context=".controllers.activities.RealEstateManagerActivity">
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -34,20 +33,12 @@
                 android:baselineAligned="false"
                 android:orientation="horizontal">
 
-                <!--LIST FRAGMENT-->
+                <!-- FRAGMENT -->
                 <FrameLayout
-                    android:id="@+id/fragment_events_list"
+                    android:id="@+id/activity_mayor_fragment"
                     android:layout_width="0px"
                     android:layout_height="match_parent"
                     android:layout_weight="30" />
-
-                <!-- DETAIL FRAGMENT -->
-                <FrameLayout
-                    android:id="@+id/fragment_event_details"
-                    android:layout_width="0px"
-                    android:layout_height="match_parent"
-                    android:layout_weight="70"
-                    />
 
             </LinearLayout>
 
@@ -57,12 +48,12 @@
 
     <!-- NavigationView -->
     <com.google.android.material.navigation.NavigationView
-    android:id="@+id/activity_mayor_nav_view"
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent"
-    android:layout_gravity="start"
-    android:fitsSystemWindows="true"
-    app:headerLayout="@layout/activity_mayor_nav_view_header"
-    app:menu="@menu/activity_mayor_nav_view_menu_drawer" />
+        android:id="@+id/activity_mayor_nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/activity_mayor_nav_view_header"
+        app:menu="@menu/activity_mayor_nav_view_menu_drawer" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

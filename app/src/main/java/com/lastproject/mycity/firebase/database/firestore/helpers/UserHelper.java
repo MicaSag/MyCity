@@ -20,7 +20,7 @@ public class UserHelper {
     // --- CREATE ---
 
     public static Task<Void> createUser(User user) {
-        return UserHelper.getUsersCollection().document(user.getUid()).set(user);
+        return UserHelper.getUsersCollection().document(user.getUserID()).set(user);
     }
 
     // --- GET ---

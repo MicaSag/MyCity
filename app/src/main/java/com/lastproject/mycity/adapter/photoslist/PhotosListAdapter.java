@@ -24,7 +24,6 @@ public class PhotosListAdapter extends RecyclerView.Adapter<PhotosListViewHolder
 
     // For Data
     private final List<String> mPhotos = new ArrayList<>();
-    private final List<String> mPhotosDescription = new ArrayList<>();
 
     // For Caller
     private Class mCaller;
@@ -34,20 +33,13 @@ public class PhotosListAdapter extends RecyclerView.Adapter<PhotosListViewHolder
         void onPhotoClick(int position, View view);
     }
     private final OnPhotoClick mCallback_OnPhotoClick;
-    // For CALLBACK
-    public interface OnTextChange{
-        void onTextChange(int position, String value);
-    }
-    private final OnTextChange mCallback_OnTextChange;
 
     // CONSTRUCTOR
     public PhotosListAdapter(Class caller, RequestManager glide,
-                             OnPhotoClick callback_OnPhotoClick,
-                             OnTextChange callback_OnTextChange) {
+                             OnPhotoClick callback_OnPhotoClick) {
         mCaller = caller;
         mGlide = glide;
         mCallback_OnPhotoClick = callback_OnPhotoClick;
-        mCallback_OnTextChange = callback_OnTextChange;
     }
 
     // Update the photo list in the recycler view
@@ -55,13 +47,6 @@ public class PhotosListAdapter extends RecyclerView.Adapter<PhotosListViewHolder
         Log.d(TAG, "setNewPhotos() called with: photos = [" + photos + "]");
         mPhotos.clear();
         mPhotos.addAll(photos);
-        notifyDataSetChanged();
-    }
-    // Update the photos description in the recycler view
-    public void setNewPhotosDescription(List<String> photosDescription){
-        Log.d(TAG, "setNewPhotosDescription() called with: photosDescription = [" + photosDescription + "]");
-        mPhotosDescription.clear();
-        mPhotosDescription.addAll(photosDescription);
         notifyDataSetChanged();
     }
 
@@ -74,12 +59,10 @@ public class PhotosListAdapter extends RecyclerView.Adapter<PhotosListViewHolder
         return new PhotosListViewHolder(view);
     }
 
-    // For update View Holder with Estate
+    // For update View Holder with Event
     @Override
     public void onBindViewHolder(PhotosListViewHolder viewHolder, int position) {
-        viewHolder.updateWithPhoto(mCaller, mPhotos.get(position), mPhotosDescription.get(position), mGlide,
-                mCallback_OnPhotoClick,
-                mCallback_OnTextChange);
+        viewHolder.updateWithPhoto(mCaller, mPhotos.get(position), mGlide, mCallback_OnPhotoClick);
     }
 
     // Return the size of the recycler view
@@ -88,7 +71,7 @@ public class PhotosListAdapter extends RecyclerView.Adapter<PhotosListViewHolder
         return mPhotos.size();
     }
 
-    // Returns the Estate Identifier of the current position
+    // Returns the Event Identifier of the current position
     public String getPhoto(int position){
         return mPhotos.get(position);
     }

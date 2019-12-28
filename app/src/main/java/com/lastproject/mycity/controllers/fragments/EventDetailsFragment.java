@@ -37,8 +37,7 @@ public class EventDetailsFragment extends Fragment implements PhotosListAdapter.
     private static final String TAG = EventDetailsFragment.class.getSimpleName();
 
     // For Design
-    @BindView(R.id.fragment_details_photos_recycler_view)
-    RecyclerView mRecyclerView;
+    @BindView(R.id.fragment_details_photos_recycler_view) RecyclerView mRecyclerView;
     @BindView(R.id.fragment_details_description_text) TextView mDescription;
     @BindView(R.id.fragment_details_location_address_line_1) TextView mLocation_1;
     @BindView(R.id.fragment_details_location_address_line_2) TextView mLocation_2;
@@ -96,8 +95,8 @@ public class EventDetailsFragment extends Fragment implements PhotosListAdapter.
         mDetailsEventViewModel = ViewModelProviders.of(this, mViewModelFactory)
                 .get(DetailsEventViewModel.class);
 
-        // Observe a change of Current Estate
-        //mDetailsEventViewModel.getCurrentEstate().observe(this, this::updateUI);
+        // Observe a change of Current Event
+        mDetailsEventViewModel.getCurrentEvent().observe(this, this::updateUI);
     }
     // --------------------------------------------------------------------------------------------
     //                                    CONFIGURATION
@@ -105,9 +104,9 @@ public class EventDetailsFragment extends Fragment implements PhotosListAdapter.
     // Configure RecyclerView, Adapter, LayoutManager & glue it together
     private void configureRecyclerView(){
         // Create adapter
-        mPhotosListAdapter = new PhotosListAdapter(this.getClass(), Glide.with(this),
-                this,
-                null);
+        mPhotosListAdapter = new PhotosListAdapter( this.getClass(),
+                                                    Glide.with(this),
+                                    this);
         // Attach the adapter to the recyclerView to populate items
         mRecyclerView.setAdapter(mPhotosListAdapter);
         // Set layout manager to position the items

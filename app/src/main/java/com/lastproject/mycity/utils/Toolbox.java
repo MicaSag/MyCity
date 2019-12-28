@@ -72,6 +72,22 @@ public class Toolbox {
      *
      * @param  context   : context of the application
      *         className : className of the activity called
+     * @return none
+     */
+    public static void startActivity(Context context, Class className){
+
+        // Create a intent for call Activity
+        Intent intent = new Intent(context, className);
+
+        // Call RestaurantCardActivity
+        context.startActivity(intent);
+    }
+
+    /**
+     * Start an Activity
+     *
+     * @param  context   : context of the application
+     *         className : className of the activity called
      *         key       : receiving key of the activity called
      *         keyValue  : sent key content
      * @return none
@@ -93,24 +109,25 @@ public class Toolbox {
      * @param context Context to get {@link ConnectivityManager}
      * @return true if Network is connected, else false
      */
-    public static boolean isNetworkAvailable(Context context) {
-
+    public static Boolean isInternetAvailable(Context context){
+        int[] networkTypes = {  ConnectivityManager.TYPE_MOBILE,
+                ConnectivityManager.TYPE_WIFI};
         try {
             // Get ConnectivityManager
             ConnectivityManager connectivityManager =
                     (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            // // Look if the connection is a Wifi or Mobile connection
+            for (int networkType : networkTypes) {
                 // Get ActiveNetworkInfo
                 NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
                 // see if a network connection is established and Wifi or Mobile connection
                 if (activeNetworkInfo != null &&
-                        activeNetworkInfo.isConnected())
+                        activeNetworkInfo.getType() == networkType)
                     return true;
-
+            }
         } catch (Exception e) {
-            Log.d(TAG, "isNetworkAvailable: KO");
             return false;
         }
-        Log.d(TAG, "isNetworkAvailable: KO");
         return false;
     }
     /**

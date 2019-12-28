@@ -8,6 +8,7 @@ import com.lastproject.mycity.models.views.AuthenticationViewModel;
 import com.lastproject.mycity.models.views.CitizenViewModel;
 import com.lastproject.mycity.models.views.CreateEventViewModel;
 import com.lastproject.mycity.models.views.DetailsEventViewModel;
+import com.lastproject.mycity.models.views.EventViewModel;
 import com.lastproject.mycity.models.views.MayorViewModel;
 import com.lastproject.mycity.repositories.EventDataRoomRepository;
 import com.lastproject.mycity.repositories.MayorDataFireStoreRepository;
@@ -49,10 +50,9 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
         }
         if (modelClass.isAssignableFrom(MayorViewModel.class)) {
             return (T) new MayorViewModel(  this.userDataAuthenticationSource,
-                                            this.userDataFireStoreSource,
-                                            this.mayorDataFireStoreSource,
-                                            this.eventDataRoomSource,
-                                            this.executor);
+                    this.userDataFireStoreSource,
+                    this.mayorDataFireStoreSource,
+                    this.executor);
         }
         if (modelClass.isAssignableFrom(CitizenViewModel.class)) {
             return (T) new CitizenViewModel(this.userDataAuthenticationSource,
@@ -60,6 +60,13 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
                                             this.mayorDataFireStoreSource,
                                             this.eventDataRoomSource,
                                             this.executor);
+        }
+        if (modelClass.isAssignableFrom(EventViewModel.class)) {
+            return (T) new EventViewModel(  this.userDataAuthenticationSource,
+                    this.userDataFireStoreSource,
+                    this.mayorDataFireStoreSource,
+                    this.eventDataRoomSource,
+                    this.executor);
         }
         if (modelClass.isAssignableFrom(DetailsEventViewModel.class)) {
             return (T) new DetailsEventViewModel(   this.userDataAuthenticationSource,

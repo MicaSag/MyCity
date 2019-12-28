@@ -15,8 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.lastproject.mycity.R;
 import com.lastproject.mycity.adapter.eventslist.EventsListAdapter;
-import com.lastproject.mycity.controllers.activities.MayorActivity;
-import com.lastproject.mycity.models.views.MayorViewModel;
+import com.lastproject.mycity.controllers.activities.EventsActivity;
+import com.lastproject.mycity.models.views.EventViewModel;
 import com.lastproject.mycity.repositories.CurrentEventDataRepository;
 import com.lastproject.mycity.room.models.Event;
 
@@ -36,7 +36,7 @@ public class EventsListFragment extends Fragment {
     private static final String TAG = EventsListFragment.class.getSimpleName();
 
     // Declare ViewModel
-    private MayorViewModel mMayorViewModel;
+    private EventViewModel mEventViewModel;
 
     //For Data
     // Declare list of property & Adapter
@@ -90,10 +90,10 @@ public class EventsListFragment extends Fragment {
     private void configureViewModel() {
         Log.d(TAG, "configureViewModel: ");
 
-        mMayorViewModel = ((MayorActivity) getActivity()).getMayorViewModel();
+        mEventViewModel = ((EventsActivity) getActivity()).getMayorViewModel();
 
         // Observe a change of Current Events List in Room
-        mMayorViewModel.getEvents().observe(this, this::updateEventsList);
+        mEventViewModel.getEvents().observe(this, this::updateEventsList);
 
         // Observe a change of Current Event (for update selected event)
         CurrentEventDataRepository.getInstance().getCurrentEventId().observe(this, this::updateEventsList);

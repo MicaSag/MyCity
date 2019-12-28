@@ -22,7 +22,6 @@ public class PhotosListViewHolder extends RecyclerView.ViewHolder implements Vie
     @BindView(R.id.photos_list_bt_delete) Button mDeleteButton;
 
     private PhotosListAdapter.OnPhotoClick mOnPhotoClick;
-    private PhotosListAdapter.OnTextChange mOnTextChange;
 
     // Constructor
     public PhotosListViewHolder(View photoView) {
@@ -33,13 +32,10 @@ public class PhotosListViewHolder extends RecyclerView.ViewHolder implements Vie
     }
 
     // Method to update the current item
-    public void updateWithPhoto(Class caller, String photo, String description, RequestManager glide,
-                                PhotosListAdapter.OnPhotoClick callback_OnPhotoClick,
-                                PhotosListAdapter.OnTextChange callback_OnTextChange
-                                ){
+    public void updateWithPhoto(Class caller, String photo, RequestManager glide,
+                                PhotosListAdapter.OnPhotoClick callback_OnPhotoClick){
         Log.d(TAG, "updateWithPhoto: ");
         mOnPhotoClick = callback_OnPhotoClick;
-        mOnTextChange = callback_OnTextChange;
 
         // Get Resources
         Resources res = itemView.getResources();

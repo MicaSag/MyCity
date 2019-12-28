@@ -3,13 +3,10 @@ package com.lastproject.mycity.models.views;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
-import androidx.sqlite.db.SimpleSQLiteQuery;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -19,6 +16,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.lastproject.mycity.firebase.database.firestore.models.Mayor;
+import com.lastproject.mycity.network.retrofit.models.townhall.TownHall;
 import com.lastproject.mycity.repositories.EventDataRoomRepository;
 import com.lastproject.mycity.repositories.MayorDataFireStoreRepository;
 import com.lastproject.mycity.repositories.UserDataAuthenticationRepository;
@@ -37,41 +36,31 @@ public class MayorViewModel extends ViewModel {
     private final UserDataAuthenticationRepository userDataAuthenticationSource;
     private final UserDataFireStoreRepository userDataFireStoreSource;
     private final MayorDataFireStoreRepository mayorDataFireStoreSource;
-    private final EventDataRoomRepository eventDataRoomSource;
     private final Executor executor;
 
     // DATA
-    // -- Registration Status
-    private MutableLiveData<RegistrationStatus> registrationStatus = new MutableLiveData<>();
-    public enum RegistrationStatus {
-        REGISTRATION_OK,
-        REGISTRATION_ERROR,
-        REGISTRATION_MAYOR_UPDATE_USER_FAILED,
-        REGISTRATION_MAYOR_WRONG_CODE_ID
-    }
-    // -- Current Events List
-    private MediatorLiveData<List<Event>> currentEvents = new MediatorLiveData<>();
+    // - Current Mayor in the model
+    private Mayor mayorInModel;
 
     public MayorViewModel(UserDataAuthenticationRepository userDataAuthenticationSource,
                           UserDataFireStoreRepository userDataFireStoreSource,
                           MayorDataFireStoreRepository mayorDataFireStoreSource,
-                          EventDataRoomRepository eventDataRoomSource,
                           Executor executor) {
         this.userDataAuthenticationSource = userDataAuthenticationSource;
         this.userDataFireStoreSource = userDataFireStoreSource;
         this.mayorDataFireStoreSource = mayorDataFireStoreSource;
-        this.eventDataRoomSource = eventDataRoomSource;
         this.executor = executor;
     }
 
-    // --- REGISTRATION STATUS ---
-    // ===========================
-    public LiveData<RegistrationStatus> getRegistrationStatus() {
-        return registrationStatus;
+    // --- MAYOR IN MODEL ---
+    //
+    public Mayor getMayorInModel() {
+        return mayorInModel;
     }
+    public void setMayorInModel(Mayor mayorInModel) {this.mayorInModel = mayorInModel;}
 
     // --- FIRE BASE : AUTHENTICATION ---
-    // ==================================
+    //
     // Get the Current User Connected
     public FirebaseUser getCurrentUser(){
         return this.userDataAuthenticationSource.getCurrentUser();
@@ -83,31 +72,44 @@ public class MayorViewModel extends ViewModel {
     }
 
     // --- FIRE BASE : FIRE STORE ---
-    // ==============================
+    //
     // Get a user in Fire Store
     public Task<DocumentSnapshot> getUser(String uid){
         return this.userDataFireStoreSource.getUser(uid);
     }
 
-    // Get a Mayor in Fire Store (by CodeID)
-    public Task<QuerySnapshot> getMayorByCodeID(String codeID){
-        Log.d(TAG, "getMayorByCodeID: ");
+    // Get a Mayor in Fire Store (by UserID)
+    public Task<QuerySnapshot> getMayorByUserID(String userID){
+        Log.d(TAG, "getMayorByUserID: ");
 
         // retrieve  query results
-        return mayorDataFireStoreSource.getMayorByCodeID(codeID).get();
+        return mayorDataFireStoreSource.getMayorByUserID(userID).get();
     }
 
-    // Update userID of a Mayor
-    public Task<Void> updateMayorUserID(String mayorID, String userID){
-        Log.d(TAG, "updateMayorUserID: ");
+    // Get Town Hall of the Mayor
+    public void getMayorTownHall(String userID) {
+        Log.d(TAG, "getMayorTownHall: ");
 
-        return mayorDataFireStoreSource.updateMayorUserID(mayorID,userID);
-    }
+        this.getMayorByUserID(userID)
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        Log.d(TAG, "onComplete getting documents: ");
+                        if (task.isSuccessful()) {
+                            if (task.getResult().size() != 0) {
+                                Log.d(TAG, "task.getResult().size() != 0");
 
-    // --- ROOM  ---
-    // =============
-    // Get the whole list of events in Room
-    public LiveData<List<Event>> getEvents(){
-        return eventDataRoomSource.getEvents();
+                                // browse the responses returned by the request
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    Log.d(TAG, document.getId() + " => " + document.getData());
+                                }
+                            } else {
+                                Log.d(TAG, "task.getResult().size() == 0");
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
     }
 }

@@ -156,6 +156,9 @@ public class UserProfileChoiceDialogFragment extends DialogFragment {
         } else {
             // Create Citizen in FireStore
             mAuthenticationViewModel.createUser(false);
+
+            mAuthenticationViewModel.getRegistrationStatus()
+                    .setValue(AuthenticationViewModel.RegistrationStatus.REGISTRATION_OK);
         }
     }
     // --------------------------------------------------------------------------------------------

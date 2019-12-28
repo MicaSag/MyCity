@@ -54,10 +54,16 @@ public class EventsListViewHolder extends RecyclerView.ViewHolder implements Vie
             glide.load(event.getPhotos().get(0)).into(mImage);
 
         // Display Event Start Date
-        mStartDate.setText(event.getStartDate().toString());
+        String startDay = event.getStartDate().getDayOfMonth()+"/"+
+                event.getStartDate().getMonth()+"/"+
+                event.getStartDate().getYear();
+        mStartDate.setText(startDay);
 
         // Display Event End Date
-        mEndDate.setText(event.getEndDate().toString());
+        String endDay = event.getEndDate().getDayOfMonth()+"/"+
+                event.getEndDate().getMonth()+"/"+
+                event.getEndDate().getYear();
+        mEndDate.setText(endDay);
 
         // For indicate item Selected
         Resources res = itemView.getResources();
@@ -67,12 +73,16 @@ public class EventsListViewHolder extends RecyclerView.ViewHolder implements Vie
                 .getCurrentEventId().getValue());
         if (event.getEventId().equals(CurrentEventDataRepository.getInstance()
                 .getCurrentEventId().getValue())) {
-            mMCV.setCardBackgroundColor(res.getColorStateList(R.color.colorAccent));
+            mMCV.setCardBackgroundColor(res.getColorStateList(R.color.colorPrimary));
             mTitle.setTextColor(Color.WHITE);
+            mStartDate.setTextColor(Color.WHITE);
+            mEndDate.setTextColor(Color.WHITE);
         }
         else {
             mMCV.setCardBackgroundColor(Color.WHITE);
-            mTitle.setTextColor(res.getColorStateList(R.color.colorAccent));
+            mTitle.setTextColor(res.getColorStateList(R.color.colorPrimary));
+            mStartDate.setTextColor(res.getColorStateList(R.color.colorPrimary));
+            mEndDate.setTextColor(res.getColorStateList(R.color.colorPrimary));
         }
     }
 

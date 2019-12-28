@@ -3,8 +3,9 @@ package com.lastproject.mycity.controllers.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProviders;
@@ -12,26 +13,33 @@ import androidx.lifecycle.ViewModelProviders;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.lastproject.mycity.R;
-import com.lastproject.mycity.controllers.bases.BaseActivity;
 import com.lastproject.mycity.controllers.fragments.UserProfileChoiceDialogFragment;
+import com.lastproject.mycity.firebase.database.firestore.models.Mayor;
 import com.lastproject.mycity.firebase.database.firestore.models.User;
 import com.lastproject.mycity.injections.Injection;
 import com.lastproject.mycity.injections.ViewModelFactory;
 import com.lastproject.mycity.models.views.AuthenticationViewModel;
 import com.lastproject.mycity.network.retrofit.models.Insee;
+import com.lastproject.mycity.utils.Toolbox;
 
 import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
  * Created by Michaël SAGOT on 01/12/2019.
  */
 
-public class AuthenticationActivity extends BaseActivity
+public class AuthenticationActivity  extends AppCompatActivity
 {
 
     // For Debug
@@ -48,24 +56,11 @@ public class AuthenticationActivity extends BaseActivity
     private static final int RC_SIGN_IN = 100;
 
     // ---------------------------------------------------------------------------------------------
-    //                                DECLARATION BASE METHODS
+    //                                        METHODS
     // ---------------------------------------------------------------------------------------------
-    // BASE METHOD Implementation
-    // Get the activity layout
-    // CALLED BY BASE METHOD 'onCreate(...)'
-    @Override
-    protected int getActivityLayout() {
-        return R.layout.activity_authentication;
-    }
-
-    // BASE METHOD Implementation
-    // Get the coordinator layout
-    // CALLED BY BASE METHOD
-    @Override
-    public View getConstraintLayout() {
+    public ConstraintLayout getConstraintLayout() {
         return mConstraintLayout;
     }
-
     // ---------------------------------------------------------------------------------------------
     //                                        ENTRY POINT
     // ---------------------------------------------------------------------------------------------
@@ -73,6 +68,10 @@ public class AuthenticationActivity extends BaseActivity
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        this.setContentView(R.layout.activity_authentication);
+
+        // Get & serialise all views
+        ButterKnife.bind(this);
 
         // Configure ViewModel
         this.configureViewModel();
@@ -97,25 +96,29 @@ public class AuthenticationActivity extends BaseActivity
     @OnClick(R.id.activity_authentication_email_login_button)
     public void onClickEmailLoginButton() {
         Log.d(TAG, "onClickEmailLoginButton: ²");
-        this.startEmailSignInActivity();
+        if (Toolbox.isInternetAvailable(this)) this.startEmailSignInActivity();
+        else Toolbox.showSnackBar(this.getConstraintLayout(), getString(R.string.error_no_internet));
     }
 
     @OnClick(R.id.activity_authentication_facebook_login_button)
     public void onClickFacebookLoginButton() {
         Log.d(TAG, "onClickFacebookLoginButton: ²");
-        this.startFaceBookSignInActivity();
+        if (Toolbox.isInternetAvailable(this)) this.startFaceBookSignInActivity();
+        else Toolbox.showSnackBar(this.getConstraintLayout(), getString(R.string.error_no_internet));
     }
 
     @OnClick(R.id.activity_authentication_google_login_button)
     public void onClickGoogleLoginButton() {
         Log.d(TAG, "onClickGoogleLoginButton: ");
-        this.startGoogleSignInActivity();
+        if (Toolbox.isInternetAvailable(this)) this.startGoogleSignInActivity();
+        else Toolbox.showSnackBar(this.getConstraintLayout(), getString(R.string.error_no_internet));
     }
 
     @OnClick(R.id.activity_authentication_twitter_login_button)
     public void onClickTwitterLoginButton() {
         Log.d(TAG, "onClickTwitterLoginButton: ");
-        this.startTwitterSignInActivity();
+        if (Toolbox.isInternetAvailable(this)) this.startTwitterSignInActivity();
+        else Toolbox.showSnackBar(this.getConstraintLayout(), getString(R.string.error_no_internet));
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -261,15 +264,54 @@ public class AuthenticationActivity extends BaseActivity
 
                 // Ask the new user if he is a citizen or a mayor.
                 this.openUserTypeChoiceDialog();
-            }
-            else{
+            } else {
                 Log.d(TAG, "checkUserRegistrationInFireStore: User exist in Cloud FireStore");
 
                 // Save the User in Model
                 mAuthenticationViewModel.setUserInModel(user);
+                Log.d(TAG, "checkUserRegistrationInFireStore: user.getUserID() = "+user);
+                if (user.isMayor()) {
+                    Log.d(TAG, "checkUserRegistrationInFireStore: User is a Mayor");
+                    mAuthenticationViewModel.getMayorByUserID(user.getUserID())
+                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    Log.d(TAG, "onComplete getting documents: ");
+                                    if (task.isSuccessful()) {
+                                        if (task.getResult().size() != 0) {
+                                            Log.d(TAG, "task.getResult().size() != 0");
+                                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                                Log.d(TAG, document.getId() + " => " + document.getData());
 
-                // Start Mayor Activity or Citizen Activity
-                startInterface();
+                                                // If the userID corresponds to the mayor document being read
+                                                // As a precaution, only the first document found will be used
+                                                // the others will be ignored (break instruction)
+                                               if (document.get("userID").toString().equals(user.getUserID())) {
+                                                   // save Mayor in the Model
+                                                   Mayor mayor = new Mayor(document.getId(),
+                                                           document.get("userID").toString(),
+                                                           document.get("inseeID").toString(),
+                                                           document.get("codeID").toString());
+                                                   mAuthenticationViewModel.setMayorInModel(mayor);
+                                                   // Start Citizen Activity
+                                                   startInterface();
+                                               }
+                                            }
+                                        } else {
+                                            Log.d(TAG, "task.getResult().size() == 0");
+                                            Toolbox.showSnackBar(getConstraintLayout(),"Mayor not Found");
+                                        }
+                                    } else {
+                                        Log.d(TAG, "Error getting documents: ", task.getException());
+                                        Toolbox.showSnackBar(getConstraintLayout(),"FireBase : Mayor Error");
+                                    }
+                                }
+                            });
+                } else {
+                    Log.d(TAG, "checkUserRegistrationInFireStore: User is a Citizen");
+                    // Start Citizen Activity
+                    startInterface();
+                }
             }
         });
     }
@@ -280,28 +322,31 @@ public class AuthenticationActivity extends BaseActivity
         Log.d(TAG, "startInterface: ");
 
         Intent intent;
-        if (mAuthenticationViewModel.getUserInModel().getMayor()) {
-            // Call Mayor Activity
+        if (mAuthenticationViewModel.getUserInModel().isMayor()) {
+
+            // Create intent for call Mayor Activity
             intent = new Intent(this, MayorActivity.class);
+            // Add data
+            Log.d(TAG, "startInterface: mAuthenticationViewModel.getMayorInModel() = "+mAuthenticationViewModel.getMayorInModel());
+            intent.putExtra("mayor",mAuthenticationViewModel.getMayorInModel());
+
         }else{
-            // Call Citizen Activity
-            intent = new Intent(this, PresentationActivity.class);
+            // Create intent for call Citizen Activity
+            intent = new Intent(this, CitizenActivity.class);
         }
         startActivity(intent);
     }
-
     // ---------------------------------------------------------------------------------------------
     //                                          UI
     // ---------------------------------------------------------------------------------------------
-    public void displayInseeList(List<Insee> inseeList) {
+    // Show Snack Bar with a message
+    public void showSnackBar(String message){
+        Log.d(TAG, "showSnackBar: ");
 
-        for(Insee insee : inseeList){
-            Log.d(TAG, "displayInseeList: ville = "+insee.getNom());
-            Log.d(TAG, "displayInseeList: code  = "+insee.getCode());
-            Log.d(TAG, "displayInseeList: code Postaux  = "+insee.getCodesPostaux().get(0));
-        }
+        Snackbar.make(mConstraintLayout, message, Snackbar.LENGTH_LONG).show();
     }
 
+    // Call Type Choice Dialog
     private void openUserTypeChoiceDialog() {
         UserProfileChoiceDialogFragment userTypeChoiceDialog = UserProfileChoiceDialogFragment.newInstance();
         userTypeChoiceDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.Dialog_FullScreen);

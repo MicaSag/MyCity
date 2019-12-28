@@ -23,17 +23,28 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
-// --- GETTERS ---
-
-    public String getUid() {
-        return this.userID;
+    @Override
+    public String toString() {
+        return "User{" +
+                "userID='" + userID + '\'' +
+                ", userName='" + userName + '\'' +
+                ", isMayor=" + isMayor +
+                ", urlPicture='" + urlPicture + '\'' +
+                ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                '}';
     }
+
+    // --- GETTERS ---
+
+
+    public String getUserID() {return userID;}
 
     public String getUserName() {
         return this.userName;
     }
 
-    public Boolean getMayor() {
+    public Boolean isMayor() {
         return isMayor;
     }
 
