@@ -26,6 +26,11 @@
     <string name="button_login_text_logged">View Profile</string>
     <string name="button_login_text_not_logged">Connection</string>
 
+    <!-- MAYOR ACTIVITY -->
+    <string name="city_choice_message_1">Hello Mayor, is this your first connection?</string>
+    <string name="city_choice_message_2">The first thing to do is to choose your city.</string>
+    <string name="city_choice_message_3">Enter it below.</string>
+
     <!-- Registration -->
     <string name="registration_succeed">Successful registration !</string>
     <string name="registration_mayor_update_user_failed">Mayor update User FAILED !</string>
@@ -47,7 +52,5 @@
     <!-- Display Modes -->
     <bool name="is_w1280">false</bool>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
