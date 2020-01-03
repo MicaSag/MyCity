@@ -5,15 +5,10 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.google.android.material.navigation.NavigationView;
 import com.lastproject.mycity.R;
 import com.lastproject.mycity.adapter.eventslist.EventsListAdapter;
 import com.lastproject.mycity.controllers.bases.BaseActivity;
@@ -21,9 +16,9 @@ import com.lastproject.mycity.controllers.fragments.EventDetailsFragment;
 import com.lastproject.mycity.controllers.fragments.EventsListFragment;
 import com.lastproject.mycity.injections.Injection;
 import com.lastproject.mycity.injections.ViewModelFactory;
+import com.lastproject.mycity.models.Event;
 import com.lastproject.mycity.models.views.EventViewModel;
 import com.lastproject.mycity.repositories.CurrentEventDataRepository;
-import com.lastproject.mycity.room.models.Event;
 import com.lastproject.mycity.utils.Toolbox;
 
 import butterknife.BindView;
@@ -144,7 +139,7 @@ public class EventsActivity extends BaseActivity
     @Override
     public void onEventClick(Event event) {
         Log.d(TAG, "onEventClick: ");
-        CurrentEventDataRepository.getInstance().setCurrentEventId(event.getEventId());
+        CurrentEventDataRepository.getInstance().setCurrentEventID(event.getEventID());
 
         // If wight < 1280 then call DetailsEventActivity
         Log.d(TAG, "onEventClick: is_w1280 = "+getResources().getBoolean(R.bool.is_w1280));

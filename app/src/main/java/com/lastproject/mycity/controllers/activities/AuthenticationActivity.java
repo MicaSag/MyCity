@@ -26,6 +26,7 @@ import com.lastproject.mycity.injections.Injection;
 import com.lastproject.mycity.injections.ViewModelFactory;
 import com.lastproject.mycity.models.views.AuthenticationViewModel;
 import com.lastproject.mycity.network.retrofit.models.Insee;
+import com.lastproject.mycity.repositories.CurrentMayorDataRepository;
 import com.lastproject.mycity.utils.Toolbox;
 
 import java.util.Arrays;
@@ -287,12 +288,12 @@ public class AuthenticationActivity  extends AppCompatActivity
                                                 // As a precaution, only the first document found will be used
                                                 // the others will be ignored (break instruction)
                                                if (document.get("userID").toString().equals(user.getUserID())) {
-                                                   // save Mayor in the Model
+                                                   // save Current Mayor
                                                    Mayor mayor = new Mayor(document.getId(),
                                                            document.get("userID").toString(),
-                                                           document.get("inseeID").toString(),
+                                                           document.get("townHallID").toString(),
                                                            document.get("codeID").toString());
-                                                   mAuthenticationViewModel.setMayorInModel(mayor);
+                                                   CurrentMayorDataRepository.getInstance().setCurrentMayor(mayor);
                                                    // Start Citizen Activity
                                                    startInterface();
                                                }
@@ -326,10 +327,6 @@ public class AuthenticationActivity  extends AppCompatActivity
 
             // Create intent for call Mayor Activity
             intent = new Intent(this, MayorActivity.class);
-            // Add data
-            Log.d(TAG, "startInterface: mAuthenticationViewModel.getMayorInModel() = "+mAuthenticationViewModel.getMayorInModel());
-            intent.putExtra("mayor",mAuthenticationViewModel.getMayorInModel());
-
         }else{
             // Create intent for call Citizen Activity
             intent = new Intent(this, CitizenActivity.class);

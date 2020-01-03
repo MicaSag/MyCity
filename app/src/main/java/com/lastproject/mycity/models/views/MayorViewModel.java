@@ -4,25 +4,25 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.lastproject.mycity.firebase.database.firestore.models.Mayor;
-import com.lastproject.mycity.network.retrofit.models.townhall.TownHall;
-import com.lastproject.mycity.repositories.EventDataRoomRepository;
+import com.lastproject.mycity.firebase.database.firestore.models.TownHall;
+import com.lastproject.mycity.network.retrofit.models.Insee;
+import com.lastproject.mycity.repositories.CurrentMayorDataRepository;
+import com.lastproject.mycity.repositories.CurrentTownHallDataRepository;
 import com.lastproject.mycity.repositories.MayorDataFireStoreRepository;
+import com.lastproject.mycity.repositories.TownHallDataFireStoreRepository;
 import com.lastproject.mycity.repositories.UserDataAuthenticationRepository;
 import com.lastproject.mycity.repositories.UserDataFireStoreRepository;
-import com.lastproject.mycity.room.models.Event;
 
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -36,28 +36,42 @@ public class MayorViewModel extends ViewModel {
     private final UserDataAuthenticationRepository userDataAuthenticationSource;
     private final UserDataFireStoreRepository userDataFireStoreSource;
     private final MayorDataFireStoreRepository mayorDataFireStoreSource;
+    private final TownHallDataFireStoreRepository townHallDataFireStoreSource;
     private final Executor executor;
 
     // DATA
-    // - Current Mayor in the model
-    private Mayor mayorInModel;
+    // - Insee List found in First Connexion Fragment
+    private List<Insee> inseeList;
 
     public MayorViewModel(UserDataAuthenticationRepository userDataAuthenticationSource,
                           UserDataFireStoreRepository userDataFireStoreSource,
                           MayorDataFireStoreRepository mayorDataFireStoreSource,
+                          TownHallDataFireStoreRepository townHallDataFireStoreSource,
                           Executor executor) {
         this.userDataAuthenticationSource = userDataAuthenticationSource;
         this.userDataFireStoreSource = userDataFireStoreSource;
         this.mayorDataFireStoreSource = mayorDataFireStoreSource;
+        this.townHallDataFireStoreSource = townHallDataFireStoreSource;
         this.executor = executor;
     }
 
-    // --- MAYOR IN MODEL ---
+    // --- DATA Methods ---
     //
-    public Mayor getMayorInModel() {
-        return mayorInModel;
-    }
-    public void setMayorInModel(Mayor mayorInModel) {this.mayorInModel = mayorInModel;}
+    public List<Insee> getInseeList() {return inseeList;}
+    public void setInseeList(List<Insee> inseeList) {this.inseeList = inseeList;}
+
+
+    // --- CURRENT MAYOR ---
+    //
+    public Mayor getCurrentMayor() {return CurrentMayorDataRepository.getInstance().getCurrentMayor();}
+    public void setCurrentMayor(Mayor mayor) {CurrentMayorDataRepository.getInstance().setCurrentMayor(mayor);}
+
+
+    // --- CURRENT TOWN HALL ---
+    //
+    public LiveData<TownHall> getCurrentTownHall() {return CurrentTownHallDataRepository.getInstance().getCurrentTownHall();}
+    public void setCurrentTownHall(TownHall townHall) {CurrentTownHallDataRepository.getInstance().setCurrentTownHall(townHall);}
+
 
     // --- FIRE BASE : AUTHENTICATION ---
     //
@@ -71,19 +85,28 @@ public class MayorViewModel extends ViewModel {
         return this.userDataAuthenticationSource.isCurrentUserLogged();
     }
 
+
+
     // --- FIRE BASE : FIRE STORE ---
     //
+    // // USERS //
     // Get a user in Fire Store
     public Task<DocumentSnapshot> getUser(String uid){
         return this.userDataFireStoreSource.getUser(uid);
     }
 
+    // // MAYORS //
     // Get a Mayor in Fire Store (by UserID)
     public Task<QuerySnapshot> getMayorByUserID(String userID){
         Log.d(TAG, "getMayorByUserID: ");
 
         // retrieve  query results
         return mayorDataFireStoreSource.getMayorByUserID(userID).get();
+    }
+
+    // Update townHallID Mayor in Fire Store
+    public Task<Void> updateMayorTownHallID(String mayorID, String townHallID){
+        return mayorDataFireStoreSource.updateMayorTownHallID(mayorID,townHallID);
     }
 
     // Get Town Hall of the Mayor
@@ -111,5 +134,13 @@ public class MayorViewModel extends ViewModel {
                         }
                     }
                 });
+    }
+    // // TOWN HALL //
+    public Task<DocumentReference> createTownHall(TownHall townHall) {
+        return townHallDataFireStoreSource.createTownHall(townHall);
+    }
+    // Get a Town Hall in Fire Store
+    public Task<DocumentSnapshot> getTownHallByTownHallID(String townHallID) {
+        return townHallDataFireStoreSource.getTownHallByTownHallID(townHallID);
     }
 }

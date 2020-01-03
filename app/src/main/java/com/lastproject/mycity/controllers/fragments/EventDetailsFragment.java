@@ -22,8 +22,8 @@ import com.lastproject.mycity.R;
 import com.lastproject.mycity.adapter.photoslist.PhotosListAdapter;
 import com.lastproject.mycity.injections.Injection;
 import com.lastproject.mycity.injections.ViewModelFactory;
+import com.lastproject.mycity.models.Event;
 import com.lastproject.mycity.models.views.DetailsEventViewModel;
-import com.lastproject.mycity.room.models.Event;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -129,31 +129,37 @@ public class EventDetailsFragment extends Fragment implements PhotosListAdapter.
         if (event != null) {
             mDescription.setText(event.getDescription());
 
-            // Display Location
-            if (!event.getAddress().get(0).isEmpty()) {
+            // Display Address
+            String address = "";
+            if (event.getAddress().size() > 0) {
                 mLocation_1.setText(event.getAddress().get(0));
                 mLocation_1.setVisibility(View.VISIBLE);
+                address+= event.getAddress().get(0)+"+";
             } else  mLocation_1.setVisibility(View.GONE);
-            if (!event.getAddress().get(1).isEmpty()) {
+            if (event.getAddress().size() > 1) {
                 mLocation_2.setText(event.getAddress().get(1));
                 mLocation_2.setVisibility(View.VISIBLE);
+                address+= event.getAddress().get(1)+"+";
             } else  mLocation_2.setVisibility(View.GONE);
-            if (!event.getAddress().get(2).isEmpty()) {
+            if (event.getAddress().size() > 2) {
                 mLocation_3.setText(event.getAddress().get(2));
                 mLocation_3.setVisibility(View.VISIBLE);
+                address+= event.getAddress().get(2)+"+";
             } else  mLocation_3.setVisibility(View.GONE);
-            if (!event.getAddress().get(3).isEmpty()) {
+            if (event.getAddress().size() > 3) {
                 mLocation_4.setText(event.getAddress().get(3));
                 mLocation_4.setVisibility(View.VISIBLE);
+                address+= event.getAddress().get(3)+"+";
             } else  mLocation_4.setVisibility(View.GONE);
-            if (!event.getAddress().get(4).isEmpty()) {
+            if (event.getAddress().size() > 4) {
                 mLocation_5.setText(event.getAddress().get(4));
                 mLocation_5.setVisibility(View.VISIBLE);
+                address+= event.getAddress().get(4);
             } else  mLocation_5.setVisibility(View.GONE);
 
             mPhotosListAdapter.setNewPhotos(event.getPhotos());
 
-            // Created Uri to recover the static map
+            // Created Uri to recover the static Mapping
             Uri.Builder uriStaticMap
                     = Uri.parse("https://maps.googleapis.com/maps/api/staticmap").buildUpon();
             // Add options
@@ -162,12 +168,7 @@ public class EventDetailsFragment extends Fragment implements PhotosListAdapter.
                     .appendQueryParameter("scale","2")
                     .appendQueryParameter("zoom","16")
                     .appendQueryParameter("key", BuildConfig.google_static_map_api);
-            String markers = "size:mid|color:blue|label:E|"
-                    + event.getAddress().get(0)+"+"
-                    + event.getAddress().get(1)+"+"
-                    + event.getAddress().get(2)+"+"
-                    + event.getAddress().get(3)+"+"
-                    + event.getAddress().get(4);
+            String markers = "size:mid|color:blue|label:E|" + address;
             uriStaticMap.appendQueryParameter("markers",markers);
             // Display static Map depending on the address of the property
             Glide.with(this)

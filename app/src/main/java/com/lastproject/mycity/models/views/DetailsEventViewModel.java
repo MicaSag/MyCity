@@ -7,12 +7,13 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
+import com.lastproject.mycity.models.Event;
 import com.lastproject.mycity.repositories.CurrentEventDataRepository;
+import com.lastproject.mycity.repositories.EventDataFireStoreRepository;
 import com.lastproject.mycity.repositories.EventDataRoomRepository;
 import com.lastproject.mycity.repositories.MayorDataFireStoreRepository;
 import com.lastproject.mycity.repositories.UserDataAuthenticationRepository;
 import com.lastproject.mycity.repositories.UserDataFireStoreRepository;
-import com.lastproject.mycity.room.models.Event;
 
 import java.util.concurrent.Executor;
 
@@ -26,6 +27,7 @@ public class DetailsEventViewModel extends ViewModel {
     private final UserDataFireStoreRepository userDataFireStoreSource;
     private final MayorDataFireStoreRepository mayorDataFireStoreSource;
     private final EventDataRoomRepository eventDataRoomSource;
+    private final EventDataFireStoreRepository eventDataFireStoreSource;
     private final Executor executor;
 
     @NonNull
@@ -35,15 +37,17 @@ public class DetailsEventViewModel extends ViewModel {
                                  UserDataFireStoreRepository userDataFireStoreSource,
                                  MayorDataFireStoreRepository mayorDataFireStoreSource,
                                  EventDataRoomRepository eventDataRoomSource,
+                                 EventDataFireStoreRepository eventDataFireStoreSource,
                                  Executor executor) {
         this.userDataAuthenticationSource = userDataAuthenticationSource;
         this.userDataFireStoreSource = userDataFireStoreSource;
         this.mayorDataFireStoreSource = mayorDataFireStoreSource;
         this.eventDataRoomSource = eventDataRoomSource;
+        this.eventDataFireStoreSource = eventDataFireStoreSource;
         this.executor = executor;
 
         mCurrentEvent = Transformations.switchMap(
-                CurrentEventDataRepository.getInstance().getCurrentEventId(),
+                CurrentEventDataRepository.getInstance().getCurrentEventID(),
                 this::getEvent);
     }
 

@@ -14,15 +14,23 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.lastproject.mycity.R;
+import com.lastproject.mycity.adapter.eventslist.EventsListAdapter;
 import com.lastproject.mycity.controllers.bases.BaseActivity;
+import com.lastproject.mycity.controllers.fragments.EventsListFragment;
 import com.lastproject.mycity.controllers.fragments.FirstConnexionFragment;
 import com.lastproject.mycity.controllers.fragments.TownHallFragment;
-import com.lastproject.mycity.firebase.database.firestore.models.Mayor;
+import com.lastproject.mycity.firebase.database.firestore.models.TownHall;
 import com.lastproject.mycity.injections.Injection;
 import com.lastproject.mycity.injections.ViewModelFactory;
+import com.lastproject.mycity.models.Event;
 import com.lastproject.mycity.models.views.MayorViewModel;
+import com.lastproject.mycity.repositories.CurrentEventDataRepository;
+import com.lastproject.mycity.utils.Toolbox;
 
 import butterknife.BindView;
 
@@ -30,7 +38,8 @@ import butterknife.BindView;
  * Created by Michaël SAGOT on 28/12/2019.
  */
 
-public class MayorActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MayorActivity extends BaseActivity implements  NavigationView.OnNavigationItemSelectedListener,
+                                                            EventsListAdapter.OnEventClick {
 
     // For Debug
     private static final String TAG = MayorActivity.class.getSimpleName();
@@ -41,6 +50,7 @@ public class MayorActivity extends BaseActivity implements NavigationView.OnNavi
     // Fragments Declarations
     private FirstConnexionFragment mFirstConnexionFragment;
     private TownHallFragment mTownHallFragment;
+    private EventsListFragment mEventsListFragment;
 
 
     // Adding @BindView in order to indicate to ButterKnife to get & serialise it
@@ -86,9 +96,6 @@ public class MayorActivity extends BaseActivity implements NavigationView.OnNavi
         // Configure ViewModel
         this.configureViewModel();
 
-        // Get caller's intent
-        this.getCallerIntent();
-
         // Configure the Navigation Drawer
         this.configureDrawerLayout();
         this.configureNavigationView();
@@ -107,31 +114,41 @@ public class MayorActivity extends BaseActivity implements NavigationView.OnNavi
                 .get(MayorViewModel.class);
     }
 
-    public MayorViewModel getMayorViewModel() {
-        return mMayorViewModel;
-    }
-
-    // ---------------------------------------------------------------------------------------------
-    //                                        CALLER INTENT
-    // ---------------------------------------------------------------------------------------------
-    // Get caller's intent
-    private void getCallerIntent() {
-        Log.d(TAG, "getCallerIntent: ");
-
-        // Save Mayor in the Model
-        Mayor mayor = getIntent().getExtras().getParcelable("mayor");
-        Log.d(TAG, "getCallerIntent: mayor = "+mayor);
-        mMayorViewModel.setMayorInModel(mayor);
-    }
+    public MayorViewModel getMayorViewModel() {return mMayorViewModel;}
 
     // ---------------------------------------------------------------------------------------------
     //                                         DISPLAY
     // ---------------------------------------------------------------------------------------------
     public void switchingDisplay() {
         Log.d(TAG, "switchingDisplay: ");
-        if (mMayorViewModel.getMayorInModel().getInseeID().equals(""))
+        if (mMayorViewModel.getCurrentMayor().getTownHallID().equals("")){
+            Log.d(TAG, "switchingDisplay: First Connexion");
+            // Show First Connexion Fragment
             configureAndShowFirstConnexionFragment();
-        else configureAndShowTownHallFragment();
+        } else {
+            Log.d(TAG, "switchingDisplay: Go To Town Hall");
+            // retrieves town hall data from the Fire Store and stores it in the view Model
+            mMayorViewModel.getTownHallByTownHallID(mMayorViewModel.getCurrentMayor().getTownHallID())
+                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            Log.d(TAG, "onComplete: ");
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
+                                TownHall townHall = document.toObject(TownHall.class);
+
+                                // Set Current TownHall
+                                mMayorViewModel.setCurrentTownHall(townHall);
+                                Log.d(TAG, "onComplete: townHall = "+mMayorViewModel.getCurrentTownHall());
+
+                                // Show Town Hall Fragment
+                                configureAndShowTownHallFragment();
+                            } else {
+                                Log.d(TAG, "Error getting documents: ", task.getException());
+                            }
+                        }
+                    });
+        }
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -166,6 +183,18 @@ public class MayorActivity extends BaseActivity implements NavigationView.OnNavi
         // Add it to FrameLayout container
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.activity_mayor_fragment, mTownHallFragment)
+                .commit();
+
+        // Get FragmentManager (Support) and Try to find existing instance of fragment in FrameLayout container
+        Fragment fragmentEventsList = getSupportFragmentManager().findFragmentById(R.id.activity_mayor_fragment_events_list);
+
+        // if a fragment already exists, then we remove it
+        if (fragmentEventsList != null) getSupportFragmentManager().beginTransaction().remove(fragmentEventsList).commit();
+
+        mEventsListFragment = mEventsListFragment.newInstance();
+        // Add it to FrameLayout container
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.activity_mayor_fragment_events_list, mEventsListFragment)
                 .commit();
     }
     // ---------------------------------------------------------------------------------------------
@@ -251,6 +280,14 @@ public class MayorActivity extends BaseActivity implements NavigationView.OnNavi
                 return super.onOptionsItemSelected(item);
         }*/
         return true;
+    }
+    @Override
+    public void onEventClick(Event event) {
+        Log.d(TAG, "onEventClick: ");
+        CurrentEventDataRepository.getInstance().setCurrentEventID(event.getEventID());
+
+        // Call DetailsEventActivity
+        Toolbox.startActivity(this, DetailsEventActivity.class);
     }
     // ---------------------------------------------------------------------------------------------
     //                                          UI

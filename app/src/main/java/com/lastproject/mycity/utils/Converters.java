@@ -4,9 +4,10 @@ import android.util.Log;
 
 import androidx.room.TypeConverter;
 
-import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.lastproject.mycity.models.LatLng;
 
 import org.threeten.bp.Instant;
 import org.threeten.bp.LocalDateTime;
@@ -23,13 +24,13 @@ public class Converters {
     private static final String TAG = Converters.class.getSimpleName();
 
     @TypeConverter
-    public static LocalDateTime fromTimestamp(Long value) {
+    public static LocalDateTime fromTimestampToLocalDateTime(Long value) {
         Log.d(TAG, "fromTimestamp() called with: value = [" + value + "]");
         return value == null ? null : Instant.ofEpochMilli(value).atZone(ZoneId.systemDefault()).toLocalDateTime();
     }
 
     @TypeConverter
-    public static Long dateToTimestamp(LocalDateTime date) {
+    public static Long fromLocalDateTimeToTimestamp(LocalDateTime date) {
         Log.d(TAG, "dateToTimestamp() called with: date = [" + date + "]");
         Long dateLong = (date == null ? null : date.atZone(ZoneId.systemDefault()).toEpochSecond()*1000);
         Log.d(TAG, "dateToTimestamp: dateLong = "+dateLong);
@@ -88,5 +89,21 @@ public class Converters {
         Gson gson = new Gson();
         String json = gson.toJson(location);
         return json;
+    }
+    @TypeConverter
+    public static String fromGeoPointToString(GeoPoint geoPoint) {
+        Log.d(TAG, "fromGeoPointToString() called with: geoPoint = [" + geoPoint + "]");
+        Gson gson = new Gson();
+        String json = gson.toJson(geoPoint);
+        return json;
+    }
+    @TypeConverter
+    public static GeoPoint fromStringToGeoPoint(String geoPoint) {
+        Log.d(TAG, "fromStringToGeoPoint() called with: geoPoint = [" + geoPoint + "]");
+        if (geoPoint == null){
+            return(null);
+        }
+        Type geoPointType = new TypeToken<GeoPoint>() {}.getType();
+        return new Gson().fromJson(geoPoint, geoPointType);
     }
 }

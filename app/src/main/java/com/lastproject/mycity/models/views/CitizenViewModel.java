@@ -11,11 +11,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.lastproject.mycity.models.Event;
 import com.lastproject.mycity.repositories.EventDataRoomRepository;
 import com.lastproject.mycity.repositories.MayorDataFireStoreRepository;
 import com.lastproject.mycity.repositories.UserDataAuthenticationRepository;
 import com.lastproject.mycity.repositories.UserDataFireStoreRepository;
-import com.lastproject.mycity.room.models.Event;
 
 import java.util.List;
 import java.util.concurrent.Executor;

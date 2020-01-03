@@ -2,8 +2,8 @@ package com.lastproject.mycity.repositories;
 
 import androidx.lifecycle.LiveData;
 
+import com.lastproject.mycity.models.Event;
 import com.lastproject.mycity.room.dao.EventDao;
-import com.lastproject.mycity.room.models.Event;
 
 import java.util.List;
 

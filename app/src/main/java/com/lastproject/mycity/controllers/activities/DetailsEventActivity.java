@@ -64,8 +64,8 @@ public class DetailsEventActivity extends BaseActivity {
 
         // If the width of the device is => 1280 then if the activity is reset during a rotation,
         // then it is closed
-        Log.d(TAG, "onResume: is_w1280 = "+getResources().getBoolean(R.bool.is_w1280));
-        if (getResources().getBoolean(R.bool.is_w1280)) finish();
+        //Log.d(TAG, "onResume: is_w1280 = "+getResources().getBoolean(R.bool.is_w1280));
+        //if (getResources().getBoolean(R.bool.is_w1280)) finish();
     }
     // ---------------------------------------------------------------------------------------------
     //                                        ENTRY POINT

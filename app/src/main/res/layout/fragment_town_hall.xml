@@ -1,14 +1,271 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".controllers.fragments.TownHallFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="TownHallFragment" />
+        android:layout_height="match_parent">
 
-</FrameLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/fragment_town_hall_root"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/fragment_first_connexion_guideline_horizontal_01"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="@integer/guidelineH01" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/fragment_first_connexion_guideline_horizontal_25"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.25" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/fragment_first_connexion_guideline_horizontal_60"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.60" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/fragment_first_connexion_guideline_vertical_33"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.33" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/fragment_first_connexion_guideline_vertical_66"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.66" />
+
+            <!-- TOWN HALL NAME -->
+            <TextView
+                android:id="@+id/fragment_town_hall_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_first_connexion_guideline_horizontal_01"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:hint="NOM DE LA COMMUNE"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:gravity="center|top"
+                android:textColor="@android:color/holo_purple"/>
+
+            <!-- === HOURS === -->
+            <!-- TITLE -->
+            <TextView
+                android:id="@+id/fragment_town_hall_hours_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_first_connexion_guideline_horizontal_25"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="Heures d'ouvertures :"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/holo_purple"/>
+            <!-- HOUR 1 -->
+            <TextView
+                android:id="@+id/fragment_town_hall_hours_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_town_hall_hours_title"
+                app:layout_constraintStart_toStartOf="parent"
+                android:hint="Heures 1"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimary"/>
+            <!-- HOUR 2 -->
+            <TextView
+                android:id="@+id/fragment_town_hall_hours_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_town_hall_hours_1"
+                app:layout_constraintStart_toStartOf="parent"
+                android:hint="Heures 2"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimary"/>
+            <!-- HOUR 3 -->
+            <TextView
+                android:id="@+id/fragment_town_hall_hours_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_town_hall_hours_2"
+                app:layout_constraintStart_toStartOf="parent"
+                android:hint="Heures 3"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimary"/>
+            <!-- HOUR 4 -->
+            <TextView
+                android:id="@+id/fragment_town_hall_hours_4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_town_hall_hours_3"
+                app:layout_constraintStart_toStartOf="parent"
+                android:hint="Heures 4"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimary"/>
+            <!-- HOUR 5 -->
+            <TextView
+                android:id="@+id/fragment_town_hall_hours_5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_town_hall_hours_4"
+                app:layout_constraintStart_toStartOf="parent"
+                android:hint="Heures 5"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimary"/>
+            <!-- HOUR 6 -->
+            <TextView
+                android:id="@+id/fragment_town_hall_hours_6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_town_hall_hours_5"
+                app:layout_constraintStart_toStartOf="parent"
+                android:hint="Heures 6"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimary"/>
+            <!-- HOUR 7 -->
+            <TextView
+                android:id="@+id/fragment_town_hall_hours_7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_town_hall_hours_6"
+                app:layout_constraintStart_toStartOf="parent"
+                android:hint="Heures 7"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimary"/>
+
+            <!-- === ADDRESS === -->
+            <!-- TITLE -->
+            <TextView
+                android:id="@+id/fragment_town_hall_address_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_first_connexion_guideline_horizontal_25"
+                app:layout_constraintStart_toStartOf="@+id/fragment_first_connexion_guideline_vertical_33"
+                android:text="Coordonnées :"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/holo_purple"/>
+            <!-- ADDRESS LINE 1 -->
+            <TextView
+                android:id="@+id/fragment_town_hall_address_line_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_town_hall_address_title"
+                app:layout_constraintStart_toStartOf="@+id/fragment_first_connexion_guideline_vertical_33"
+                android:hint="address line 1"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimary"/>
+            <!-- ADDRESS LINE 2 -->
+            <TextView
+                android:id="@+id/fragment_town_hall_address_line_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_town_hall_address_line_1"
+                app:layout_constraintStart_toStartOf="@+id/fragment_first_connexion_guideline_vertical_33"
+                android:hint="address line 2"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimary"/>
+            <!-- ADDRESS LINE 3 -->
+            <TextView
+                android:id="@+id/fragment_town_hall_address_line_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_town_hall_address_line_2"
+                app:layout_constraintStart_toStartOf="@+id/fragment_first_connexion_guideline_vertical_33"
+                android:hint="address line 3"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimary"/>
+            <!-- ADDRESS LINE 4 -->
+            <TextView
+                android:id="@+id/fragment_town_hall_address_line_4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_town_hall_address_line_3"
+                app:layout_constraintStart_toStartOf="@+id/fragment_first_connexion_guideline_vertical_33"
+                android:hint="address line 4"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimary"/>
+            <!-- EMAIL -->
+            <TextView
+                android:id="@+id/fragment_town_hall_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_town_hall_address_line_4"
+                app:layout_constraintStart_toStartOf="@+id/fragment_first_connexion_guideline_vertical_33"
+                android:hint="email"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimary"/>
+            <!-- PHONE -->
+            <TextView
+                android:id="@+id/fragment_town_hall_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_town_hall_email"
+                app:layout_constraintStart_toStartOf="@+id/fragment_first_connexion_guideline_vertical_33"
+                android:hint="phone"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimary"/>
+            <!-- URL -->
+            <TextView
+                android:id="@+id/fragment_town_hall_url"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_town_hall_phone"
+                app:layout_constraintStart_toStartOf="@+id/fragment_first_connexion_guideline_vertical_33"
+                android:hint="url"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimary"/>
+
+            <!-- Static Map -->
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.MaterialComponents.CardView"
+                android:id="@+id/fragment_town_hall_mcv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_first_connexion_guideline_horizontal_25"
+                app:layout_constraintStart_toStartOf="@+id/fragment_first_connexion_guideline_vertical_66"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:cardElevation="8dp"
+                app:cardCornerRadius="10dp">
+                <ImageView
+                    android:id="@+id/fragment_town_hall_static_map"
+                    android:layout_width="250dp"
+                    android:layout_height="250dp"
+                    />
+            </com.google.android.material.card.MaterialCardView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+</LinearLayout>

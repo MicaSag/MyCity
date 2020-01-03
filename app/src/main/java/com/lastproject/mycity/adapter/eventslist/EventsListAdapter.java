@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.RequestManager;
 import com.lastproject.mycity.R;
-import com.lastproject.mycity.room.models.Event;
+import com.lastproject.mycity.models.Event;
 
 import java.util.List;
 

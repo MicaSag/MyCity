@@ -9,16 +9,18 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.lastproject.mycity.R;
 import com.lastproject.mycity.adapter.eventslist.EventsListAdapter;
-import com.lastproject.mycity.controllers.activities.EventsActivity;
-import com.lastproject.mycity.models.views.EventViewModel;
+import com.lastproject.mycity.injections.Injection;
+import com.lastproject.mycity.injections.ViewModelFactory;
+import com.lastproject.mycity.models.Event;
+import com.lastproject.mycity.models.views.ListEventsViewModel;
 import com.lastproject.mycity.repositories.CurrentEventDataRepository;
-import com.lastproject.mycity.room.models.Event;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +38,7 @@ public class EventsListFragment extends Fragment {
     private static final String TAG = EventsListFragment.class.getSimpleName();
 
     // Declare ViewModel
-    private EventViewModel mEventViewModel;
+    private ListEventsViewModel mListEventsViewModel;
 
     //For Data
     // Declare list of property & Adapter
@@ -90,13 +92,15 @@ public class EventsListFragment extends Fragment {
     private void configureViewModel() {
         Log.d(TAG, "configureViewModel: ");
 
-        mEventViewModel = ((EventsActivity) getActivity()).getMayorViewModel();
+        ViewModelFactory mViewModelFactory = Injection.provideViewModelFactory(getContext());
+        mListEventsViewModel = ViewModelProviders.of(this, mViewModelFactory)
+                .get(ListEventsViewModel.class);
 
         // Observe a change of Current Events List in Room
-        mEventViewModel.getEvents().observe(this, this::updateEventsList);
+        mListEventsViewModel.getEventsRoom().observe(this, this::updateEventsList);
 
         // Observe a change of Current Event (for update selected event)
-        CurrentEventDataRepository.getInstance().getCurrentEventId().observe(this, this::updateEventsList);
+        CurrentEventDataRepository.getInstance().getCurrentEventID().observe(this, this::updateEventsList);
     }
     // --------------------------------------------------------------------------------------------
     //                                    CONFIGURATION
@@ -110,7 +114,8 @@ public class EventsListFragment extends Fragment {
         // Attach the adapter to the recyclerView to populate items
         mRecyclerView.setAdapter(mEventsListAdapter);
         // Set layout manager to position the items
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),
+                LinearLayoutManager.HORIZONTAL,false));
     }
     // --------------------------------------------------------------------------------------------
     //                                        ACTIONS

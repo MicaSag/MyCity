@@ -29,8 +29,8 @@ public class MayorHelper {
 
     // --- CREATE ---
 
-    public static Task<Void> createMayor(String userID, String inseeID, String codeID) {
-        Mayor mayorToCreate = new Mayor(null,userID, inseeID, codeID);
+    public static Task<Void> createMayor(String userID, String townHallID, String codeID) {
+        Mayor mayorToCreate = new Mayor(null,userID, townHallID, codeID);
         return MayorHelper.getMayorsCollection()
                 .document()
                 .set(mayorToCreate);
@@ -48,9 +48,9 @@ public class MayorHelper {
         return MayorHelper.getMayorsCollection().whereEqualTo("userID",userID);
     }
 
-    // Get Mayor by inseeID
-    public static Query getMayorByInseeID(String inseeID){
-        return MayorHelper.getMayorsCollection().whereEqualTo("inseeID",inseeID);
+    // Get Mayor by townHallID
+    public static Query getMayorByTownHallID(String townHallID){
+        return MayorHelper.getMayorsCollection().whereEqualTo("townHallID",townHallID);
     }
 
     // Get Mayor by codeID
@@ -70,9 +70,9 @@ public class MayorHelper {
         return MayorHelper.getMayorsCollection().document(mayorID).update("userID", userID);
     }
 
-    // Update inseeID of Mayor
-    public static Task<Void> updateMayorInseeID(String mayorID, String inseeID) {
-        return MayorHelper.getMayorsCollection().document(mayorID).update("inseeID", inseeID);
+    // Update townHallID of Mayor
+    public static Task<Void> updateMayorTownHallID(String mayorID, String townHallID) {
+        return MayorHelper.getMayorsCollection().document(mayorID).update("townHallID", townHallID);
     }
 
     // --- DELETE ---

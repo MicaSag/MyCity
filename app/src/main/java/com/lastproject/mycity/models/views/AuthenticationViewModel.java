@@ -3,6 +3,7 @@ package com.lastproject.mycity.models.views;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -15,7 +16,13 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.lastproject.mycity.firebase.database.firestore.models.Mayor;
+import com.lastproject.mycity.firebase.database.firestore.models.TownHall;
 import com.lastproject.mycity.firebase.database.firestore.models.User;
+import com.lastproject.mycity.models.Event;
+import com.lastproject.mycity.repositories.CurrentMayorDataRepository;
+import com.lastproject.mycity.repositories.CurrentTownHallDataRepository;
+import com.lastproject.mycity.repositories.EventDataFireStoreRepository;
+import com.lastproject.mycity.repositories.EventDataRoomRepository;
 import com.lastproject.mycity.repositories.MayorDataFireStoreRepository;
 import com.lastproject.mycity.repositories.UserDataAuthenticationRepository;
 import com.lastproject.mycity.repositories.UserDataFireStoreRepository;
@@ -31,6 +38,7 @@ public class AuthenticationViewModel extends ViewModel {
     private final UserDataAuthenticationRepository userDataAuthenticationSource;
     private final UserDataFireStoreRepository userDataFireStoreSource;
     private final MayorDataFireStoreRepository mayorDataFireStoreSource;
+    private final EventDataRoomRepository eventDataRoomSource;
     private final Executor executor;
 
     // Data
@@ -44,20 +52,17 @@ public class AuthenticationViewModel extends ViewModel {
     }
     // - Current User in the model
     private User userInModel;
-    // - Current Mayor in the model
-    private Mayor mayorInModel;
-
 
     public AuthenticationViewModel(UserDataAuthenticationRepository userDataAuthenticationSource,
                                    UserDataFireStoreRepository userDataFireStoreSource,
                                    MayorDataFireStoreRepository mayorDataFireStoreSource,
+                                   EventDataRoomRepository eventDataRoomSource,
                                    Executor executor) {
         this.userDataAuthenticationSource = userDataAuthenticationSource;
         this.userDataFireStoreSource = userDataFireStoreSource;
         this.mayorDataFireStoreSource = mayorDataFireStoreSource;
+        this.eventDataRoomSource = eventDataRoomSource;
         this.executor = executor;
-
-
     }
 
     // --- USER IN MODEL ---
@@ -70,21 +75,22 @@ public class AuthenticationViewModel extends ViewModel {
         this.userInModel = userInModel;
     }
 
-    // --- MAYOR IN MODEL ---
-    //
-    public Mayor getMayorInModel() {
-        return mayorInModel;
-    }
-
-    public void setMayorInModel(Mayor mayorInModel) {
-        this.mayorInModel = mayorInModel;
-    }
-
     // --- REGISTRATION STATUS ---
     //
     public MutableLiveData<RegistrationStatus> getRegistrationStatus() {
         return registrationStatus;
     }
+
+    // --- CURRENT MAYOR ---
+    //
+    public Mayor getCurrentMayor() {return CurrentMayorDataRepository.getInstance().getCurrentMayor();}
+    public void setCurrentMayor(Mayor mayor) {CurrentMayorDataRepository.getInstance().setCurrentMayor(mayor);}
+
+    // --- CURRENT TOWN HALL ---
+    //
+    public LiveData<TownHall> getTownHall() {return CurrentTownHallDataRepository.getInstance().getCurrentTownHall();}
+    public void setTownHall(TownHall townHall) {CurrentTownHallDataRepository.getInstance().setCurrentTownHall(townHall);}
+
 
     // --- FIRE BASE : AUTHENTICATION ---
     //
@@ -185,12 +191,12 @@ public class AuthenticationViewModel extends ViewModel {
                                             public void onSuccess(Void aVoid) {
                                                 Log.d(TAG, "onSuccess getting documents: ");
 
-                                                // save Mayor in the Model
+                                                // save Current Mayor
                                                 Mayor mayor = new Mayor(document.getId(),
                                                                         document.get("userID").toString(),
-                                                                        document.get("inseeID").toString(),
+                                                                        document.get("townHallID").toString(),
                                                                         document.get("codeID").toString());
-                                                setMayorInModel(mayor);
+                                                setCurrentMayor(mayor);
 
                                                 // create the user in fireStore as mayor
                                                 createUser(true);

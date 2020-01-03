@@ -38,7 +38,6 @@ public class UserProfileChoiceDialogFragment extends DialogFragment {
     @BindView(R.id.fragment_user_profile_choice_rb_mayor) RadioButton mRadioButtonMayor;
     @BindView(R.id.fragment_user_profile_choice_et_mayor_id) TextInputEditText mMayorIDValue;
 
-
     // Declare ViewModel
     private AuthenticationViewModel mAuthenticationViewModel;
 

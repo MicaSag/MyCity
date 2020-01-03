@@ -8,7 +8,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.lastproject.mycity.room.models.Event;
+import com.lastproject.mycity.models.Event;
 
 import java.util.List;
 
@@ -21,12 +21,12 @@ public interface EventDao {
     @Query("SELECT * FROM Event")
     LiveData<List<Event>> getEvents();
 
-    @Query("SELECT * FROM Event where eventId = :eventId")
-    LiveData<Event> getEvent(@NonNull String eventId);
+    @Query("SELECT * FROM Event where eventID = :eventID")
+    LiveData<Event> getEvent(@NonNull String eventID);
 
     @Update
     int updateEvent(Event event);
 
-    @Query("DELETE FROM Event WHERE eventId = :eventId")
-    int deleteEvent(@NonNull String eventId);
+    @Query("DELETE FROM Event WHERE eventID = :eventID")
+    int deleteEvent(@NonNull String eventID);
 }

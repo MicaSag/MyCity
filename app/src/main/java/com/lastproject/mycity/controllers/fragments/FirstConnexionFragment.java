@@ -2,11 +2,6 @@ package com.lastproject.mycity.controllers.fragments;
 
 
 import android.os.Bundle;
-
-import androidx.appcompat.widget.Toolbar;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,14 +11,21 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 
+import androidx.fragment.app.Fragment;
+
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
 import com.lastproject.mycity.R;
-import com.lastproject.mycity.controllers.activities.AuthenticationActivity;
 import com.lastproject.mycity.controllers.activities.MayorActivity;
-import com.lastproject.mycity.models.views.AuthenticationViewModel;
+import com.lastproject.mycity.firebase.database.firestore.models.TownHall;
+import com.lastproject.mycity.models.views.MayorViewModel;
 import com.lastproject.mycity.network.retrofit.models.Insee;
-import com.lastproject.mycity.network.retrofit.models.townhall.TownHall;
+import com.lastproject.mycity.network.retrofit.models.townhall.TownH;
 import com.lastproject.mycity.network.retrofit.streams.InseeListStreams;
 import com.lastproject.mycity.network.retrofit.streams.TownHallStreams;
+import com.lastproject.mycity.repositories.CurrentMayorDataRepository;
+import com.lastproject.mycity.repositories.CurrentTownHallDataRepository;
+import com.lastproject.mycity.utils.Mapping;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,8 +33,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnItemClick;
-import butterknife.OnItemSelected;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 
@@ -47,6 +47,9 @@ public class FirstConnexionFragment extends Fragment {
     // Adding @BindView in order to indicate to ButterKnife to get & serialise it
     public @BindView(R.id.fragment_first_connexion_ed_city_value) EditText mCityValue;
     public @BindView(R.id.fragment_first_connexion_auto_city_list) AutoCompleteTextView mAutoCityList;
+
+    // Declare ViewModel
+    private MayorViewModel mMayorViewModel;
 
     //FOR DATA
     private Disposable disposable;
@@ -79,11 +82,23 @@ public class FirstConnexionFragment extends Fragment {
         // Initialize ButterKnife
         ButterKnife.bind(this, view);
 
+        // Configure ViewModel
+        configureViewModel();
+
         // ButterKnife does not support an autocomplete view,
         // so you have to create a classic listener for this view
         createAutoCompleteCityListListener();
 
         return view;
+    }
+    // ---------------------------------------------------------------------------------------------
+    //                                        VIEW MODEL
+    // ---------------------------------------------------------------------------------------------
+    // Configure ViewModel
+    private void configureViewModel() {
+        Log.d(TAG, "configureViewModel: ");
+
+        mMayorViewModel = ((MayorActivity) getActivity()).getMayorViewModel();
     }
     // ---------------------------------------------------------------------------------------------
     //                                          ACTIONS
@@ -94,8 +109,14 @@ public class FirstConnexionFragment extends Fragment {
         mAutoCityList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d(TAG, "onItemSelected() called with: parent = [" + parent + "], view = ["
-                        + view + "], position = [" + position + "], id = [" + id + "]");
+                Log.d(TAG, "onItemSelected() :");
+
+                String item = parent.getItemAtPosition(position).toString();
+                Log.d(TAG, "onItemClick: item = "+item);
+
+                // Update Current Mayor with townHallID (Insee code)
+                mMayorViewModel.getCurrentMayor()
+                        .setTownHallID(mMayorViewModel.getInseeList().get(position).getCode());
             }
         });
     }
@@ -115,9 +136,11 @@ public class FirstConnexionFragment extends Fragment {
     public void onValidateClick(View view) {
         Log.d(TAG, "onValidateClick: ");
 
-        // If the desired character string is not empty
-        // we start searching for Insee codes
-        ((MayorActivity) getActivity()).configureAndShowTownHallFragment();
+        // Get TownH Data
+        // save its in viewModel and FireStore
+        // And Show Town Hall Fragment
+        getTownHallInformations(mMayorViewModel.getCurrentMayor().getTownHallID());
+
     }
     // ---------------------------------------------------------------------------------------------
     //                                       HTTP (RxJAVA)
@@ -129,58 +152,78 @@ public class FirstConnexionFragment extends Fragment {
         // Retrieves cities based on an input character string
         String citySearch = mCityValue.getText().toString();
         // Execute the stream subscribing to Observable defined inside GithubStream
-        this.disposable = InseeListStreams.streamFetchInseeList(citySearch).subscribeWith(new DisposableObserver<List<Insee>>() {
+        this.disposable = InseeListStreams.streamFetchInseeList(citySearch)
+                .subscribeWith(new DisposableObserver<List<Insee>>() {
             @Override
             public void onNext(List<Insee> inseeList) {
-                Log.e("TAG", "On Next");
+                Log.d(TAG, "onNext: ");
                 // Update UI with list of users
                 displayInseeList(inseeList);
-                //getTownHallInformation(inseeList.get(0).getCode());
                 configureAutoCompleteInseeList(inseeList);
             }
-
             @Override
-            public void onError(Throwable e) {
-                Log.e("TAG", "On Error" + Log.getStackTraceString(e));
-            }
-
+            public void onError(Throwable e) {Log.d(TAG, "onError: ");}
             @Override
-            public void onComplete() {
-                Log.e("TAG", "On Complete !!");
-            }
+            public void onComplete() {Log.d(TAG, "onComplete: ");}
         });
     }
-
-
     // Retrieves the information of a city according to its insee code
-    private void getTownHallInformation(String insee) {
+    private void getTownHallInformations(String insee) {
+        Log.d(TAG, "getTownHallInformations: ");
 
         // Execute the stream subscribing to Observable defined inside GithubStream
-        this.disposable = TownHallStreams.streamFetchTownHall(insee).subscribeWith(new DisposableObserver<TownHall>() {
+        this.disposable = TownHallStreams.streamFetchTownHall(insee).subscribeWith(new DisposableObserver<TownH>() {
             @Override
-            public void onNext(TownHall townHall) {
-                Log.e("TAG", "On Next");
+            public void onNext(TownH townH) {
+                Log.d(TAG, "onNext: ");
                 // Update UI with list of users
-                displayTownHall(townHall);
-            }
+                displayTownHall(townH);
 
+                // Map TownH To TownHall
+                TownHall townHall = Mapping.mapTownHToTownHall(townH);
+
+                // Create TownHall in Fire Store
+                mMayorViewModel
+                        .createTownHall(townHall)
+                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d(TAG, "onSuccess: ");
+
+                        // Save TownHall in model
+                        mMayorViewModel.setCurrentTownHall(townHall);
+
+                        // Update townHallID Mayor in Fire Store
+                        mMayorViewModel.updateMayorTownHallID(mMayorViewModel
+                                .getCurrentMayor().getMayorID(), documentReference.getId() )
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+
+                                        // Show Town Hall Fragment
+                                        ((MayorActivity) getActivity()).configureAndShowTownHallFragment();
+                                    }
+                                });
+                    }
+                });
+            }
             @Override
-            public void onError(Throwable e) {
-                Log.e("TAG", "On Error" + Log.getStackTraceString(e));
-            }
-
+            public void onError(Throwable e) {Log.d(TAG, "onError: ");}
             @Override
             public void onComplete() {
-                Log.e("TAG", "On Complete !!");
+                Log.d(TAG, "onComplete: ");
             }
         });
     }
 
     // ---------------------------------------------------------------------------------------------
-    //                              AUTOCOMPLETE TYPE CONFIGURATION
+    //                      AUTOCOMPLETE INSEE CONFIGURATION
     // ---------------------------------------------------------------------------------------------
     private void configureAutoCompleteInseeList(List<Insee> inseeList) {
         Log.d(TAG, "configureAutoCompleteType: ");
+
+        // Save insee List in view Model
+        mMayorViewModel.setInseeList(inseeList);
 
         ArrayList<String> ar = new ArrayList<>();
 
@@ -205,42 +248,41 @@ public class FirstConnexionFragment extends Fragment {
             Log.d(TAG, "displayInseeList: code Postaux  = " + insee.getCodesPostaux().get(0));
         }
     }
-    public void displayTownHall(TownHall townHall) {
+    public void displayTownHall(TownH townH) {
 
-        Log.d(TAG, "displayTownHall: TownHall = " + townHall.getFeatures().get(0).getProperties().getId());
-        Log.d(TAG, "displayTownHall: TownHall = " + townHall.getFeatures().get(0).getProperties().getPivotLocal());
-        Log.d(TAG, "displayTownHall: TownHall = " + townHall.getFeatures().get(0).getProperties().getNom());
-        Log.d(TAG, "displayTownHall: TownHall = " + townHall.getFeatures().get(0).getGeometry().getCoordinates().get(0));
-        Log.d(TAG, "displayTownHall: TownHall = " + townHall.getFeatures().get(0).getGeometry().getCoordinates().get(1));
-        Log.d(TAG, "displayTownHall: TownHall = " + townHall.getFeatures().get(0).getProperties()
+        Log.d(TAG, "displayTownHall: TownH = " + townH.getFeatures().get(0).getProperties().getId());
+        Log.d(TAG, "displayTownHall: TownH = " + townH.getFeatures().get(0).getProperties().getPivotLocal());
+        Log.d(TAG, "displayTownHall: TownH = " + townH.getFeatures().get(0).getProperties().getNom());
+        Log.d(TAG, "displayTownHall: TownH = " + townH.getFeatures().get(0).getGeometry().getCoordinates().get(0));
+        Log.d(TAG, "displayTownHall: TownH = " + townH.getFeatures().get(0).getGeometry().getCoordinates().get(1));
+        Log.d(TAG, "displayTownHall: TownH = " + townH.getFeatures().get(0).getProperties()
                 .getAdresses().get(0).getLignes().size());
-        Log.d(TAG, "displayTownHall: TownHall = " + townHall.getFeatures().get(0).getProperties()
+        Log.d(TAG, "displayTownHall: TownH = " + townH.getFeatures().get(0).getProperties()
                 .getAdresses().get(0).getLignes());
-        Log.d(TAG, "displayTownHall: TownHall = " + townHall.getFeatures().get(0).getProperties()
+        Log.d(TAG, "displayTownHall: TownH = " + townH.getFeatures().get(0).getProperties()
                 .getAdresses().get(0).getCodePostal());
-        Log.d(TAG, "displayTownHall: TownHall = " + townHall.getFeatures().get(0).getProperties()
+        Log.d(TAG, "displayTownHall: TownH = " + townH.getFeatures().get(0).getProperties()
                 .getAdresses().get(0).getCommune());
-        Log.d(TAG, "displayTownHall: TownHall = " + townHall.getFeatures().get(0).getProperties()
+        Log.d(TAG, "displayTownHall: TownH = " + townH.getFeatures().get(0).getProperties()
                 .getHoraires().size());
-        Log.d(TAG, "displayTownHall: TownHall = " + townHall.getFeatures().get(0).getProperties()
+        Log.d(TAG, "displayTownHall: TownH = " + townH.getFeatures().get(0).getProperties()
                 .getHoraires().get(0).getDu());
-        Log.d(TAG, "displayTownHall: TownHall = " + townHall.getFeatures().get(0).getProperties()
+        Log.d(TAG, "displayTownHall: TownH = " + townH.getFeatures().get(0).getProperties()
                 .getHoraires().get(0).getAu());
-        Log.d(TAG, "displayTownHall: TownHall = " + townHall.getFeatures().get(0).getProperties()
+        Log.d(TAG, "displayTownHall: TownH = " + townH.getFeatures().get(0).getProperties()
                 .getHoraires().get(0).getHeures().get(0).getDe());
-        Log.d(TAG, "displayTownHall: TownHall = " + townHall.getFeatures().get(0).getProperties()
+        Log.d(TAG, "displayTownHall: TownH = " + townH.getFeatures().get(0).getProperties()
                 .getHoraires().get(0).getHeures().get(0).getA());
-        Log.d(TAG, "displayTownHall: TownHall = " + townHall.getFeatures().get(0).getProperties()
+        Log.d(TAG, "displayTownHall: TownH = " + townH.getFeatures().get(0).getProperties()
                 .getEmail());
-        Log.d(TAG, "displayTownHall: TownHall = " + townHall.getFeatures().get(0).getProperties()
+        Log.d(TAG, "displayTownHall: TownH = " + townH.getFeatures().get(0).getProperties()
                 .getTelephone());
-        Log.d(TAG, "displayTownHall: TownHall = " + townHall.getFeatures().get(0).getProperties()
+        Log.d(TAG, "displayTownHall: TownH = " + townH.getFeatures().get(0).getProperties()
                 .getUrl());
     }
     // ---------------------------------------------------------------------------------------------
     //                                      DESTROY ACTIVITY
     // ---------------------------------------------------------------------------------------------
-
     @Override
     public void onDestroy() {
         super.onDestroy();

@@ -9,16 +9,16 @@ public class Mayor implements Parcelable {
 
     private String mayorID;
     private String userID;
-    private String inseeID;
+    private String townHallID;
     @NonNull  private String codeID;
 
     // Blank constructor necessary for use with FireBase
     public Mayor() { }
 
-    public Mayor(String mayorID, String userID, String inseeID, @NonNull String codeID) {
+    public Mayor(String mayorID, String userID, String townHallID, @NonNull String codeID) {
         this.mayorID = mayorID;
         this.userID = userID;
-        this.inseeID = inseeID;
+        this.townHallID = townHallID;
         this.codeID = codeID;
     }
 
@@ -27,7 +27,7 @@ public class Mayor implements Parcelable {
         return "Mayor{" +
                 "mayorID='" + mayorID + '\'' +
                 ", userID='" + userID + '\'' +
-                ", inseeID='" + inseeID + '\'' +
+                ", townHallID='" + townHallID + '\'' +
                 ", codeID='" + codeID + '\'' +
                 '}';
     }
@@ -40,10 +40,9 @@ public class Mayor implements Parcelable {
         return userID;
     }
 
-    public String getInseeID() {
-        return inseeID;
+    public String getTownHallID() {
+        return townHallID;
     }
-
 
 // --- SETTERS ---
 
@@ -53,8 +52,8 @@ public class Mayor implements Parcelable {
         this.userID = userID;
     }
 
-    public void setInseeID(String inseeID) {
-        this.inseeID = inseeID;
+    public void setTownHallID(String townHallID) {
+        this.townHallID = townHallID;
     }
 
     public void setCodeID(String codeID) {
@@ -77,7 +76,7 @@ public class Mayor implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.mayorID);
         dest.writeString(this.userID);
-        dest.writeString(this.inseeID);
+        dest.writeString(this.townHallID);
         dest.writeString(this.codeID);
     }
 
@@ -98,7 +97,7 @@ public class Mayor implements Parcelable {
     protected Mayor(Parcel in) {
         this.mayorID = in.readString();
         this.userID = in.readString();
-        this.inseeID = in.readString();
+        this.townHallID = in.readString();
         this.codeID = in.readString();
     }
 }

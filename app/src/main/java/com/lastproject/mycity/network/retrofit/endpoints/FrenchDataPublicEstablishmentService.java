@@ -1,7 +1,7 @@
 package com.lastproject.mycity.network.retrofit.endpoints;
 
 
-import com.lastproject.mycity.network.retrofit.models.townhall.TownHall;
+import com.lastproject.mycity.network.retrofit.models.townhall.TownH;
 
 
 import io.reactivex.Observable;
@@ -15,7 +15,7 @@ import retrofit2.http.Path;
 public interface FrenchDataPublicEstablishmentService {
 
     @GET("communes/{inseecode}/mairie")
-    Observable<TownHall> getTownHall(@Path("inseecode") String inseecode);
+    Observable<TownH> getTownHall(@Path("inseecode") String inseecode);
 
     public static final Retrofit retrofit = new Retrofit.Builder()
             .baseUrl("https://etablissements-publics.api.gouv.fr/v3/")

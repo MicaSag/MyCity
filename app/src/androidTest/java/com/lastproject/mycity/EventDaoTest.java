@@ -9,7 +9,6 @@ import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.lastproject.mycity.room.database.MyCityDatabase;
-import com.lastproject.mycity.room.models.Event;
 
 import org.junit.After;
 import org.junit.Before;

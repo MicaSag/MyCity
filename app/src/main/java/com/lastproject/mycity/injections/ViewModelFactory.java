@@ -9,9 +9,12 @@ import com.lastproject.mycity.models.views.CitizenViewModel;
 import com.lastproject.mycity.models.views.CreateEventViewModel;
 import com.lastproject.mycity.models.views.DetailsEventViewModel;
 import com.lastproject.mycity.models.views.EventViewModel;
+import com.lastproject.mycity.models.views.ListEventsViewModel;
 import com.lastproject.mycity.models.views.MayorViewModel;
+import com.lastproject.mycity.repositories.EventDataFireStoreRepository;
 import com.lastproject.mycity.repositories.EventDataRoomRepository;
 import com.lastproject.mycity.repositories.MayorDataFireStoreRepository;
+import com.lastproject.mycity.repositories.TownHallDataFireStoreRepository;
 import com.lastproject.mycity.repositories.UserDataAuthenticationRepository;
 import com.lastproject.mycity.repositories.UserDataFireStoreRepository;
 
@@ -26,17 +29,23 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
     private final UserDataAuthenticationRepository userDataAuthenticationSource;
     private final UserDataFireStoreRepository userDataFireStoreSource;
     private final MayorDataFireStoreRepository mayorDataFireStoreSource;
+    private final TownHallDataFireStoreRepository townHallDataFireStoreSource;
+    private final EventDataFireStoreRepository eventDataFireStoreSource;
     private final Executor executor;
 
     public ViewModelFactory(EventDataRoomRepository eventDataRoomSource,
                             UserDataAuthenticationRepository userDataAuthenticationSource,
                             UserDataFireStoreRepository userDataFireStoreSource,
                             MayorDataFireStoreRepository mayorDataFireStoreSource,
+                            TownHallDataFireStoreRepository townHallDataFireStoreSource,
+                            EventDataFireStoreRepository eventDataFireStoreSource,
                             Executor executor) {
         this.eventDataRoomSource = eventDataRoomSource;
         this.userDataAuthenticationSource = userDataAuthenticationSource;
         this.userDataFireStoreSource = userDataFireStoreSource;
         this.mayorDataFireStoreSource = mayorDataFireStoreSource;
+        this.townHallDataFireStoreSource = townHallDataFireStoreSource;
+        this.eventDataFireStoreSource = eventDataFireStoreSource;
         this.executor = executor;
     }
 
@@ -46,13 +55,15 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
             return (T) new AuthenticationViewModel( this.userDataAuthenticationSource,
                                                     this.userDataFireStoreSource,
                                                     this.mayorDataFireStoreSource,
+                                                    this.eventDataRoomSource,
                                                     this.executor);
         }
         if (modelClass.isAssignableFrom(MayorViewModel.class)) {
             return (T) new MayorViewModel(  this.userDataAuthenticationSource,
-                    this.userDataFireStoreSource,
-                    this.mayorDataFireStoreSource,
-                    this.executor);
+                                            this.userDataFireStoreSource,
+                                            this.mayorDataFireStoreSource,
+                                            this.townHallDataFireStoreSource,
+                                            this.executor);
         }
         if (modelClass.isAssignableFrom(CitizenViewModel.class)) {
             return (T) new CitizenViewModel(this.userDataAuthenticationSource,
@@ -63,16 +74,22 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
         }
         if (modelClass.isAssignableFrom(EventViewModel.class)) {
             return (T) new EventViewModel(  this.userDataAuthenticationSource,
-                    this.userDataFireStoreSource,
-                    this.mayorDataFireStoreSource,
-                    this.eventDataRoomSource,
-                    this.executor);
+                                            this.userDataFireStoreSource,
+                                            this.mayorDataFireStoreSource,
+                                            this.eventDataRoomSource,
+                                            this.executor);
+        }
+        if (modelClass.isAssignableFrom(ListEventsViewModel.class)) {
+                return (T) new ListEventsViewModel( this.eventDataRoomSource,
+                                                    this.eventDataFireStoreSource,
+                                                    this.executor);
         }
         if (modelClass.isAssignableFrom(DetailsEventViewModel.class)) {
             return (T) new DetailsEventViewModel(   this.userDataAuthenticationSource,
                                                     this.userDataFireStoreSource,
                                                     this.mayorDataFireStoreSource,
                                                     this.eventDataRoomSource,
+                                                    this.eventDataFireStoreSource,
                                                     this.executor);
         }
         if (modelClass.isAssignableFrom(CreateEventViewModel.class)) {

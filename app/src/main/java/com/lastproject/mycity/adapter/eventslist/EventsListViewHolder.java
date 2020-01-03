@@ -12,8 +12,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.RequestManager;
 import com.google.android.material.card.MaterialCardView;
 import com.lastproject.mycity.R;
+import com.lastproject.mycity.models.Event;
 import com.lastproject.mycity.repositories.CurrentEventDataRepository;
-import com.lastproject.mycity.room.models.Event;
+import com.lastproject.mycity.utils.Converters;
+
+import org.threeten.bp.LocalDateTime;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -54,25 +57,27 @@ public class EventsListViewHolder extends RecyclerView.ViewHolder implements Vie
             glide.load(event.getPhotos().get(0)).into(mImage);
 
         // Display Event Start Date
-        String startDay = event.getStartDate().getDayOfMonth()+"/"+
-                event.getStartDate().getMonth()+"/"+
-                event.getStartDate().getYear();
+        LocalDateTime startDate = Converters.fromTimestampToLocalDateTime(event.getStartDate());
+        String startDay = startDate.getDayOfMonth()+"/"+
+                startDate.getMonth()+"/"+
+                startDate.getYear();
         mStartDate.setText(startDay);
 
         // Display Event End Date
-        String endDay = event.getEndDate().getDayOfMonth()+"/"+
-                event.getEndDate().getMonth()+"/"+
-                event.getEndDate().getYear();
+        LocalDateTime endDate = Converters.fromTimestampToLocalDateTime(event.getEndDate());
+        String endDay = endDate.getDayOfMonth()+"/"+
+                endDate.getMonth()+"/"+
+                endDate.getYear();
         mEndDate.setText(endDay);
 
         // For indicate item Selected
         Resources res = itemView.getResources();
-        Log.d(TAG, "updateWithProperty: event.getEventId() = "+event.getEventId());
+        Log.d(TAG, "updateWithProperty: event.getEventID() = "+event.getEventID());
         Log.d(TAG, "updateWithProperty: CurrentEventDataRepository.getInstance()\n" +
                 "                .getCurrentEventId().getValue() = "+CurrentEventDataRepository.getInstance()
-                .getCurrentEventId().getValue());
-        if (event.getEventId().equals(CurrentEventDataRepository.getInstance()
-                .getCurrentEventId().getValue())) {
+                .getCurrentEventID().getValue());
+        if (event.getEventID().equals(CurrentEventDataRepository.getInstance()
+                .getCurrentEventID().getValue())) {
             mMCV.setCardBackgroundColor(res.getColorStateList(R.color.colorPrimary));
             mTitle.setTextColor(Color.WHITE);
             mStartDate.setTextColor(Color.WHITE);

@@ -29,9 +29,9 @@ public class MayorDataFireStoreRepository {
         return MayorHelper.getMayorByUserID(userID);
     }
 
-    // Get Mayor by inseeID
-    public Query getMayorByInseeID(String inseeID){
-        return MayorHelper.getMayorByInseeID(inseeID);
+    // Get Mayor by townHallID
+    public Query getMayorByTownHallID(String townHallID){
+        return MayorHelper.getMayorByTownHallID(townHallID);
     }
 
     // Get Mayor by codeID
@@ -55,9 +55,9 @@ public class MayorDataFireStoreRepository {
         return MayorHelper.updateMayorUserID(mayorID, userID);
     }
 
-    // Update inseeID of Mayor
-    public Task<Void> updateMayorInseeID(String mayorID, String inseeID) {
-        return MayorHelper.updateMayorInseeID(mayorID, inseeID);
+    // Update townHallID of Mayor
+    public Task<Void> updateMayorTownHallID(String mayorID, String townHallID) {
+        return MayorHelper.updateMayorTownHallID(mayorID, townHallID);
     }
 }
 
