@@ -120,6 +120,13 @@
                 android:layout_height="150dp"
                 android:layout_gravity="start"
                 android:scaleType="fitXY" />
+            <ImageView
+                android:id="@+id/view_older_event_canceled_image"
+                android:src="@drawable/canceled"
+                android:layout_width="210dp"
+                android:layout_height="150dp"
+                android:layout_gravity="start"
+                android:scaleType="fitXY" />
         </FrameLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

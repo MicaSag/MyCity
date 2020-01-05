@@ -7,6 +7,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.lastproject.mycity.firebase.database.firestore.models.EventFireStore;
 import com.lastproject.mycity.models.Event;
 
 public class EventHelper {
@@ -24,9 +25,8 @@ public class EventHelper {
 
     // --- CREATE ---
 
-    public static Task<DocumentReference> createEvent(Event event) {
-        return EventHelper.getEventsCollection()
-                .add(event);
+    public static Task<DocumentReference> createEvent(EventFireStore eventFireStore) {
+        return EventHelper.getEventsCollection().add(eventFireStore);
     }
 
     // --- GET ---
@@ -50,7 +50,9 @@ public class EventHelper {
 
     // Update Event
     public static Task<Void> updateEvent(Event event) {
-        return EventHelper.getEventsCollection().document(event.getEventID()).set(event);
+        EventFireStore eventFireStore = event;
+        return EventHelper.getEventsCollection().document(event.getEventID())
+                .set(eventFireStore);
     }
 
     // --- DELETE ---

@@ -116,7 +116,7 @@ public class FirstConnexionFragment extends Fragment {
 
                 // Update Current Mayor with townHallID (Insee code)
                 mMayorViewModel.getCurrentMayor()
-                        .setTownHallID(mMayorViewModel.getInseeList().get(position).getCode());
+                        .getMayorFireStore().setTownHallID(mMayorViewModel.getInseeList().get(position).getCode());
             }
         });
     }
@@ -139,7 +139,7 @@ public class FirstConnexionFragment extends Fragment {
         // Get TownH Data
         // save its in viewModel and FireStore
         // And Show Town Hall Fragment
-        getTownHallInformations(mMayorViewModel.getCurrentMayor().getTownHallID());
+        getTownHallInformations(mMayorViewModel.getCurrentMayor().getMayorFireStore().getTownHallID());
 
     }
     // ---------------------------------------------------------------------------------------------
@@ -194,11 +194,15 @@ public class FirstConnexionFragment extends Fragment {
                         mMayorViewModel.setCurrentTownHall(townHall);
 
                         // Update townHallID Mayor in Fire Store
+                        Log.d(TAG, "onSuccess: mMayorViewModel.getCurrentMayor().getMayorID() = "
+                                +mMayorViewModel.getCurrentMayor().getMayorID());
+                        Log.d(TAG, "onSuccess: documentReference.getId() = "+documentReference.getId());
                         mMayorViewModel.updateMayorTownHallID(mMayorViewModel
                                 .getCurrentMayor().getMayorID(), documentReference.getId() )
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
+                                        Log.d(TAG, "onSuccess() : Update townHallID Mayor in Fire Store");
 
                                         // Show Town Hall Fragment
                                         ((MayorActivity) getActivity()).configureAndShowTownHallFragment();

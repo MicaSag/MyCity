@@ -24,6 +24,7 @@ import com.lastproject.mycity.injections.Injection;
 import com.lastproject.mycity.injections.ViewModelFactory;
 import com.lastproject.mycity.models.Event;
 import com.lastproject.mycity.models.views.DetailsEventViewModel;
+import com.lastproject.mycity.utils.Converters;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,12 +39,15 @@ public class EventDetailsFragment extends Fragment implements PhotosListAdapter.
 
     // For Design
     @BindView(R.id.fragment_details_photos_recycler_view) RecyclerView mRecyclerView;
+    @BindView(R.id.fragment_details_title) TextView mTitle;
     @BindView(R.id.fragment_details_description_text) TextView mDescription;
     @BindView(R.id.fragment_details_location_address_line_1) TextView mLocation_1;
     @BindView(R.id.fragment_details_location_address_line_2) TextView mLocation_2;
     @BindView(R.id.fragment_details_location_address_line_3) TextView mLocation_3;
     @BindView(R.id.fragment_details_location_address_line_4) TextView mLocation_4;
     @BindView(R.id.fragment_details_location_address_line_5) TextView mLocation_5;
+    @BindView(R.id.fragment_details_start_date) TextView mStartDate;
+    @BindView(R.id.fragment_details_end_date) TextView mEndDate;
     @BindView(R.id.fragment_details_static_map) ImageView mStaticMap;
 
     // Declare DetailsEventViewModel
@@ -126,55 +130,72 @@ public class EventDetailsFragment extends Fragment implements PhotosListAdapter.
     //                                             UI
     // ---------------------------------------------------------------------------------------------
     public void updateUI(Event event){
+        Log.d(TAG, "updateUI() called with: event = [" + event + "]");
         if (event != null) {
             mDescription.setText(event.getDescription());
 
+            if (event.getTitle() != null) {
+                mTitle.setText(event.getTitle());
+            }
+
+            if (event.getStartDate() != null) {
+                mStartDate.setText(Converters.fromTimestampToLocalDateTime(event.getStartDate()).toString());
+            }
+
+            if (event.getEndDate()!= null) {
+                mEndDate.setText(Converters.fromTimestampToLocalDateTime(event.getEndDate()).toString());
+            }
+
+            if (event.getPhotos() != null) {
+                mPhotosListAdapter.setNewPhotos(event.getPhotos());
+            }
+
             // Display Address
-            String address = "";
-            if (event.getAddress().size() > 0) {
-                mLocation_1.setText(event.getAddress().get(0));
-                mLocation_1.setVisibility(View.VISIBLE);
-                address+= event.getAddress().get(0)+"+";
-            } else  mLocation_1.setVisibility(View.GONE);
-            if (event.getAddress().size() > 1) {
-                mLocation_2.setText(event.getAddress().get(1));
-                mLocation_2.setVisibility(View.VISIBLE);
-                address+= event.getAddress().get(1)+"+";
-            } else  mLocation_2.setVisibility(View.GONE);
-            if (event.getAddress().size() > 2) {
-                mLocation_3.setText(event.getAddress().get(2));
-                mLocation_3.setVisibility(View.VISIBLE);
-                address+= event.getAddress().get(2)+"+";
-            } else  mLocation_3.setVisibility(View.GONE);
-            if (event.getAddress().size() > 3) {
-                mLocation_4.setText(event.getAddress().get(3));
-                mLocation_4.setVisibility(View.VISIBLE);
-                address+= event.getAddress().get(3)+"+";
-            } else  mLocation_4.setVisibility(View.GONE);
-            if (event.getAddress().size() > 4) {
-                mLocation_5.setText(event.getAddress().get(4));
-                mLocation_5.setVisibility(View.VISIBLE);
-                address+= event.getAddress().get(4);
-            } else  mLocation_5.setVisibility(View.GONE);
+            if (event.getAddress() != null) {
+                String address = "";
+                if (event.getAddress().size() > 0) {
+                    mLocation_1.setText(event.getAddress().get(0));
+                    mLocation_1.setVisibility(View.VISIBLE);
+                    address += event.getAddress().get(0) + "+";
+                } else mLocation_1.setVisibility(View.GONE);
+                if (event.getAddress().size() > 1) {
+                    mLocation_2.setText(event.getAddress().get(1));
+                    mLocation_2.setVisibility(View.VISIBLE);
+                    address += event.getAddress().get(1) + "+";
+                } else mLocation_2.setVisibility(View.GONE);
+                if (event.getAddress().size() > 2) {
+                    mLocation_3.setText(event.getAddress().get(2));
+                    mLocation_3.setVisibility(View.VISIBLE);
+                    address += event.getAddress().get(2) + "+";
+                } else mLocation_3.setVisibility(View.GONE);
+                if (event.getAddress().size() > 3) {
+                    mLocation_4.setText(event.getAddress().get(3));
+                    mLocation_4.setVisibility(View.VISIBLE);
+                    address += event.getAddress().get(3) + "+";
+                } else mLocation_4.setVisibility(View.GONE);
+                if (event.getAddress().size() > 4) {
+                    mLocation_5.setText(event.getAddress().get(4));
+                    mLocation_5.setVisibility(View.VISIBLE);
+                    address += event.getAddress().get(4);
+                } else mLocation_5.setVisibility(View.GONE);
 
-            mPhotosListAdapter.setNewPhotos(event.getPhotos());
-
-            // Created Uri to recover the static Mapping
-            Uri.Builder uriStaticMap
-                    = Uri.parse("https://maps.googleapis.com/maps/api/staticmap").buildUpon();
-            // Add options
-            uriStaticMap
-                    .appendQueryParameter("size","300x300")
-                    .appendQueryParameter("scale","2")
-                    .appendQueryParameter("zoom","16")
-                    .appendQueryParameter("key", BuildConfig.google_static_map_api);
-            String markers = "size:mid|color:blue|label:E|" + address;
-            uriStaticMap.appendQueryParameter("markers",markers);
-            // Display static Map depending on the address of the property
-            Glide.with(this)
-                    .load(uriStaticMap.build())
-                    .apply(RequestOptions.centerCropTransform())
-                    .into(mStaticMap);
+                // Created Uri to recover the static Mapping
+                Uri.Builder uriStaticMap
+                        = Uri.parse("https://maps.googleapis.com/maps/api/staticmap").buildUpon();
+                // Add options
+                uriStaticMap
+                        .appendQueryParameter("size", "300x300")
+                        .appendQueryParameter("scale", "2")
+                        .appendQueryParameter("zoom", "16")
+                        .appendQueryParameter("key", BuildConfig.google_static_map_api);
+                String markers = "size:mid|color:blue|label:E|" + address;
+                uriStaticMap.appendQueryParameter("markers", markers);
+                // Display static Map depending on the address of the property
+                Glide.with(this)
+                        .load(uriStaticMap.build())
+                        .apply(RequestOptions.centerCropTransform())
+                        .into(mStaticMap);
+            }
         }
     }
 }

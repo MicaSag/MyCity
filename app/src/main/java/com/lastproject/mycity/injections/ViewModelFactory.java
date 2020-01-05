@@ -54,9 +54,7 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
         if (modelClass.isAssignableFrom(AuthenticationViewModel.class)) {
             return (T) new AuthenticationViewModel( this.userDataAuthenticationSource,
                                                     this.userDataFireStoreSource,
-                                                    this.mayorDataFireStoreSource,
-                                                    this.eventDataRoomSource,
-                                                    this.executor);
+                                                    this.mayorDataFireStoreSource);
         }
         if (modelClass.isAssignableFrom(MayorViewModel.class)) {
             return (T) new MayorViewModel(  this.userDataAuthenticationSource,
@@ -85,10 +83,7 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
                                                     this.executor);
         }
         if (modelClass.isAssignableFrom(DetailsEventViewModel.class)) {
-            return (T) new DetailsEventViewModel(   this.userDataAuthenticationSource,
-                                                    this.userDataFireStoreSource,
-                                                    this.mayorDataFireStoreSource,
-                                                    this.eventDataRoomSource,
+            return (T) new DetailsEventViewModel(   this.eventDataRoomSource,
                                                     this.eventDataFireStoreSource,
                                                     this.executor);
         }

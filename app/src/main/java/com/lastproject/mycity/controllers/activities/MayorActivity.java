@@ -1,14 +1,18 @@
 package com.lastproject.mycity.controllers.activities;
 
+import android.content.ContentValues;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.constraintlayout.widget.Guideline;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -58,6 +62,9 @@ public class MayorActivity extends BaseActivity implements  NavigationView.OnNav
     public @BindView(R.id.activity_mayor_root) ConstraintLayout mConstraintLayout;
     public @BindView(R.id.activity_mayor_drawer_layout) DrawerLayout mDrawerLayout;
     public @BindView(R.id.activity_mayor_nav_view) NavigationView mNavigationView;
+    public @BindView(R.id.activity_mayor_guideline_horizontal_50) Guideline mGuideLine50;
+    public @BindView(R.id.activity_mayor_guideline_horizontal_70) Guideline mGuideLine70;
+    public @BindView(R.id.activity_mayor_fragment_events_list) FrameLayout mFragmentEventList;
 
     // ---------------------------------------------------------------------------------------------
     //                                DECLARATION BASE METHODS
@@ -103,6 +110,11 @@ public class MayorActivity extends BaseActivity implements  NavigationView.OnNav
 
         // display switching according to the progress of the mayor's profile
         this.switchingDisplay();
+
+        /*ConstraintLayout.LayoutParams params =
+                (ConstraintLayout.LayoutParams)mFragmentEventList.getLayoutParams();
+        params.topToBottom = mTownHallFragment.mHoursMCV.getId();
+        mFragmentEventList.requestLayout();*/
     }
     // ---------------------------------------------------------------------------------------------
     //                                        VIEW MODEL
@@ -121,14 +133,16 @@ public class MayorActivity extends BaseActivity implements  NavigationView.OnNav
     // ---------------------------------------------------------------------------------------------
     public void switchingDisplay() {
         Log.d(TAG, "switchingDisplay: ");
-        if (mMayorViewModel.getCurrentMayor().getTownHallID().equals("")){
+        if (mMayorViewModel.getCurrentMayor().getMayorFireStore().getTownHallID().equals("")){
             Log.d(TAG, "switchingDisplay: First Connexion");
             // Show First Connexion Fragment
             configureAndShowFirstConnexionFragment();
         } else {
-            Log.d(TAG, "switchingDisplay: Go To Town Hall");
+            Log.d(TAG, "switchingDisplay: Go To Town Hall _ townHallID = "
+                    +mMayorViewModel.getCurrentMayor().getMayorFireStore().getTownHallID());
             // retrieves town hall data from the Fire Store and stores it in the view Model
-            mMayorViewModel.getTownHallByTownHallID(mMayorViewModel.getCurrentMayor().getTownHallID())
+            mMayorViewModel.getTownHallByTownHallID(mMayorViewModel
+                                            .getCurrentMayor().getMayorFireStore().getTownHallID())
                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -139,7 +153,7 @@ public class MayorActivity extends BaseActivity implements  NavigationView.OnNav
 
                                 // Set Current TownHall
                                 mMayorViewModel.setCurrentTownHall(townHall);
-                                Log.d(TAG, "onComplete: townHall = "+mMayorViewModel.getCurrentTownHall());
+                                Log.d(TAG, "onComplete: townHall = "+mMayorViewModel.getCurrentTownHall().getValue());
 
                                 // Show Town Hall Fragment
                                 configureAndShowTownHallFragment();
@@ -286,8 +300,8 @@ public class MayorActivity extends BaseActivity implements  NavigationView.OnNav
         Log.d(TAG, "onEventClick: ");
         CurrentEventDataRepository.getInstance().setCurrentEventID(event.getEventID());
 
-        // Call DetailsEventActivity
-        Toolbox.startActivity(this, DetailsEventActivity.class);
+        // Call DetailsEventActivity if event not canceled
+        if (!event.isCanceled()) Toolbox.startActivity(this, DetailsEventActivity.class);
     }
     // ---------------------------------------------------------------------------------------------
     //                                          UI

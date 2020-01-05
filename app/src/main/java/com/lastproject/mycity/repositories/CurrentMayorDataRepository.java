@@ -1,6 +1,6 @@
 package com.lastproject.mycity.repositories;
 
-import com.lastproject.mycity.firebase.database.firestore.models.Mayor;
+import com.lastproject.mycity.models.Mayor;
 
 public class CurrentMayorDataRepository {
 

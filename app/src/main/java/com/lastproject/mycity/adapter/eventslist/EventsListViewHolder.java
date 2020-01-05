@@ -33,6 +33,7 @@ public class EventsListViewHolder extends RecyclerView.ViewHolder implements Vie
     @BindView(R.id.view_older_event_start_date)  TextView mStartDate;
     @BindView(R.id.view_older_event_end_date)  TextView mEndDate;
     @BindView(R.id.view_older_event_image) ImageView mImage;
+    @BindView(R.id.view_older_event_canceled_image) ImageView mCanceledImage;
 
     private EventsListAdapter.OnEventClick mOnEventClick;
     private Event mEvent;
@@ -50,25 +51,29 @@ public class EventsListViewHolder extends RecyclerView.ViewHolder implements Vie
         mOnEventClick = callback;
 
         // Display Event Title
-        mTitle.setText(event.getTitle());
+        if (event.getTitle() !=null) mTitle.setText(event.getTitle());
 
         // Display Event Photo
         if (event.getPhotos() !=null) if (event.getPhotos().get(0) != null)
             glide.load(event.getPhotos().get(0)).into(mImage);
 
         // Display Event Start Date
-        LocalDateTime startDate = Converters.fromTimestampToLocalDateTime(event.getStartDate());
-        String startDay = startDate.getDayOfMonth()+"/"+
-                startDate.getMonth()+"/"+
-                startDate.getYear();
-        mStartDate.setText(startDay);
+        if (event.getStartDate() !=null) {
+            LocalDateTime startDate = Converters.fromTimestampToLocalDateTime(event.getStartDate());
+            String startDay = startDate.getDayOfMonth() + "/" +
+                    startDate.getMonth() + "/" +
+                    startDate.getYear();
+            mStartDate.setText(startDay);
+        }
 
         // Display Event End Date
-        LocalDateTime endDate = Converters.fromTimestampToLocalDateTime(event.getEndDate());
-        String endDay = endDate.getDayOfMonth()+"/"+
-                endDate.getMonth()+"/"+
-                endDate.getYear();
-        mEndDate.setText(endDay);
+        if (event.getEndDate()!= null) {
+            LocalDateTime endDate = Converters.fromTimestampToLocalDateTime(event.getEndDate());
+            String endDay = endDate.getDayOfMonth() + "/" +
+                    endDate.getMonth() + "/" +
+                    endDate.getYear();
+            mEndDate.setText(endDay);
+        }
 
         // For indicate item Selected
         Resources res = itemView.getResources();
@@ -88,6 +93,15 @@ public class EventsListViewHolder extends RecyclerView.ViewHolder implements Vie
             mTitle.setTextColor(res.getColorStateList(R.color.colorPrimary));
             mStartDate.setTextColor(res.getColorStateList(R.color.colorPrimary));
             mEndDate.setTextColor(res.getColorStateList(R.color.colorPrimary));
+        }
+
+        // Display Canceled
+        Log.d(TAG, "updateWithProperty: event.isCanceled() = "+event.isCanceled());
+        if (event.isCanceled()) {
+            mCanceledImage.setVisibility(View.VISIBLE);
+        }
+        else {
+            mCanceledImage.setVisibility(View.INVISIBLE);
         }
     }
 

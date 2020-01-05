@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- === HOURS === -->
+<com.google.android.material.card.MaterialCardView
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/Widget.MaterialComponents.CardView"
+    android:id="@+id/hours_mcv"
+    app:cardElevation="8dp"
+    app:cardCornerRadius="10dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/hours_cl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp">
+
+        <!-- TITLE -->
+        <TextView
+            android:id="@+id/hours_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Heures d'ouvertures"
+            android:textColor="@android:color/holo_purple"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        <!-- HOUR 1 -->
+        <TextView
+            android:id="@+id/hours_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:hint="Heures 1"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/hours_title" />
+        <!-- HOUR 2 -->
+        <TextView
+            android:id="@+id/hours_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Heures 2"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/hours_1"
+            app:layout_constraintTop_toBottomOf="@+id/hours_1" />
+        <!-- HOUR 3 -->
+        <TextView
+            android:id="@+id/hours_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Heures 3"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/hours_2"
+            app:layout_constraintTop_toBottomOf="@+id/hours_2" />
+        <!-- HOUR 4 -->
+        <TextView
+            android:id="@+id/hours_4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Heures 4"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/hours_3"
+            app:layout_constraintTop_toBottomOf="@+id/hours_3" />
+        <!-- HOUR 5 -->
+        <TextView
+            android:id="@+id/hours_5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Heures 5"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/hours_4"
+            app:layout_constraintTop_toBottomOf="@+id/hours_4" />
+        <!-- HOUR 6 -->
+        <TextView
+            android:id="@+id/hours_6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Heures 6"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/hours_5"
+            app:layout_constraintTop_toBottomOf="@+id/hours_5" />
+        <!-- HOUR 7 -->
+        <TextView
+            android:id="@+id/hours_7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Heures 7"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/hours_6"
+            app:layout_constraintTop_toBottomOf="@+id/hours_6" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

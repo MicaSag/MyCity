@@ -1,18 +1,11 @@
 package com.lastproject.mycity.firebase.database.firestore.helpers;
 
-import android.util.Log;
-
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.lastproject.mycity.firebase.database.firestore.models.Mayor;
+import com.lastproject.mycity.firebase.database.firestore.models.MayorFireStore;
 
 public class MayorHelper {
 
@@ -29,11 +22,10 @@ public class MayorHelper {
 
     // --- CREATE ---
 
-    public static Task<Void> createMayor(String userID, String townHallID, String codeID) {
-        Mayor mayorToCreate = new Mayor(null,userID, townHallID, codeID);
+    public static Task<Void> createMayor(MayorFireStore mayorFireStore) {
         return MayorHelper.getMayorsCollection()
                 .document()
-                .set(mayorToCreate);
+                .set(mayorFireStore);
     }
 
     // --- GET ---

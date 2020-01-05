@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.material.card.MaterialCardView;
 import com.lastproject.mycity.BuildConfig;
 import com.lastproject.mycity.R;
 import com.lastproject.mycity.controllers.activities.MayorActivity;
@@ -33,15 +34,20 @@ public class TownHallFragment extends Fragment {
     private static final String TAG = TownHallFragment.class.getSimpleName();
 
     // Adding @BindView in order to indicate to ButterKnife to get & serialise it
+    // -- LAYOUT : fragment_town_hall
     public @BindView(R.id.fragment_town_hall_name) TextView mName;
-    public @BindView(R.id.fragment_town_hall_hours_title) TextView mHoursTitle;
-    public @BindView(R.id.fragment_town_hall_hours_1) TextView mHour1;
-    public @BindView(R.id.fragment_town_hall_hours_2) TextView mHour2;
-    public @BindView(R.id.fragment_town_hall_hours_3) TextView mHour3;
-    public @BindView(R.id.fragment_town_hall_hours_4) TextView mHour4;
-    public @BindView(R.id.fragment_town_hall_hours_5) TextView mHour5;
-    public @BindView(R.id.fragment_town_hall_hours_6) TextView mHour6;
-    public @BindView(R.id.fragment_town_hall_hours_7) TextView mHour7;
+    public @BindView(R.id.fragment_town_hall_mcv_hours) MaterialCardView mMCV_Hours;
+    // -- LAYOUT : mcv_hours
+    //public @BindView(R.id.hours_mcv) MaterialCardView mHoursMCV;
+    public @BindView(R.id.hours_title) TextView mHoursTitle;
+    public @BindView(R.id.hours_1) TextView mHour1;
+    public @BindView(R.id.hours_2) TextView mHour2;
+    public @BindView(R.id.hours_3) TextView mHour3;
+    public @BindView(R.id.hours_4) TextView mHour4;
+    public @BindView(R.id.hours_5) TextView mHour5;
+    public @BindView(R.id.hours_6) TextView mHour6;
+    public @BindView(R.id.hours_7) TextView mHour7;
+
     public @BindView(R.id.fragment_town_hall_address_title) TextView mAddressTitle;
     public @BindView(R.id.fragment_town_hall_address_line_1) TextView mAddressLine1;
     public @BindView(R.id.fragment_town_hall_address_line_2) TextView mAddressLine2;

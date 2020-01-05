@@ -23,9 +23,6 @@ public class DetailsEventViewModel extends ViewModel {
     private static final String TAG = DetailsEventViewModel.class.getSimpleName();
 
     // Repositories
-    private final UserDataAuthenticationRepository userDataAuthenticationSource;
-    private final UserDataFireStoreRepository userDataFireStoreSource;
-    private final MayorDataFireStoreRepository mayorDataFireStoreSource;
     private final EventDataRoomRepository eventDataRoomSource;
     private final EventDataFireStoreRepository eventDataFireStoreSource;
     private final Executor executor;
@@ -33,15 +30,9 @@ public class DetailsEventViewModel extends ViewModel {
     @NonNull
     private LiveData<Event> mCurrentEvent;
 
-    public DetailsEventViewModel(UserDataAuthenticationRepository userDataAuthenticationSource,
-                                 UserDataFireStoreRepository userDataFireStoreSource,
-                                 MayorDataFireStoreRepository mayorDataFireStoreSource,
-                                 EventDataRoomRepository eventDataRoomSource,
+    public DetailsEventViewModel(EventDataRoomRepository eventDataRoomSource,
                                  EventDataFireStoreRepository eventDataFireStoreSource,
                                  Executor executor) {
-        this.userDataAuthenticationSource = userDataAuthenticationSource;
-        this.userDataFireStoreSource = userDataFireStoreSource;
-        this.mayorDataFireStoreSource = mayorDataFireStoreSource;
         this.eventDataRoomSource = eventDataRoomSource;
         this.eventDataFireStoreSource = eventDataFireStoreSource;
         this.executor = executor;

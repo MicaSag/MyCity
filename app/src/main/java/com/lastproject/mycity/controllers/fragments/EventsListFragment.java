@@ -114,8 +114,11 @@ public class EventsListFragment extends Fragment {
         // Attach the adapter to the recyclerView to populate items
         mRecyclerView.setAdapter(mEventsListAdapter);
         // Set layout manager to position the items
+        int orientation;
+        if (getResources().getBoolean(R.bool.is_w1280)) {orientation = RecyclerView.HORIZONTAL;}
+        else{orientation = RecyclerView.VERTICAL;}
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),
-                LinearLayoutManager.HORIZONTAL,false));
+                orientation,false));
     }
     // --------------------------------------------------------------------------------------------
     //                                        ACTIONS

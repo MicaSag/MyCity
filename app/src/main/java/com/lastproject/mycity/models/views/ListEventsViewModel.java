@@ -4,28 +4,23 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.lastproject.mycity.firebase.database.firestore.models.Mayor;
+import com.lastproject.mycity.firebase.database.firestore.models.EventFireStore;
+import com.lastproject.mycity.models.Mayor;
 import com.lastproject.mycity.firebase.database.firestore.models.TownHall;
 import com.lastproject.mycity.models.Event;
 import com.lastproject.mycity.repositories.CurrentEventDataRepository;
-import com.lastproject.mycity.repositories.CurrentEventsDataRepository;
 import com.lastproject.mycity.repositories.CurrentMayorDataRepository;
 import com.lastproject.mycity.repositories.CurrentTownHallDataRepository;
 import com.lastproject.mycity.repositories.EventDataFireStoreRepository;
 import com.lastproject.mycity.repositories.EventDataRoomRepository;
-import com.lastproject.mycity.room.database.MyCityDatabase;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
 
@@ -48,9 +43,9 @@ public class ListEventsViewModel extends ViewModel {
 
         // Get the whole list of Fire Store Events
         Log.d(TAG, "onChanged: getCurrentTownHall = " + getCurrentTownHall().getValue());
-        Query fireStoreEvents = getEventsFireStore(getCurrentTownHall().getValue().getInseeID());
+        Query fireStoreEvents = getEventsInFireStoreByInseeID(getCurrentTownHall().getValue().getInseeID());
 
-        // get Events list in FireStore
+        // get Events in FireStore By InseeID
         fireStoreEvents.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots,
@@ -62,8 +57,9 @@ public class ListEventsViewModel extends ViewModel {
                 }
 
                 for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                    Event event = document.toObject(Event.class);
-                    Log.d(TAG, "onEvent: event Fire Base = " + event);
+                    EventFireStore eventFireStore = document.toObject(EventFireStore.class);
+                    Log.d(TAG, "onEvent: event Fire Base = " + eventFireStore);
+                    Event event = new Event(document.getId(),eventFireStore);
                     // Create Event in Room
                     createEventRoom(event);
                 }
@@ -91,7 +87,7 @@ public class ListEventsViewModel extends ViewModel {
         CurrentTownHallDataRepository.getInstance().setCurrentTownHall(townHall);
     }
 
-    // --- CURRENT EVENTS ---
+    // --- CURRENT EVENT SELECTED ---
     //
     public LiveData<String> getCurrentEventID() {
         return CurrentEventDataRepository.getInstance().getCurrentEventID();
@@ -105,8 +101,8 @@ public class ListEventsViewModel extends ViewModel {
     // --- FIRE STORE  ---
     // =============
     // Get the whole list of events in FireStore
-    public Query getEventsFireStore(String inseeID) {
-        return eventDataFireStoreSource.getEventsByInseeID(inseeID);
+    public Query getEventsInFireStoreByInseeID(String inseeID) {
+        return eventDataFireStoreSource.getEventsInFireStoreByInseeID(inseeID);
     }
 
     // --- ROOM  ---

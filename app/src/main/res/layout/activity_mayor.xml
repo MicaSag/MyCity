@@ -21,43 +21,57 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/activity_mayor_root"
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:fillViewport="false">
 
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/fragment_first_connexion_guideline_horizontal_50"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintGuide_percent="0.5" />
-
-                <!-- FRAGMENT -->
-                <FrameLayout
-                    android:id="@+id/activity_mayor_fragment"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/activity_mayor_root"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    >
 
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    />
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/activity_mayor_guideline_horizontal_50"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:layout_constraintGuide_percent="0.5" />
 
-                <!-- FRAGMENT -->
-                <FrameLayout
-                    android:id="@+id/activity_mayor_fragment_events_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/activity_mayor_guideline_horizontal_70"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:layout_constraintGuide_percent="0.7" />
 
-                    app:layout_constraintTop_toTopOf="@+id/fragment_first_connexion_guideline_horizontal_50"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    />
+                    <!-- FRAGMENT -->
+                    <FrameLayout
+                        android:id="@+id/activity_mayor_fragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        />
+
+                    <!-- FRAGMENT -->
+                    <FrameLayout
+                        android:id="@+id/activity_mayor_fragment_events_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+
+                        app:layout_constraintTop_toBottomOf="@+id/activity_mayor_fragment"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </ScrollView>
 
         </LinearLayout>
 

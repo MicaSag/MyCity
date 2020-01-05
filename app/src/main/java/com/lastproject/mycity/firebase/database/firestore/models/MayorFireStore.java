@@ -5,18 +5,16 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
-public class Mayor implements Parcelable {
+public class MayorFireStore implements Parcelable {
 
-    private String mayorID;
     private String userID;
     private String townHallID;
-    @NonNull  private String codeID;
+    private String codeID;
 
     // Blank constructor necessary for use with FireBase
-    public Mayor() { }
+    public MayorFireStore() { }
 
-    public Mayor(String mayorID, String userID, String townHallID, @NonNull String codeID) {
-        this.mayorID = mayorID;
+    public MayorFireStore(String userID, String townHallID, String codeID) {
         this.userID = userID;
         this.townHallID = townHallID;
         this.codeID = codeID;
@@ -24,17 +22,14 @@ public class Mayor implements Parcelable {
 
     @Override
     public String toString() {
-        return "Mayor{" +
-                "mayorID='" + mayorID + '\'' +
-                ", userID='" + userID + '\'' +
+        return "MayorFireStore{" +
+                "userID='" + userID + '\'' +
                 ", townHallID='" + townHallID + '\'' +
                 ", codeID='" + codeID + '\'' +
                 '}';
     }
 
-    // --- GETTERS ---
-
-    public String getMayorID() {return mayorID;}
+// --- GETTERS ---
 
     public String getUserID() {
         return userID;
@@ -44,9 +39,9 @@ public class Mayor implements Parcelable {
         return townHallID;
     }
 
-// --- SETTERS ---
+    @NonNull public String getCodeID() {return codeID;}
 
-    public void setMayorID(String mayorID) {this.mayorID = mayorID;}
+    // --- SETTERS ---
 
     public void setUserID(String userID) {
         this.userID = userID;
@@ -56,10 +51,7 @@ public class Mayor implements Parcelable {
         this.townHallID = townHallID;
     }
 
-    public void setCodeID(String codeID) {
-        this.codeID = codeID;
-    }
-
+    public void setCodeID(@NonNull String codeID) {this.codeID = codeID;}
 
     // ---------------------------------------------------------------------------------------------
     //                                         PARCELABLE SECTION
@@ -74,28 +66,26 @@ public class Mayor implements Parcelable {
     /* Write Mayor in parcel */
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.mayorID);
         dest.writeString(this.userID);
         dest.writeString(this.townHallID);
         dest.writeString(this.codeID);
     }
 
     /* Factory Creator */
-    public static final Creator<Mayor> CREATOR = new Creator<Mayor>() {
+    public static final Creator<MayorFireStore> CREATOR = new Creator<MayorFireStore>() {
         @Override
-        public Mayor createFromParcel(Parcel in) {
-            return new Mayor(in);
+        public MayorFireStore createFromParcel(Parcel in) {
+            return new MayorFireStore(in);
         }
 
         @Override
-        public Mayor[] newArray(int size) {
-            return new Mayor[size];
+        public MayorFireStore[] newArray(int size) {
+            return new MayorFireStore[size];
         }
     };
 
     /* Constructor for build a Mayor from Parcel */
-    protected Mayor(Parcel in) {
-        this.mayorID = in.readString();
+    protected MayorFireStore(Parcel in) {
         this.userID = in.readString();
         this.townHallID = in.readString();
         this.codeID = in.readString();

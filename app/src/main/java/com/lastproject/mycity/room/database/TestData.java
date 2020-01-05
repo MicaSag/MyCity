@@ -32,6 +32,7 @@ public class TestData {
         contentValues.put("address", Arrays.asList("\"3 rue de la chesnaie\"", "\"\"", "\"Cagneux\"", "\"Bailleval\"", "\"France\"").toString());
         contentValues.put("startDate", Converters.fromLocalDateTimeToTimestamp(LocalDateTime.now().withDayOfMonth(2).withYear(2019).withMonth(4)));
         contentValues.put("endDate", Converters.fromLocalDateTimeToTimestamp(LocalDateTime.now().withDayOfMonth(2).withYear(2020).withMonth(3)));
+        contentValues.put("canceled", false);
 
         return contentValues;
     }
@@ -57,6 +58,7 @@ public class TestData {
         contentValues.put("address", Arrays.asList("\"3 rue de la chesnaie\"", "\"\"", "\"Cagneux\"", "\"Bailleval\"", "\"France\"").toString());
         contentValues.put("startDate", Converters.fromLocalDateTimeToTimestamp(LocalDateTime.now().withDayOfMonth(2).withYear(2019).withMonth(4)));
         contentValues.put("endDate", Converters.fromLocalDateTimeToTimestamp(LocalDateTime.now().withDayOfMonth(2).withYear(2020).withMonth(3)));
+        contentValues.put("canceled", false);
 
         return contentValues;
     }
@@ -78,6 +80,7 @@ public class TestData {
         contentValues.put("address", Arrays.asList("\"3 rue de la chesnaie\"", "\"\"", "\"Cagneux\"", "\"Bailleval\"", "\"France\"").toString());
         contentValues.put("startDate", Converters.fromLocalDateTimeToTimestamp(LocalDateTime.now().withDayOfMonth(2).withYear(2019).withMonth(4)));
         contentValues.put("endDate", Converters.fromLocalDateTimeToTimestamp(LocalDateTime.now().withDayOfMonth(2).withYear(2020).withMonth(3)));
+        contentValues.put("canceled", false);
 
         return contentValues;
     }
@@ -99,6 +102,7 @@ public class TestData {
         contentValues.put("address", Arrays.asList("\"3 rue de la chesnaie\"", "\"\"", "\"Cagneux\"", "\"Bailleval\"", "\"France\"").toString());
         contentValues.put("startDate", Converters.fromLocalDateTimeToTimestamp(LocalDateTime.now().withDayOfMonth(2).withYear(2019).withMonth(4)));
         contentValues.put("endDate", Converters.fromLocalDateTimeToTimestamp(LocalDateTime.now().withDayOfMonth(2).withYear(2020).withMonth(3)));
+        contentValues.put("canceled", false);
 
         return contentValues;
     }
@@ -119,6 +123,7 @@ public class TestData {
         contentValues.put("address", Arrays.asList("\"3 rue de la chesnaie\"", "\"\"", "\"Cagneux\"", "\"Bailleval\"", "\"France\"").toString());
         contentValues.put("startDate", Converters.fromLocalDateTimeToTimestamp(LocalDateTime.now().withDayOfMonth(2).withYear(2019).withMonth(4)));
         contentValues.put("endDate", Converters.fromLocalDateTimeToTimestamp(LocalDateTime.now().withDayOfMonth(2).withYear(2020).withMonth(3)));
+        contentValues.put("canceled", false);
 
         return contentValues;
     }
@@ -139,6 +144,7 @@ public class TestData {
         contentValues.put("address", Arrays.asList("\"3 rue de la chesnaie\"", "\"\"", "\"Cagneux\"", "\"Bailleval\"", "\"France\"").toString());
         contentValues.put("startDate", Converters.fromLocalDateTimeToTimestamp(LocalDateTime.now().withDayOfMonth(2).withYear(2019).withMonth(4)));
         contentValues.put("endDate", Converters.fromLocalDateTimeToTimestamp(LocalDateTime.now().withDayOfMonth(2).withYear(2020).withMonth(3)));
+        contentValues.put("canceled", false);
 
         return contentValues;
     }
@@ -160,6 +166,7 @@ public class TestData {
         contentValues.put("location", Converters.fromGeoPointToString(new GeoPoint(50.6105,1.88136)));
         contentValues.put("startDate", Converters.fromLocalDateTimeToTimestamp(LocalDateTime.now().withDayOfMonth(2).withYear(2019).withMonth(4)));
         contentValues.put("endDate", Converters.fromLocalDateTimeToTimestamp(LocalDateTime.now().withDayOfMonth(2).withYear(2020).withMonth(3)));
+        contentValues.put("canceled", false);
 
         return contentValues;
     }

@@ -7,6 +7,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.lastproject.mycity.firebase.database.firestore.helpers.EventHelper;
+import com.lastproject.mycity.firebase.database.firestore.models.EventFireStore;
 import com.lastproject.mycity.models.Event;
 
 public class EventDataFireStoreRepository {
@@ -21,39 +22,39 @@ public class EventDataFireStoreRepository {
 
     // --- CREATE ---
 
-    public static Task<DocumentReference> createEvent(Event event) {
-        return EventHelper.createEvent(event);
+    public Task<DocumentReference> createEventInFireStore(EventFireStore eventFireStore) {
+        return EventHelper.createEvent(eventFireStore);
     }
 
     // --- GET ---
 
     // Get All Events
-    public Task<QuerySnapshot> getEvents() {
+    public Task<QuerySnapshot> getEventsInFireStore() {
         return EventHelper.getEvents();
     }
 
 
 
     // Get Event by eventID
-    public Task<DocumentSnapshot> getEventByEventID(String eventID){
+    public Task<DocumentSnapshot> getEventInFireStoreByEventID(String eventID){
         return EventHelper.getEventByEventID(eventID);
     }
 
     // Get All Events by townHallID
-    public Query getEventsByInseeID(String inseeID){
+    public Query getEventsInFireStoreByInseeID(String inseeID){
         return EventHelper.getEventsByInseeID(inseeID);
     }
 
     // --- UPDATE ---
 
     // Update Event
-    public Task<Void> updateEvent(Event event) {
+    public Task<Void> updateEventInFireStore(Event event) {
         return EventHelper.updateEvent(event);
     }
 
     // --- DELETE ---
 
-    public Task<Void> deleteEvent(String eventID) {
+    public Task<Void> deleteEventInFireStore(String eventID) {
         return EventHelper.deleteEvent(eventID);
     }
 }

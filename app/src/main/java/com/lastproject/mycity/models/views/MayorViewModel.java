@@ -4,7 +4,6 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -14,7 +13,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.lastproject.mycity.firebase.database.firestore.models.Mayor;
+import com.lastproject.mycity.models.Mayor;
 import com.lastproject.mycity.firebase.database.firestore.models.TownHall;
 import com.lastproject.mycity.network.retrofit.models.Insee;
 import com.lastproject.mycity.repositories.CurrentMayorDataRepository;

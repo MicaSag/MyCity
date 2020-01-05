@@ -4,8 +4,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 import com.lastproject.mycity.firebase.database.firestore.helpers.MayorHelper;
-import com.lastproject.mycity.firebase.database.firestore.helpers.UserHelper;
-import com.lastproject.mycity.firebase.database.firestore.models.Mayor;
+import com.lastproject.mycity.firebase.database.firestore.models.MayorFireStore;
 
 public class MayorDataFireStoreRepository {
 
@@ -13,8 +12,8 @@ public class MayorDataFireStoreRepository {
 
     // --- CREATE ---
 
-    public Task<Void> createMayor(String userID, String inseeID, String codeID) {
-        return MayorHelper.createMayor(userID, inseeID, codeID);
+    public Task<Void> createMayor(MayorFireStore mayorFireStore) {
+        return MayorHelper.createMayor(mayorFireStore);
     }
 
     // --- GET ---

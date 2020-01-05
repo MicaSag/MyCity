@@ -20,17 +20,16 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.lastproject.mycity.R;
 import com.lastproject.mycity.controllers.fragments.UserProfileChoiceDialogFragment;
-import com.lastproject.mycity.firebase.database.firestore.models.Mayor;
+import com.lastproject.mycity.firebase.database.firestore.models.MayorFireStore;
+import com.lastproject.mycity.models.Mayor;
 import com.lastproject.mycity.firebase.database.firestore.models.User;
 import com.lastproject.mycity.injections.Injection;
 import com.lastproject.mycity.injections.ViewModelFactory;
 import com.lastproject.mycity.models.views.AuthenticationViewModel;
-import com.lastproject.mycity.network.retrofit.models.Insee;
 import com.lastproject.mycity.repositories.CurrentMayorDataRepository;
 import com.lastproject.mycity.utils.Toolbox;
 
 import java.util.Arrays;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -284,16 +283,17 @@ public class AuthenticationActivity  extends AppCompatActivity
                                             for (QueryDocumentSnapshot document : task.getResult()) {
                                                 Log.d(TAG, document.getId() + " => " + document.getData());
 
+                                                MayorFireStore mayorFireStore = document.toObject(MayorFireStore.class);
+                                                Log.d(TAG, "onComplete: mayorFireStore = "+mayorFireStore);
                                                 // If the userID corresponds to the mayor document being read
                                                 // As a precaution, only the first document found will be used
                                                 // the others will be ignored (break instruction)
-                                               if (document.get("userID").toString().equals(user.getUserID())) {
+                                               if (mayorFireStore.getUserID().equals(user.getUserID())) {
+
                                                    // save Current Mayor
-                                                   Mayor mayor = new Mayor(document.getId(),
-                                                           document.get("userID").toString(),
-                                                           document.get("townHallID").toString(),
-                                                           document.get("codeID").toString());
+                                                   Mayor mayor = new Mayor(document.getId(), mayorFireStore);
                                                    CurrentMayorDataRepository.getInstance().setCurrentMayor(mayor);
+
                                                    // Start Citizen Activity
                                                    startInterface();
                                                }

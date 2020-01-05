@@ -3,7 +3,6 @@ package com.lastproject.mycity.models.views;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -15,19 +14,13 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.lastproject.mycity.firebase.database.firestore.models.Mayor;
-import com.lastproject.mycity.firebase.database.firestore.models.TownHall;
+import com.lastproject.mycity.firebase.database.firestore.models.MayorFireStore;
 import com.lastproject.mycity.firebase.database.firestore.models.User;
-import com.lastproject.mycity.models.Event;
+import com.lastproject.mycity.models.Mayor;
 import com.lastproject.mycity.repositories.CurrentMayorDataRepository;
-import com.lastproject.mycity.repositories.CurrentTownHallDataRepository;
-import com.lastproject.mycity.repositories.EventDataFireStoreRepository;
-import com.lastproject.mycity.repositories.EventDataRoomRepository;
 import com.lastproject.mycity.repositories.MayorDataFireStoreRepository;
 import com.lastproject.mycity.repositories.UserDataAuthenticationRepository;
 import com.lastproject.mycity.repositories.UserDataFireStoreRepository;
-
-import java.util.concurrent.Executor;
 
 public class AuthenticationViewModel extends ViewModel {
 
@@ -38,8 +31,6 @@ public class AuthenticationViewModel extends ViewModel {
     private final UserDataAuthenticationRepository userDataAuthenticationSource;
     private final UserDataFireStoreRepository userDataFireStoreSource;
     private final MayorDataFireStoreRepository mayorDataFireStoreSource;
-    private final EventDataRoomRepository eventDataRoomSource;
-    private final Executor executor;
 
     // Data
     // - Registration Status
@@ -55,14 +46,10 @@ public class AuthenticationViewModel extends ViewModel {
 
     public AuthenticationViewModel(UserDataAuthenticationRepository userDataAuthenticationSource,
                                    UserDataFireStoreRepository userDataFireStoreSource,
-                                   MayorDataFireStoreRepository mayorDataFireStoreSource,
-                                   EventDataRoomRepository eventDataRoomSource,
-                                   Executor executor) {
+                                   MayorDataFireStoreRepository mayorDataFireStoreSource) {
         this.userDataAuthenticationSource = userDataAuthenticationSource;
         this.userDataFireStoreSource = userDataFireStoreSource;
         this.mayorDataFireStoreSource = mayorDataFireStoreSource;
-        this.eventDataRoomSource = eventDataRoomSource;
-        this.executor = executor;
     }
 
     // --- USER IN MODEL ---
@@ -83,25 +70,13 @@ public class AuthenticationViewModel extends ViewModel {
 
     // --- CURRENT MAYOR ---
     //
-    public Mayor getCurrentMayor() {return CurrentMayorDataRepository.getInstance().getCurrentMayor();}
     public void setCurrentMayor(Mayor mayor) {CurrentMayorDataRepository.getInstance().setCurrentMayor(mayor);}
-
-    // --- CURRENT TOWN HALL ---
-    //
-    public LiveData<TownHall> getTownHall() {return CurrentTownHallDataRepository.getInstance().getCurrentTownHall();}
-    public void setTownHall(TownHall townHall) {CurrentTownHallDataRepository.getInstance().setCurrentTownHall(townHall);}
-
 
     // --- FIRE BASE : AUTHENTICATION ---
     //
     // Get the Current User Connected
     public FirebaseUser getCurrentUser(){
         return this.userDataAuthenticationSource.getCurrentUser();
-    }
-
-    // Check if current user is logged in
-    public Boolean isCurrentUserLogged(){
-        return this.userDataAuthenticationSource.isCurrentUserLogged();
     }
 
     // --- FIRE BASE : FIRE STORE ---
@@ -171,12 +146,15 @@ public class AuthenticationViewModel extends ViewModel {
                                 for (QueryDocumentSnapshot document : task.getResult()) {
                                     Log.d(TAG, document.getId() + " => " + document.getData());
 
+                                    // Get MayorFireStore Object
+                                    MayorFireStore mayorFireStore = document.toObject(MayorFireStore.class);
+
                                     // If the code corresponds to the mayor document being read,
                                     // then we update userID of the Mayor document
                                     // As a precaution, only the first document found will be updated, 
                                     // the others will be ignored (break instruction)
-                                    Log.d(TAG, "onComplete: document.get("+codeID+") = "+document.get("codeID"));
-                                    if (document.get("codeID").toString().equals(codeID)) {
+                                    Log.d(TAG, "onComplete: document.get("+codeID+") = "+mayorFireStore.getCodeID());
+                                    if (mayorFireStore.getCodeID().equals(codeID)) {
                                         Log.d(TAG, "onComplete: UPDATE MAYOR with UserID");
                                         // UPDATE Mayor
                                         updateMayorUserID(document.getId(), userID)
@@ -192,10 +170,7 @@ public class AuthenticationViewModel extends ViewModel {
                                                 Log.d(TAG, "onSuccess getting documents: ");
 
                                                 // save Current Mayor
-                                                Mayor mayor = new Mayor(document.getId(),
-                                                                        document.get("userID").toString(),
-                                                                        document.get("townHallID").toString(),
-                                                                        document.get("codeID").toString());
+                                                Mayor mayor = new Mayor(document.getId(),mayorFireStore);
                                                 setCurrentMayor(mayor);
 
                                                 // create the user in fireStore as mayor
