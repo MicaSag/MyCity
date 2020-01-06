@@ -62,8 +62,6 @@ public class MayorActivity extends BaseActivity implements  NavigationView.OnNav
     public @BindView(R.id.activity_mayor_root) ConstraintLayout mConstraintLayout;
     public @BindView(R.id.activity_mayor_drawer_layout) DrawerLayout mDrawerLayout;
     public @BindView(R.id.activity_mayor_nav_view) NavigationView mNavigationView;
-    public @BindView(R.id.activity_mayor_guideline_horizontal_50) Guideline mGuideLine50;
-    public @BindView(R.id.activity_mayor_guideline_horizontal_70) Guideline mGuideLine70;
     public @BindView(R.id.activity_mayor_fragment_events_list) FrameLayout mFragmentEventList;
 
     // ---------------------------------------------------------------------------------------------

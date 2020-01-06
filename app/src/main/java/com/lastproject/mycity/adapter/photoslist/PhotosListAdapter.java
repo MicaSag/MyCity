@@ -23,7 +23,7 @@ public class PhotosListAdapter extends RecyclerView.Adapter<PhotosListViewHolder
     private RequestManager mGlide;
 
     // For Data
-    private final List<String> mPhotos = new ArrayList<>();
+    private List<String> mPhotos = new ArrayList<>();
 
     // For Caller
     private Class mCaller;

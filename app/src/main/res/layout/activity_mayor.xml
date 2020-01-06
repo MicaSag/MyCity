@@ -10,6 +10,13 @@
     tools:openDrawer="start"
     tools:context=".controllers.activities.MayorActivity">
 
+    <com.google.android.material.card.MaterialCardView
+        style="@style/Widget.MaterialComponents.CardView"
+        android:id="@+id/activity_mayor_mcv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:cardBackgroundColor="@color/colorBackground">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -32,20 +39,6 @@
                     android:layout_height="wrap_content"
                     >
 
-                    <androidx.constraintlayout.widget.Guideline
-                        android:id="@+id/activity_mayor_guideline_horizontal_50"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        app:layout_constraintGuide_percent="0.5" />
-
-                    <androidx.constraintlayout.widget.Guideline
-                        android:id="@+id/activity_mayor_guideline_horizontal_70"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        app:layout_constraintGuide_percent="0.7" />
-
                     <!-- FRAGMENT -->
                     <FrameLayout
                         android:id="@+id/activity_mayor_fragment"
@@ -61,7 +54,7 @@
                     <FrameLayout
                         android:id="@+id/activity_mayor_fragment_events_list"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
 
                         app:layout_constraintTop_toBottomOf="@+id/activity_mayor_fragment"
                         app:layout_constraintStart_toStartOf="parent"
@@ -74,6 +67,8 @@
             </ScrollView>
 
         </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
 
     <!-- NavigationView -->
     <com.google.android.material.navigation.NavigationView

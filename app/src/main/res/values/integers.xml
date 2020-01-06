@@ -8,4 +8,7 @@
     <item name="guidelineV02" type="integer" format="float">0.80</item>
     <item name="scaleX" type="integer" format="float">1.00</item>
 
+    <!-- For Photos Event animation -->
+    <integer name="anim_duration_medium">300</integer>
+
 </resources>

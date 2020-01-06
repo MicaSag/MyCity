@@ -21,15 +21,13 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:baselineAligned="false"
             android:orientation="horizontal">
 
             <!-- DETAIL FRAGMENT -->
             <FrameLayout
                 android:id="@+id/fragment_event_details"
-                android:layout_width="0px"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="70"
                 />
 
         </LinearLayout>

@@ -17,6 +17,7 @@ import com.lastproject.mycity.repositories.CurrentEventDataRepository;
 import com.lastproject.mycity.utils.Converters;
 
 import org.threeten.bp.LocalDateTime;
+import org.threeten.bp.format.DateTimeFormatter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,6 +31,8 @@ public class EventsListViewHolder extends RecyclerView.ViewHolder implements Vie
 
     @BindView(R.id.view_older_event_mcv) MaterialCardView mMCV;
     @BindView(R.id.view_older_event_title) TextView mTitle;
+    @BindView(R.id.view_older_event_start_date_label)  TextView mStartDateLabel;
+    @BindView(R.id.view_older_event_end_date_label)  TextView mEndDateLabel;
     @BindView(R.id.view_older_event_start_date)  TextView mStartDate;
     @BindView(R.id.view_older_event_end_date)  TextView mEndDate;
     @BindView(R.id.view_older_event_image) ImageView mImage;
@@ -53,26 +56,20 @@ public class EventsListViewHolder extends RecyclerView.ViewHolder implements Vie
         // Display Event Title
         if (event.getTitle() !=null) mTitle.setText(event.getTitle());
 
-        // Display Event Photo
-        if (event.getPhotos() !=null) if (event.getPhotos().get(0) != null)
-            glide.load(event.getPhotos().get(0)).into(mImage);
-
         // Display Event Start Date
-        if (event.getStartDate() !=null) {
-            LocalDateTime startDate = Converters.fromTimestampToLocalDateTime(event.getStartDate());
-            String startDay = startDate.getDayOfMonth() + "/" +
-                    startDate.getMonth() + "/" +
-                    startDate.getYear();
-            mStartDate.setText(startDay);
+        String date;
+        LocalDateTime dateLDT;
+        if (event.getStartDate() != null) {
+            dateLDT = Converters.fromTimestampToLocalDateTime(event.getStartDate());
+            date = dateLDT.format(DateTimeFormatter.ISO_DATE);
+            mStartDate.setText(date);
         }
 
         // Display Event End Date
         if (event.getEndDate()!= null) {
-            LocalDateTime endDate = Converters.fromTimestampToLocalDateTime(event.getEndDate());
-            String endDay = endDate.getDayOfMonth() + "/" +
-                    endDate.getMonth() + "/" +
-                    endDate.getYear();
-            mEndDate.setText(endDay);
+            dateLDT = Converters.fromTimestampToLocalDateTime(event.getStartDate());
+            date = dateLDT.format(DateTimeFormatter.ISO_DATE);
+            mEndDate.setText(date);
         }
 
         // For indicate item Selected
@@ -87,13 +84,22 @@ public class EventsListViewHolder extends RecyclerView.ViewHolder implements Vie
             mTitle.setTextColor(Color.WHITE);
             mStartDate.setTextColor(Color.WHITE);
             mEndDate.setTextColor(Color.WHITE);
+            mStartDateLabel.setTextColor(Color.WHITE);
+            mEndDateLabel.setTextColor(Color.WHITE);
         }
         else {
             mMCV.setCardBackgroundColor(Color.WHITE);
             mTitle.setTextColor(res.getColorStateList(R.color.colorPrimary));
             mStartDate.setTextColor(res.getColorStateList(R.color.colorPrimary));
             mEndDate.setTextColor(res.getColorStateList(R.color.colorPrimary));
+            mStartDateLabel.setTextColor(res.getColorStateList(R.color.colorPrimary));
+            mEndDateLabel.setTextColor(res.getColorStateList(R.color.colorPrimary));
         }
+
+
+        // Display Event Photo
+        if (event.getPhotos() !=null) if (event.getPhotos().get(0) != null)
+            glide.load(event.getPhotos().get(0)).into(mImage);
 
         // Display Canceled
         Log.d(TAG, "updateWithProperty: event.isCanceled() = "+event.isCanceled());

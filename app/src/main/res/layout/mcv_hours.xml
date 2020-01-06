@@ -22,8 +22,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="Heures d'ouvertures"
-            android:textColor="@android:color/holo_purple"
-            android:textSize="16sp"
+            android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -34,9 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:hint="Heures 1"
-            android:textColor="@color/colorPrimary"
             android:textSize="16sp"
-            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/hours_title" />
         <!-- HOUR 2 -->
@@ -45,9 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="Heures 2"
-            android:textColor="@color/colorPrimary"
             android:textSize="16sp"
-            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@+id/hours_1"
             app:layout_constraintTop_toBottomOf="@+id/hours_1" />
         <!-- HOUR 3 -->
@@ -56,9 +51,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="Heures 3"
-            android:textColor="@color/colorPrimary"
             android:textSize="16sp"
-            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@+id/hours_2"
             app:layout_constraintTop_toBottomOf="@+id/hours_2" />
         <!-- HOUR 4 -->
@@ -67,9 +60,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="Heures 4"
-            android:textColor="@color/colorPrimary"
             android:textSize="16sp"
-            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@+id/hours_3"
             app:layout_constraintTop_toBottomOf="@+id/hours_3" />
         <!-- HOUR 5 -->
@@ -78,9 +69,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="Heures 5"
-            android:textColor="@color/colorPrimary"
             android:textSize="16sp"
-            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@+id/hours_4"
             app:layout_constraintTop_toBottomOf="@+id/hours_4" />
         <!-- HOUR 6 -->
@@ -89,9 +78,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="Heures 6"
-            android:textColor="@color/colorPrimary"
             android:textSize="16sp"
-            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@+id/hours_5"
             app:layout_constraintTop_toBottomOf="@+id/hours_5" />
         <!-- HOUR 7 -->
@@ -100,9 +87,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="Heures 7"
-            android:textColor="@color/colorPrimary"
             android:textSize="16sp"
-            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@+id/hours_6"
             app:layout_constraintTop_toBottomOf="@+id/hours_6" />
 
