@@ -23,9 +23,7 @@
         <!-- GOOGLE Maps APi Key -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="${googleMapsApiKey}" />
-
-        <!-- 0 => ENTRY Activity : AUTHENTICATION -->
+            android:value="${googleMapsApiKey}" /> <!-- 0 => ENTRY Activity : AUTHENTICATION -->
         <activity
             android:name=".controllers.activities.AuthenticationActivity"
             android:theme="@style/AppThemeFirebase">
@@ -34,25 +32,32 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <!-- 1 => MAYOR Activity -->
-        <activity   android:name=".controllers.activities.MayorActivity"
-                    android:label="MAYOR Interface"/>
-
-        <!-- 2 => CITIZEN Activity -->
-        <activity   android:name=".controllers.activities.CitizenActivity"
-                    android:label="CITIZEN Interface"/>
-
-        <!-- 3 => EVENTS Activity -->
-        <activity   android:name=".controllers.activities.EventsActivity"
-                    android:label="EVENT Interface"/>
-        <!-- 3.1 => A child of the Events Activity -->
+        </activity> <!-- 1 => MAYOR Activity -->
+        <activity
+            android:name=".controllers.activities.MayorActivity"
+            android:label="MAYOR Interface" /> <!-- 2 => CITIZEN Activity -->
+        <activity
+            android:name=".controllers.activities.CitizenActivity"
+            android:label="CITIZEN Interface" /> <!-- 3 => EVENTS Activity -->
+        <activity
+            android:name=".controllers.activities.EventsActivity"
+            android:label="EVENT Interface" /> <!-- 3.1 => A child of the Events Activity -->
         <!-- DETAILS EVENT Activity -->
         <activity
-            android:name=".controllers.activities.DetailsEventActivity"
+            android:name=".controllers.activities.EventActivity"
             android:label="Details Event"
             android:parentActivityName=".controllers.activities.EventsActivity">
+
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".controllers.activities.EventsActivity" />
+        </activity>
+        <!-- FULL SCREEN IMAGE Activity -->
+        <activity
+            android:name=".controllers.activities.FullScreenImageActivity"
+            android:label="Full Screen Image"
+            android:parentActivityName=".controllers.activities.FullScreenImageActivity">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data

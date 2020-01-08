@@ -21,7 +21,7 @@ public class TestData {
         ContentValues contentValues = new ContentValues();
         contentValues.put("eventID", LocalDateTime.now().toString());
         contentValues.put("inseeID", "38174");
-        contentValues.put("title", "Broquante");
+        contentValues.put("title", "Brocante");
         contentValues.put("description", "Chineurs, chineuses, vous trouverez ce que vous cherchez depuis longtemps dans notre" +
                 "borquante annuelle.");
         contentValues.put("photos", "[" +

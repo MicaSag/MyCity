@@ -58,5 +58,7 @@
     <string name="Roboto_Light">Roboto-Light</string>
     <string name="Roboto_Thin">Roboto-Thin</string>
 
+    <!-- For Animation -->
+    <string name="animation_full_screen_image" translatable="false">AnimationFullScreenImage</string>
 
 </resources>

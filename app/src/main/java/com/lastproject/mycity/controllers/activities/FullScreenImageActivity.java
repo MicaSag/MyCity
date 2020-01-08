@@ -8,18 +8,24 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.lastproject.mycity.R;
 import com.lastproject.mycity.controllers.bases.BaseActivity;
-import com.lastproject.mycity.controllers.fragments.EventDetailsFragment;
+import com.lastproject.mycity.controllers.fragments.FullScreenImageFragment;
 
 import butterknife.BindView;
 
-public class DetailsEventActivity extends BaseActivity {
+public class FullScreenImageActivity extends BaseActivity {
 
-    private static final String TAG = DetailsEventActivity.class.getSimpleName();
+    // FOR Debug
+    private static final String TAG = FullScreenImageActivity.class.getSimpleName();
 
     // Adding @BindView in order to indicate to ButterKnife to get & serialise it
     // - Get Coordinator Layout
-    @BindView(R.id.activity_details_constraint_layout)
-    ConstraintLayout mConstraintLayout;
+    public @BindView(R.id.activity_full_screen_image_constraint_layout) ConstraintLayout mConstraintLayout;
+
+    // Photo
+    public String mPhoto;
+
+    // Fragment
+   FullScreenImageFragment mFullScreenImageFragment;
 
     // ---------------------------------------------------------------------------------------------
     //                                DECLARATION BASE METHODS
@@ -29,7 +35,7 @@ public class DetailsEventActivity extends BaseActivity {
     // CALLED BY BASE METHOD 'onCreate(...)'
     @Override
     protected int getActivityLayout() {
-        return R.layout.activity_details_event;
+        return R.layout.activity_full_screen_image;
     }
 
     // BASE METHOD Implementation
@@ -56,17 +62,6 @@ public class DetailsEventActivity extends BaseActivity {
         // Enable the Up button
         super.mActionBar.setDisplayHomeAsUpEnabled(true);
     }
-
-    @Override
-    protected void onResume() {
-        Log.d(TAG, "onResume: ");
-        super.onResume();
-
-        // If the width of the device is => 1280 then if the activity is reset during a rotation,
-        // then it is closed
-        //Log.d(TAG, "onResume: is_w1280 = "+getResources().getBoolean(R.bool.is_w1280));
-        //if (getResources().getBoolean(R.bool.is_w1280)) finish();
-    }
     // ---------------------------------------------------------------------------------------------
     //                                        ENTRY POINT
     // ---------------------------------------------------------------------------------------------
@@ -74,26 +69,40 @@ public class DetailsEventActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Configuring Toolbar
-        this.configureToolbar();
+        // Retrieve caller data
+        this.retrieveCallerData();
 
-        // Configure EstateDetailsFragment
-        this.configureAndShowEstateDetailsFragment();
+        // Configure and Show Full Screen Image Fragment
+        this.configureAndShowFullScreenImageFragment();
+    }
+    // ---------------------------------------------------------------------------------------------
+    //                                         CALLER
+    // ---------------------------------------------------------------------------------------------
+    // Retrieve caller data
+    private void retrieveCallerData() {
+
+        // Get Intent
+        mPhoto = getIntent().getStringExtra("PHOTO");
     }
     // ---------------------------------------------------------------------------------------------
     //                                        FRAGMENT
     // ---------------------------------------------------------------------------------------------
-    private void configureAndShowEstateDetailsFragment() {
+    private void configureAndShowFullScreenImageFragment() {
+        Log.d(TAG, "configureAndShowFullScreenImageFragment: ");
+
         // Get FragmentManager (Support) and Try to find existing instance of fragment in FrameLayout container
         // Declare fragment
-        EventDetailsFragment mEventDetailsFragment = (EventDetailsFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.fragment_event_details);
+        mFullScreenImageFragment = (FullScreenImageFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.fragment_full_screen_image);
 
-        // Create new Event Details fragment
-        mEventDetailsFragment = EventDetailsFragment.newInstance();
-        // Add it to FrameLayout container
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_event_details, mEventDetailsFragment)
-                .commit();
+        if (mFullScreenImageFragment == null) {
+            // Create new Full Screen Image  fragment
+            mFullScreenImageFragment = FullScreenImageFragment.newInstance();
+
+            // Add it to FrameLayout container
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.fragment_full_screen_image, mFullScreenImageFragment)
+                    .commit();
+        }
     }
 }

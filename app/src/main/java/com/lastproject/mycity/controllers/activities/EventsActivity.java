@@ -12,7 +12,7 @@ import androidx.lifecycle.ViewModelProviders;
 import com.lastproject.mycity.R;
 import com.lastproject.mycity.adapter.eventslist.EventsListAdapter;
 import com.lastproject.mycity.controllers.bases.BaseActivity;
-import com.lastproject.mycity.controllers.fragments.EventDetailsFragment;
+import com.lastproject.mycity.controllers.fragments.EventEditFragment;
 import com.lastproject.mycity.controllers.fragments.EventsListFragment;
 import com.lastproject.mycity.injections.Injection;
 import com.lastproject.mycity.injections.ViewModelFactory;
@@ -37,7 +37,7 @@ public class EventsActivity extends BaseActivity
     private EventViewModel mEventViewModel;
 
     // Fragments Declarations
-    private EventDetailsFragment mEventDetailsFragment;
+    private EventEditFragment mEventEditFragment;
     private EventsListFragment mEventsListFragment;
 
     // Adding @BindView in order to indicate to ButterKnife to get & serialise it
@@ -119,16 +119,16 @@ public class EventsActivity extends BaseActivity
     }
     private void configureAndShowEventDetailsFragment() {
         // Get FragmentManager (Support) and Try to find existing instance of fragment in FrameLayout container
-        mEventDetailsFragment = (EventDetailsFragment) getSupportFragmentManager()
+        mEventEditFragment = (EventEditFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.fragment_event_details);
 
         // We only add DetailsFragment for wight 1280 (If found frame_layout_detail)
-        if (mEventDetailsFragment == null && getResources().getBoolean(R.bool.is_w1280)) {
+        if (mEventEditFragment == null && getResources().getBoolean(R.bool.is_w1280)) {
             // Create new main fragment
-            mEventDetailsFragment = EventDetailsFragment.newInstance();
+            mEventEditFragment = EventEditFragment.newInstance();
             // Add it to FrameLayout container
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_event_details, mEventDetailsFragment)
+                    .add(R.id.fragment_event_details, mEventEditFragment)
                     .commit();
         }
     }
@@ -141,10 +141,10 @@ public class EventsActivity extends BaseActivity
         Log.d(TAG, "onEventClick: ");
         CurrentEventDataRepository.getInstance().setCurrentEventID(event.getEventID());
 
-        // If wight < 1280 then call DetailsEventActivity
+        // If wight < 1280 then call EventActivity
         Log.d(TAG, "onEventClick: is_w1280 = "+getResources().getBoolean(R.bool.is_w1280));
         if (!getResources().getBoolean(R.bool.is_w1280))
-            Toolbox.startActivity(this, DetailsEventActivity.class);
+            Toolbox.startActivity(this, EventActivity.class);
     }
 
     @Override

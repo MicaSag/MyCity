@@ -2,6 +2,7 @@ package com.lastproject.mycity.controllers.fragments;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,19 +15,24 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.lastproject.mycity.R;
 import com.lastproject.mycity.adapter.eventslist.EventsListAdapter;
+import com.lastproject.mycity.controllers.activities.EventActivity;
 import com.lastproject.mycity.injections.Injection;
 import com.lastproject.mycity.injections.ViewModelFactory;
 import com.lastproject.mycity.models.Event;
+import com.lastproject.mycity.models.views.EventViewModel;
 import com.lastproject.mycity.models.views.ListEventsViewModel;
 import com.lastproject.mycity.repositories.CurrentEventDataRepository;
+import com.lastproject.mycity.utils.Toolbox;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 
 /**
@@ -50,6 +56,7 @@ public class EventsListFragment extends Fragment {
 
     // For Design
     @BindView(R.id.fragment_list_events_recycler_view) RecyclerView mRecyclerView;
+    public @BindView(R.id.fragment_list_events_fab) FloatingActionButton mButtonCreateEvent;
 
     public EventsListFragment() {
         // Required empty public constructor
@@ -128,6 +135,17 @@ public class EventsListFragment extends Fragment {
         super.onAttach(context);
 
         mOnPropertyClick = (EventsListAdapter.OnEventClick)context;
+    }
+
+    @OnClick(R.id.fragment_list_events_fab)
+    public void onClickFloatingActionButton(View v) {
+        Log.d(TAG, "onClickFloatingActionButton: ");
+
+        // Call EventActivity with CREATE MODE
+        Toolbox.startActivity(  getActivity(),
+                                EventActivity.class,
+                                EventViewModel.MODE,
+                                EventViewModel.EventMode.CREATE.name());
     }
     // ---------------------------------------------------------------------------------------------
     //                                          UI

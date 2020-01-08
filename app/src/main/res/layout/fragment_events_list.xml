@@ -40,7 +40,7 @@
 
         <!-- DECLARING FLOATING ACTION BUTTON -->
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fragment_detail_fab"
+            android:id="@+id/fragment_list_events_fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"

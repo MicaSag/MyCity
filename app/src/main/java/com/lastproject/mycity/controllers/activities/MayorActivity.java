@@ -1,6 +1,5 @@
 package com.lastproject.mycity.controllers.activities;
 
-import android.content.ContentValues;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -11,8 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.constraintlayout.widget.Guideline;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -32,6 +29,7 @@ import com.lastproject.mycity.firebase.database.firestore.models.TownHall;
 import com.lastproject.mycity.injections.Injection;
 import com.lastproject.mycity.injections.ViewModelFactory;
 import com.lastproject.mycity.models.Event;
+import com.lastproject.mycity.models.views.EventViewModel;
 import com.lastproject.mycity.models.views.MayorViewModel;
 import com.lastproject.mycity.repositories.CurrentEventDataRepository;
 import com.lastproject.mycity.utils.Toolbox;
@@ -298,8 +296,12 @@ public class MayorActivity extends BaseActivity implements  NavigationView.OnNav
         Log.d(TAG, "onEventClick: ");
         CurrentEventDataRepository.getInstance().setCurrentEventID(event.getEventID());
 
-        // Call DetailsEventActivity if event not canceled
-        if (!event.isCanceled()) Toolbox.startActivity(this, DetailsEventActivity.class);
+        // Call EventActivity if event not canceled
+        if (!event.isCanceled())
+            Toolbox.startActivity(  this,
+                                    EventActivity.class,
+                                    EventViewModel.MODE,
+                                    EventViewModel.EventMode.EDIT.name());
     }
     // ---------------------------------------------------------------------------------------------
     //                                          UI

@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/Widget.MaterialComponents.CardView"
-    android:id="@+id/fragment_list_estate_root"
+    android:id="@+id/fragment_event_details_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:cardBackgroundColor="@color/colorBackground">
@@ -13,7 +13,7 @@
             android:id="@+id/fragment_event_details_cl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:context=".controllers.fragments.EventDetailsFragment">
+            tools:context=".controllers.fragments.EventEditFragment">
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/fragment_event_details_guideline_horizontal_04"

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -26,8 +27,9 @@ import com.lastproject.mycity.adapter.photoslist.PhotosListAdapter;
 import com.lastproject.mycity.injections.Injection;
 import com.lastproject.mycity.injections.ViewModelFactory;
 import com.lastproject.mycity.models.Event;
-import com.lastproject.mycity.models.views.DetailsEventViewModel;
+import com.lastproject.mycity.models.views.EventViewModel;
 import com.lastproject.mycity.utils.Converters;
+import com.lastproject.mycity.views.CityEditText;
 
 import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.format.DateTimeFormatter;
@@ -36,45 +38,45 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by Michaël SAGOT on 26/12/2019.
+ * Created by Michaël SAGOT on 06/01/2020.
  */
-public class EventDetailsFragment extends Fragment implements   PhotosListAdapter.OnPhotoClick,
-                                                                SwipeRefreshLayout.OnRefreshListener {
+public class EventCreateFragment extends Fragment implements   PhotosListAdapter.OnPhotoClick,
+                                                               SwipeRefreshLayout.OnRefreshListener {
 
     // For debugging Mode
-    private static final String TAG = EventDetailsFragment.class.getSimpleName();
+    private static final String TAG = EventCreateFragment.class.getSimpleName();
 
     // For Design
-    @BindView(R.id.fragment_event_details_photos_swipe_container) SwipeRefreshLayout mPhotosSFL;
-    @BindView(R.id.fragment_event_details_photos_recycler_view) RecyclerView mRecyclerView;
-    @BindView(R.id.fragment_details_title) TextView mTitle;
-    @BindView(R.id.fragment_details_description_text) TextView mDescription;
-    @BindView(R.id.fragment_details_location_address_line_1) TextView mLocation_1;
-    @BindView(R.id.fragment_details_location_address_line_2) TextView mLocation_2;
-    @BindView(R.id.fragment_details_location_address_line_3) TextView mLocation_3;
-    @BindView(R.id.fragment_details_location_address_line_4) TextView mLocation_4;
-    @BindView(R.id.fragment_details_location_address_line_5) TextView mLocation_5;
-    @BindView(R.id.fragment_event_details_start_date_value) TextView mStartDate;
-    @BindView(R.id.fragment_event_details_end_date_value) TextView mEndDate;
-    @BindView(R.id.fragment_details_static_map) ImageView mStaticMap;
+    @BindView(R.id.fragment_event_create_photos_swipe_container) SwipeRefreshLayout mPhotosSFL;
+    @BindView(R.id.fragment_event_create_photos_recycler_view) RecyclerView mRecyclerView;
+    @BindView(R.id.fragment_event_create_title) CityEditText mTitle;
+    @BindView(R.id.fragment_event_create_description_text) CityEditText mDescription;
+    @BindView(R.id.fragment_event_create_location_address_line_1) CityEditText mLocation_1;
+    @BindView(R.id.fragment_event_create_location_address_line_2) CityEditText mLocation_2;
+    @BindView(R.id.fragment_event_create_location_address_line_3) CityEditText mLocation_3;
+    @BindView(R.id.fragment_event_create_location_address_line_4) CityEditText mLocation_4;
+    @BindView(R.id.fragment_event_create_location_address_line_5) CityEditText mLocation_5;
+    @BindView(R.id.fragment_event_create_start_date_value) CityEditText mStartDate;
+    @BindView(R.id.fragment_event_create_end_date_value) CityEditText mEndDate;
+    @BindView(R.id.fragment_event_create_static_map) ImageView mStaticMap;
 
-    // Declare DetailsEventViewModel
-    private DetailsEventViewModel mDetailsEventViewModel;
+    // Declare EventViewModel
+    private EventViewModel mEventViewModel;
 
     // For Display list of photos
-    PhotosListAdapter mPhotosListAdapter;
+    private PhotosListAdapter mPhotosListAdapter;
 
-    public EventDetailsFragment() {
+    public EventCreateFragment() {
         // Required empty public constructor
     }
     // ---------------------------------------------------------------------------------------------
     //                                  FRAGMENT INSTANTIATION
     // ---------------------------------------------------------------------------------------------
-    public static EventDetailsFragment newInstance() {
+    public static EventCreateFragment newInstance() {
         Log.d(TAG, "newInstance: ");
 
         // Create new fragment
-        EventDetailsFragment fragment = new EventDetailsFragment();
+        EventCreateFragment fragment = new EventCreateFragment();
 
         return fragment;
     }
@@ -86,7 +88,7 @@ public class EventDetailsFragment extends Fragment implements   PhotosListAdapte
                              Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView: ");
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_event_details, container, false);
+        View view = inflater.inflate(R.layout.fragment_event_create, container, false);
         ButterKnife.bind(this, view);
 
         // Configuration Photo RecyclerView
@@ -95,8 +97,8 @@ public class EventDetailsFragment extends Fragment implements   PhotosListAdapte
         // Create Listener on SwipeRefreshLayout of photosList
         mPhotosSFL.setOnRefreshListener(this);
 
-        // Configure DetailsEstateViewModel
-        this.configureEstateDetailsViewModel();
+        // Configure eventViewModel
+        this.configureEventViewModel();
 
         return view;
     }
@@ -104,14 +106,14 @@ public class EventDetailsFragment extends Fragment implements   PhotosListAdapte
     //                                        VIEW MODEL
     // ---------------------------------------------------------------------------------------------
     // Configure ViewModel
-    private void configureEstateDetailsViewModel(){
+    private void configureEventViewModel(){
 
         ViewModelFactory mViewModelFactory = Injection.provideViewModelFactory(getContext());
-        mDetailsEventViewModel = ViewModelProviders.of(this, mViewModelFactory)
-                .get(DetailsEventViewModel.class);
+        mEventViewModel = ViewModelProviders.of(this, mViewModelFactory)
+                .get(EventViewModel.class);
 
         // Observe a change of Current Event
-        mDetailsEventViewModel.getCurrentEvent().observe(this, this::updateUI);
+        mEventViewModel.getCurrentEvent().observe(this, this::updateUI);
     }
     // --------------------------------------------------------------------------------------------
     //                                    CONFIGURATION
@@ -139,7 +141,7 @@ public class EventDetailsFragment extends Fragment implements   PhotosListAdapte
     @Override
     public void onRefresh() {
         Log.d(TAG, "onRefresh: ");
-        refreshPhotosList( mDetailsEventViewModel.getCurrentEvent().getValue());
+        refreshPhotosList( mEventViewModel.getCurrentEvent().getValue());
     }
     // ---------------------------------------------------------------------------------------------
     //                                             UI
@@ -224,7 +226,7 @@ public class EventDetailsFragment extends Fragment implements   PhotosListAdapte
     public void refreshPhotosList(Event event) {
 
         if (event.getPhotos() != null) {
-            //mPhotosListAdapter.setNewPhotos(event.getPhotos());
+            mPhotosListAdapter.setNewPhotos(event.getPhotos());
 
             mPhotosSFL.setRefreshing(false);
 

@@ -6,8 +6,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.lastproject.mycity.models.views.AuthenticationViewModel;
 import com.lastproject.mycity.models.views.CitizenViewModel;
-import com.lastproject.mycity.models.views.CreateEventViewModel;
-import com.lastproject.mycity.models.views.DetailsEventViewModel;
 import com.lastproject.mycity.models.views.EventViewModel;
 import com.lastproject.mycity.models.views.ListEventsViewModel;
 import com.lastproject.mycity.models.views.MayorViewModel;
@@ -71,24 +69,14 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
                                             this.executor);
         }
         if (modelClass.isAssignableFrom(EventViewModel.class)) {
-            return (T) new EventViewModel(  this.userDataAuthenticationSource,
-                                            this.userDataFireStoreSource,
-                                            this.mayorDataFireStoreSource,
-                                            this.eventDataRoomSource,
+            return (T) new EventViewModel(  this.eventDataRoomSource,
+                                            this.eventDataFireStoreSource,
                                             this.executor);
         }
         if (modelClass.isAssignableFrom(ListEventsViewModel.class)) {
                 return (T) new ListEventsViewModel( this.eventDataRoomSource,
                                                     this.eventDataFireStoreSource,
                                                     this.executor);
-        }
-        if (modelClass.isAssignableFrom(DetailsEventViewModel.class)) {
-            return (T) new DetailsEventViewModel(   this.eventDataRoomSource,
-                                                    this.eventDataFireStoreSource,
-                                                    this.executor);
-        }
-        if (modelClass.isAssignableFrom(CreateEventViewModel.class)) {
-            return (T) new CreateEventViewModel(eventDataRoomSource, executor);
         }
         throw new IllegalArgumentException("Unknown ViewModel class");
     }
