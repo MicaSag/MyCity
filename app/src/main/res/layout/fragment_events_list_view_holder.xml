@@ -39,6 +39,19 @@
 
         <!-- (1) <<<<<<<<  FIRST SECTION    >>>>>>>>  -->
         <!-- (1)(1) FIRST COLUMN -->
+
+        <!-- (1)(1) PUBLISH LOGO -->
+        <ImageView
+            android:id="@+id/view_older_event_publish_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="16dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:background="@drawable/baseline_publish_black_24"
+            />
+
         <!-- (1)(1) TITLE -->
         <com.lastproject.mycity.views.CityTextView
             android:id="@+id/view_older_event_title"
@@ -46,7 +59,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:gravity="top"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/view_older_event_publish_logo"
             app:layout_constraintEnd_toStartOf="@+id/view_older_event_guideline_vertical_60"
             app:layout_constraintTop_toTopOf="parent"
             android:hint="@string/title_event_hint_value"

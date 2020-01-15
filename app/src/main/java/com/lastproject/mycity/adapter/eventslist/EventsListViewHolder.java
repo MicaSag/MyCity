@@ -13,11 +13,7 @@ import com.bumptech.glide.RequestManager;
 import com.google.android.material.card.MaterialCardView;
 import com.lastproject.mycity.R;
 import com.lastproject.mycity.models.Event;
-import com.lastproject.mycity.repositories.CurrentEventDataRepository;
-import com.lastproject.mycity.utils.Converters;
-
-import org.threeten.bp.LocalDateTime;
-import org.threeten.bp.format.DateTimeFormatter;
+import com.lastproject.mycity.repositories.CurrentEventIDDataRepository;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,6 +33,7 @@ public class EventsListViewHolder extends RecyclerView.ViewHolder implements Vie
     @BindView(R.id.view_older_event_end_date)  TextView mEndDate;
     @BindView(R.id.view_older_event_image) ImageView mImage;
     @BindView(R.id.view_older_event_canceled_image) ImageView mCanceledImage;
+    @BindView(R.id.view_older_event_publish_logo) ImageView mPublishImage;
 
     private EventsListAdapter.OnEventClick mOnEventClick;
     private Event mEvent;
@@ -53,32 +50,30 @@ public class EventsListViewHolder extends RecyclerView.ViewHolder implements Vie
         mEvent = event;
         mOnEventClick = callback;
 
+        // Display Publish Indicator
+        if (!event.isPublished()) {
+            mPublishImage.setVisibility(View.VISIBLE);
+        }
+        else {
+            mPublishImage.setVisibility(View.INVISIBLE);
+        }
+
         // Display Event Title
         if (event.getTitle() !=null) mTitle.setText(event.getTitle());
 
         // Display Event Start Date
-        String date;
-        LocalDateTime dateLDT;
-        if (event.getStartDate() != null) {
-            dateLDT = Converters.fromTimestampToLocalDateTime(event.getStartDate());
-            date = dateLDT.format(DateTimeFormatter.ISO_DATE);
-            mStartDate.setText(date);
-        }
+        mStartDate.setText(event.getStartDate());
 
         // Display Event End Date
-        if (event.getEndDate()!= null) {
-            dateLDT = Converters.fromTimestampToLocalDateTime(event.getStartDate());
-            date = dateLDT.format(DateTimeFormatter.ISO_DATE);
-            mEndDate.setText(date);
-        }
+        mEndDate.setText(event.getEndDate());
 
         // For indicate item Selected
         Resources res = itemView.getResources();
         Log.d(TAG, "updateWithProperty: event.getEventID() = "+event.getEventID());
-        Log.d(TAG, "updateWithProperty: CurrentEventDataRepository.getInstance()\n" +
-                "                .getCurrentEventId().getValue() = "+CurrentEventDataRepository.getInstance()
+        Log.d(TAG, "updateWithProperty: CurrentEventIDDataRepository.getInstance()\n" +
+                "                .getCurrentEventId().getValue() = "+ CurrentEventIDDataRepository.getInstance()
                 .getCurrentEventID().getValue());
-        if (event.getEventID().equals(CurrentEventDataRepository.getInstance()
+        if (event.getEventID().equals(CurrentEventIDDataRepository.getInstance()
                 .getCurrentEventID().getValue())) {
             mMCV.setCardBackgroundColor(res.getColorStateList(R.color.colorPrimary));
             mTitle.setTextColor(Color.WHITE);
@@ -95,7 +90,6 @@ public class EventsListViewHolder extends RecyclerView.ViewHolder implements Vie
             mStartDateLabel.setTextColor(res.getColorStateList(R.color.colorPrimary));
             mEndDateLabel.setTextColor(res.getColorStateList(R.color.colorPrimary));
         }
-
 
         // Display Event Photo
         if (event.getPhotos() !=null) if (event.getPhotos().get(0) != null)

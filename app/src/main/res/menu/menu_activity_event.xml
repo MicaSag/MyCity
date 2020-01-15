@@ -1,0 +1,33 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/menu_activity_event">
+    <item
+        android:id="@+id/menu_activity_event_CREATE"
+        android:icon="@drawable/baseline_add_circle_outline_black_24"
+        app:showAsAction="ifRoom"
+        android:visible="false"
+        android:title="Create">
+    </item>
+    <item
+        android:id="@+id/menu_activity_event_PUBLISH"
+        android:icon="@drawable/baseline_publish_black_24"
+        app:showAsAction="ifRoom"
+        android:visible="false"
+        android:title="Publish">
+    </item>
+    <item
+        android:id="@+id/menu_activity_event_UPDATE"
+        android:icon="@drawable/baseline_edit_black_24"
+        app:showAsAction="ifRoom"
+        android:visible="false"
+        android:title="Update">
+    </item>
+    <item
+        android:id="@+id/menu_activity_event_DELETE"
+        android:icon="@drawable/baseline_delete_black_24"
+        app:showAsAction="ifRoom"
+        android:visible="false"
+        android:title="Update">
+    </item>
+
+</menu>

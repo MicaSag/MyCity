@@ -99,7 +99,7 @@ public class CitizenViewModel extends ViewModel {
     // --- ROOM  ---
     // =============
     // Get the whole list of events in Room
-    public LiveData<List<Event>> getEvents(){
-        return eventDataRoomSource.getEvents();
+    public LiveData<List<Event>> getAllEvents(){
+        return eventDataRoomSource.getAllEvents();
     }
 }

@@ -2,7 +2,6 @@ package com.lastproject.mycity.controllers.fragments;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,7 +23,7 @@ import com.lastproject.mycity.injections.ViewModelFactory;
 import com.lastproject.mycity.models.Event;
 import com.lastproject.mycity.models.views.EventViewModel;
 import com.lastproject.mycity.models.views.ListEventsViewModel;
-import com.lastproject.mycity.repositories.CurrentEventDataRepository;
+import com.lastproject.mycity.repositories.CurrentEventIDDataRepository;
 import com.lastproject.mycity.utils.Toolbox;
 
 import java.util.ArrayList;
@@ -104,10 +103,12 @@ public class EventsListFragment extends Fragment {
                 .get(ListEventsViewModel.class);
 
         // Observe a change of Current Events List in Room
-        mListEventsViewModel.getEventsRoom().observe(this, this::updateEventsList);
+        mListEventsViewModel.getAllEventsRoomByInseeID(
+                mListEventsViewModel.getCurrentTownHall().getValue().getInseeID())
+                .observe(this, this::updateEventsList);
 
         // Observe a change of Current Event (for update selected event)
-        CurrentEventDataRepository.getInstance().getCurrentEventID().observe(this, this::updateEventsList);
+        CurrentEventIDDataRepository.getInstance().getCurrentEventID().observe(this, this::updateEventsList);
     }
     // --------------------------------------------------------------------------------------------
     //                                    CONFIGURATION

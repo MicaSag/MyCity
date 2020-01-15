@@ -51,7 +51,7 @@ public class FullScreenImageActivity extends BaseActivity {
     // CALLED BY BASE METHOD
     @Override
     protected int getToolbarMenu() {
-        return R.menu.menu_activity_details_event;
+        return R.menu.menu_activity_event;
     }
     // ---------------------------------------------------------------------------------------------
     //                                OVERLOAD BASE METHODS

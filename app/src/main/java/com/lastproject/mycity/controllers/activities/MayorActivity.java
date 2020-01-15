@@ -31,7 +31,7 @@ import com.lastproject.mycity.injections.ViewModelFactory;
 import com.lastproject.mycity.models.Event;
 import com.lastproject.mycity.models.views.EventViewModel;
 import com.lastproject.mycity.models.views.MayorViewModel;
-import com.lastproject.mycity.repositories.CurrentEventDataRepository;
+import com.lastproject.mycity.repositories.CurrentEventIDDataRepository;
 import com.lastproject.mycity.utils.Toolbox;
 
 import butterknife.BindView;
@@ -294,14 +294,14 @@ public class MayorActivity extends BaseActivity implements  NavigationView.OnNav
     @Override
     public void onEventClick(Event event) {
         Log.d(TAG, "onEventClick: ");
-        CurrentEventDataRepository.getInstance().setCurrentEventID(event.getEventID());
+        CurrentEventIDDataRepository.getInstance().setCurrentEventID(event.getEventID());
 
         // Call EventActivity if event not canceled
         if (!event.isCanceled())
             Toolbox.startActivity(  this,
                                     EventActivity.class,
                                     EventViewModel.MODE,
-                                    EventViewModel.EventMode.EDIT.name());
+                                    EventViewModel.EventMode.VIEW.name());
     }
     // ---------------------------------------------------------------------------------------------
     //                                          UI

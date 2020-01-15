@@ -39,7 +39,7 @@
                     android:layout_height="wrap_content"
                     >
 
-                    <!-- FRAGMENT -->
+                    <!-- FRAGMENT FIRST CONNEXION/TOWN HALL -->
                     <FrameLayout
                         android:id="@+id/activity_mayor_fragment"
                         android:layout_width="match_parent"
@@ -50,7 +50,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         />
 
-                    <!-- FRAGMENT -->
+                    <!-- FRAGMENT EVENTS LIST -->
                     <FrameLayout
                         android:id="@+id/activity_mayor_fragment_events_list"
                         android:layout_width="match_parent"

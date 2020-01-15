@@ -10,6 +10,8 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- Used to store files -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
+    <uses-feature android:name="android.hardware.camera" android:required="true"/>
+
     <application
         android:name=".MainApplication"
         android:allowBackup="true"
@@ -32,26 +34,27 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- 1 => MAYOR Activity -->
+        </activity>
+        <!-- 1 => MAYOR Activity -->
         <activity
             android:name=".controllers.activities.MayorActivity"
-            android:label="MAYOR Interface" /> <!-- 2 => CITIZEN Activity -->
+            android:label="MAYOR Interface" />
+        <!-- 2 => CITIZEN Activity -->
         <activity
             android:name=".controllers.activities.CitizenActivity"
-            android:label="CITIZEN Interface" /> <!-- 3 => EVENTS Activity -->
-        <activity
-            android:name=".controllers.activities.EventsActivity"
-            android:label="EVENT Interface" /> <!-- 3.1 => A child of the Events Activity -->
-        <!-- DETAILS EVENT Activity -->
+            android:label="CITIZEN Interface" />
+        <!-- 3 => EVENTS Activity -->
+        <!-- 3.1 => A child of the Events Activity -->
+        <!-- EVENT Activity -->
         <activity
             android:name=".controllers.activities.EventActivity"
-            android:label="Details Event"
-            android:parentActivityName=".controllers.activities.EventsActivity">
+            android:label="Event"
+            android:parentActivityName=".controllers.activities.MayorActivity">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".controllers.activities.EventsActivity" />
+                android:value=".controllers.activities.MayorActivity" />
         </activity>
         <!-- FULL SCREEN IMAGE Activity -->
         <activity
@@ -62,8 +65,19 @@
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".controllers.activities.EventsActivity" />
+                android:value=".controllers.activities.EventActivity" />
         </activity>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.lastproject.mycity.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
     </application>
 
 </manifest>

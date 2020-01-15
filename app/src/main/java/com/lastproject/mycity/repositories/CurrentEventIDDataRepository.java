@@ -5,23 +5,23 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.lastproject.mycity.room.dao.EventDao;
 
-public class CurrentEventDataRepository {
+public class CurrentEventIDDataRepository {
 
     public final EventDao mEventDao;
 
-    private static CurrentEventDataRepository sInstance;
+    private static CurrentEventIDDataRepository sInstance;
 
     // CurrentEventID
     private MutableLiveData<String> mCurrentEventID = new MutableLiveData<>();
 
-    public static CurrentEventDataRepository getInstance() {
+    public static CurrentEventIDDataRepository getInstance() {
         if (sInstance == null) {
-            sInstance = new CurrentEventDataRepository(null);
+            sInstance = new CurrentEventIDDataRepository(null);
         }
         return sInstance;
     }
 
-    public CurrentEventDataRepository(EventDao eventDao) {
+    public CurrentEventIDDataRepository(EventDao eventDao) {
         mEventDao = eventDao;
 
         // The default CurrentEventID is number 1

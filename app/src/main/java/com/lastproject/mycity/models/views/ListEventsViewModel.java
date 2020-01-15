@@ -4,6 +4,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 
 import com.google.firebase.firestore.EventListener;
@@ -15,7 +16,7 @@ import com.lastproject.mycity.firebase.database.firestore.models.EventFireStore;
 import com.lastproject.mycity.models.Mayor;
 import com.lastproject.mycity.firebase.database.firestore.models.TownHall;
 import com.lastproject.mycity.models.Event;
-import com.lastproject.mycity.repositories.CurrentEventDataRepository;
+import com.lastproject.mycity.repositories.CurrentEventIDDataRepository;
 import com.lastproject.mycity.repositories.CurrentMayorDataRepository;
 import com.lastproject.mycity.repositories.CurrentTownHallDataRepository;
 import com.lastproject.mycity.repositories.EventDataFireStoreRepository;
@@ -46,6 +47,7 @@ public class ListEventsViewModel extends ViewModel {
         Query fireStoreEvents = getEventsInFireStoreByInseeID(getCurrentTownHall().getValue().getInseeID());
 
         // get Events in FireStore By InseeID
+        // And add Listener on them
         fireStoreEvents.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots,
@@ -56,12 +58,47 @@ public class ListEventsViewModel extends ViewModel {
                     return;
                 }
 
+                // Feature to add
+                // ==> Purge of published events present in the local Room database
+
+                // Loop on all events found
                 for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+
                     EventFireStore eventFireStore = document.toObject(EventFireStore.class);
                     Log.d(TAG, "onEvent: event Fire Base = " + eventFireStore);
-                    Event event = new Event(document.getId(),eventFireStore);
-                    // Create Event in Room
-                    createEventRoom(event);
+
+                    // Find in room dataBase if the event is already present
+                    LiveData<Event> lEvent = getEventByEventIDRoom(document.getId());
+
+                    lEvent.observeForever(new Observer<Event>() {
+                        @Override
+                        public void onChanged(Event event) {
+
+                            // Unsubscribe the Observer
+                            lEvent.removeObserver(this);
+
+                            // Prepare the event to be integrated into the room
+                            Event eventRoom = new Event(document.getId(), true, eventFireStore);
+
+                            // If the event exists
+                            if (event != null) {
+                                Log.d(TAG, "onChanged: event != null");
+                                // If the event has published status
+                                if (event.isPublished()) {
+                                    Log.d(TAG, "onChanged: event.isPublished()");
+                                    Log.d(TAG, "onChanged: Create Event in Room");
+                                    // Create Event in Room
+                                    createEventRoom(eventRoom);
+                                }
+                            } else {
+                                Log.d(TAG, "onChanged: event == null");
+                                Log.d(TAG, "onChanged: Create Event in Room");
+                                // Create Event in Room
+                                createEventRoom(eventRoom);
+                            }
+
+                        }
+                    });
                 }
             }
         });
@@ -90,11 +127,11 @@ public class ListEventsViewModel extends ViewModel {
     // --- CURRENT EVENT SELECTED ---
     //
     public LiveData<String> getCurrentEventID() {
-        return CurrentEventDataRepository.getInstance().getCurrentEventID();
+        return CurrentEventIDDataRepository.getInstance().getCurrentEventID();
     }
 
     public void setCurrentEventID(String eventID) {
-        CurrentEventDataRepository.getInstance().setCurrentEventID(eventID);
+        CurrentEventIDDataRepository.getInstance().setCurrentEventID(eventID);
     }
 
 
@@ -108,8 +145,18 @@ public class ListEventsViewModel extends ViewModel {
     // --- ROOM  ---
     // =============
     // Get the whole list of events in Room
-    public LiveData<List<Event>> getEventsRoom() {
-        return eventDataRoomSource.getEvents();
+    public LiveData<List<Event>> getAllEventsRoom() {
+        return eventDataRoomSource.getAllEvents();
+    }
+
+    // Get the whole list of events in Room by InseeID
+    public LiveData<List<Event>> getAllEventsRoomByInseeID(String inseeID) {
+        return eventDataRoomSource.getAllEventsByInseeID(inseeID);
+    }
+
+    // Get event in Room by eventID
+    public LiveData<Event> getEventByEventIDRoom(String eventID) {
+        return eventDataRoomSource.getEvent(eventID);
     }
 
     // Create Event in Room

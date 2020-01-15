@@ -13,7 +13,7 @@
             android:id="@+id/fragment_event_details_cl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:context=".controllers.fragments.EventEditFragment">
+            tools:context=".controllers.fragments.EventViewFragment">
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/fragment_event_details_guideline_horizontal_04"
@@ -314,7 +314,7 @@
                         android:layout_marginStart="16dp"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        android:background="@drawable/baseline_perm_identity_black_24"
+                        android:background="@drawable/baseline_my_location_black_24"
                         />
                     <!-- (4)(1) LOCATION : title -->
                     <com.lastproject.mycity.views.CityTextView

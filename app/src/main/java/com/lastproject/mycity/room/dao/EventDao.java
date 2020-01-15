@@ -19,7 +19,10 @@ public interface EventDao {
     void createEvent(Event event);
 
     @Query("SELECT * FROM Event")
-    LiveData<List<Event>> getEvents();
+    LiveData<List<Event>> getAllEvents();
+
+    @Query("SELECT * FROM Event where inseeID = :inseeID")
+    LiveData<List<Event>> getAllEventsByInseeID(@NonNull String inseeID);
 
     @Query("SELECT * FROM Event where eventID = :eventID")
     LiveData<Event> getEvent(@NonNull String eventID);

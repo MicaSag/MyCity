@@ -15,7 +15,11 @@ public class EventDataRoomRepository {
 
     // --- GET ---
 
-    public LiveData<List<Event>> getEvents(){ return this.eventDao.getEvents(); }
+    public LiveData<List<Event>> getAllEvents(){ return this.eventDao.getAllEvents(); }
+
+    public LiveData<List<Event>> getAllEventsByInseeID(String inseeID){
+        return this.eventDao.getAllEventsByInseeID(inseeID);
+    }
 
     public LiveData<Event> getEvent(String eventId){ return this.eventDao.getEvent(eventId); }
 
@@ -27,5 +31,5 @@ public class EventDataRoomRepository {
     public void deleteEvent(String eventId){ eventDao.deleteEvent(eventId); }
 
     // --- UPDATE ---
-    public void updateItem(Event event){ eventDao.updateEvent(event); }
+    public void updateEvent(Event event){ eventDao.updateEvent(event); }
 }

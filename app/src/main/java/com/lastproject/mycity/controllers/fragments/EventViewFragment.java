@@ -16,7 +16,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -26,16 +25,11 @@ import com.bumptech.glide.request.RequestOptions;
 import com.lastproject.mycity.BuildConfig;
 import com.lastproject.mycity.R;
 import com.lastproject.mycity.adapter.photoslist.PhotosListAdapter;
+import com.lastproject.mycity.controllers.activities.EventActivity;
 import com.lastproject.mycity.controllers.activities.FullScreenImageActivity;
-import com.lastproject.mycity.injections.Injection;
-import com.lastproject.mycity.injections.ViewModelFactory;
 import com.lastproject.mycity.models.Event;
 import com.lastproject.mycity.models.views.EventViewModel;
-import com.lastproject.mycity.utils.Converters;
 import com.lastproject.mycity.utils.Toolbox;
-
-import org.threeten.bp.LocalDateTime;
-import org.threeten.bp.format.DateTimeFormatter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,11 +37,11 @@ import butterknife.ButterKnife;
 /**
  * Created by Michaël SAGOT on 26/12/2019.
  */
-public class EventEditFragment extends Fragment implements  PhotosListAdapter.OnPhotoClick,
+public class EventViewFragment extends Fragment implements  PhotosListAdapter.OnPhotoClick,
                                                             SwipeRefreshLayout.OnRefreshListener {
 
     // For debugging Mode
-    private static final String TAG = EventEditFragment.class.getSimpleName();
+    private static final String TAG = EventViewFragment.class.getSimpleName();
 
     // For Design
     @BindView(R.id.fragment_event_details_photos_swipe_container) SwipeRefreshLayout mPhotosSFL;
@@ -69,17 +63,17 @@ public class EventEditFragment extends Fragment implements  PhotosListAdapter.On
     // For Display list of photos
     PhotosListAdapter mPhotosListAdapter;
 
-    public EventEditFragment() {
+    public EventViewFragment() {
         // Required empty public constructor
     }
     // ---------------------------------------------------------------------------------------------
     //                                  FRAGMENT INSTANTIATION
     // ---------------------------------------------------------------------------------------------
-    public static EventEditFragment newInstance() {
+    public static EventViewFragment newInstance() {
         Log.d(TAG, "newInstance: ");
 
         // Create new fragment
-        EventEditFragment fragment = new EventEditFragment();
+        EventViewFragment fragment = new EventViewFragment();
 
         return fragment;
     }
@@ -91,7 +85,7 @@ public class EventEditFragment extends Fragment implements  PhotosListAdapter.On
                              Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView: ");
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_event_edit, container, false);
+        View view = inflater.inflate(R.layout.fragment_event_view, container, false);
         ButterKnife.bind(this, view);
 
         // Configuration Photo RecyclerView
@@ -100,8 +94,8 @@ public class EventEditFragment extends Fragment implements  PhotosListAdapter.On
         // Create Listener on SwipeRefreshLayout of photosList
         mPhotosSFL.setOnRefreshListener(this);
 
-        // Configure DetailsEstateViewModel
-        this.configureEstateDetailsViewModel();
+        // Configure EventEstateViewModel
+        this.configureEventViewModel();
 
         return view;
     }
@@ -109,13 +103,13 @@ public class EventEditFragment extends Fragment implements  PhotosListAdapter.On
     //                                        VIEW MODEL
     // ---------------------------------------------------------------------------------------------
     // Configure ViewModel
-    private void configureEstateDetailsViewModel(){
+    private void configureEventViewModel(){
+        Log.d(TAG, "configureEventViewModel: ");
 
-        ViewModelFactory mViewModelFactory = Injection.provideViewModelFactory(getContext());
-        mEventViewModel = ViewModelProviders.of(this, mViewModelFactory)
-                .get(EventViewModel.class);
+        mEventViewModel = ((EventActivity)getActivity()).getEventViewModel();
 
         // Observe a change of Current Event
+        Log.d(TAG, "configureEventViewModel: mEventViewModel.getCurrentEvent() = "+mEventViewModel);
         mEventViewModel.getCurrentEvent().observe(this, this::updateUI);
     }
     // --------------------------------------------------------------------------------------------
@@ -166,26 +160,18 @@ public class EventEditFragment extends Fragment implements  PhotosListAdapter.On
     public void updateUI(Event event){
         Log.d(TAG, "updateUI() called with: event = [" + event + "]");
         if (event != null) {
+
+            // Display Title
+            mTitle.setText(event.getTitle());
+
+            // Display Description
             mDescription.setText(event.getDescription());
 
-            if (event.getTitle() != null) {
-                mTitle.setText(event.getTitle());
-            }
             // Display Event Start Date
-            String date;
-            LocalDateTime dateLDT;
-            if (event.getStartDate() != null) {
-                dateLDT = Converters.fromTimestampToLocalDateTime(event.getStartDate());
-                date = dateLDT.format(DateTimeFormatter.ISO_DATE);
-                mStartDate.setText(date);
-            }
+            mStartDate.setText(event.getStartDate());
 
             // Display Event End Date
-            if (event.getEndDate()!= null) {
-                dateLDT = Converters.fromTimestampToLocalDateTime(event.getStartDate());
-                date = dateLDT.format(DateTimeFormatter.ISO_DATE);
-                mEndDate.setText(date);
-            }
+            mEndDate.setText(event.getEndDate());
 
             // Display Address
             if (event.getAddress() != null) {

@@ -3,6 +3,8 @@ package com.lastproject.mycity.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -17,9 +19,14 @@ import androidx.annotation.Nullable;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.lastproject.mycity.controllers.bases.BaseActivity;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * Toolbox containing various functions used in the application
@@ -208,6 +215,19 @@ public class Toolbox {
     }
 
     /**
+     * @since 1.0
+     * @param year
+     * @param monthOfYear
+     * @param dayOfMonth
+     * Return date in format string JJ/MM/SSAA
+     */
+    public static String dateReformatJJMMSSAA(int year, int monthOfYear, int dayOfMonth){
+
+        return  String.format("%02d", dayOfMonth) + "/" +
+                String.format("%02d", monthOfYear) + "/" + year;
+    }
+
+    /**
      * This method is used to hide keyboard
      * @param activity
      */
@@ -221,5 +241,24 @@ public class Toolbox {
         Log.d(TAG, "showSnackBar: ");
 
         Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
+    }
+
+    /**
+     *
+     * Method that returns GeoCoder data from a physical address
+     *
+     */
+    public static List<Address> geocoderAddressFromPhysicalAddress(Activity activity, List<String> address)
+            throws IOException {
+
+            Geocoder geocoder = new Geocoder(activity, Locale.getDefault());
+
+            // Get the coordinates of the
+            return geocoder.getFromLocationName(address.get(0) + "," +
+                                                            address.get(1) + "," +
+                                                            address.get(2) + "," +
+                                                            address.get(3) + "," +
+                                                            address.get(4)
+                                                            , 1);
     }
 }

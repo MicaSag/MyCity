@@ -8,21 +8,22 @@ import java.util.ArrayList;
 
 @Entity public class EventFireStore {
 
-    private String inseeID;
-    private String title;
-    private String description;
-    private ArrayList<String> photos;
-    private ArrayList<String> address;
-    private GeoPoint location;
-    private Long startDate;             // LocalDateTime in Long Format
-    private Long endDate;               // LocalDateTime in Long Format
-    private boolean canceled;
+    private String inseeID;             // Insee the city where the event takes place
+    private String title;               // Title of the event
+    private String description;         // Description of the event
+    private ArrayList<String> photos;   // Photos list of the event
+    private ArrayList<String> address;  // Address where the event takes place
+    private GeoPoint location;          // GeoPoint where the event takes place
+    private String startDate;           // Date in format JJ/MM/SSAA
+    private String endDate;             // Date in format JJ/MM/SSAA
+    private boolean canceled;           // Is True  : event = canceled
+                                        // Is false : event = good
 
     // Blank constructor necessary for use with FireBase
     public EventFireStore() { }
 
     public EventFireStore(String inseeID, String title, String description, ArrayList<String> photos,
-                          ArrayList<String> address, GeoPoint location, Long startDate, Long endDate,
+                          ArrayList<String> address, GeoPoint location, String startDate, String endDate,
                           boolean canceled) {
         this.inseeID = inseeID;
         this.title = title;
@@ -76,11 +77,11 @@ import java.util.ArrayList;
         return location;
     }
 
-    public Long getStartDate() {
+    public String getStartDate() {
         return startDate;
     }
 
-    public Long getEndDate() {
+    public String getEndDate() {
         return endDate;
     }
 
@@ -114,11 +115,11 @@ import java.util.ArrayList;
         this.location = location;
     }
 
-    public void setStartDate(Long startDate) {
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 
-    public void setEndDate(Long endDate) {
+    public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
 
