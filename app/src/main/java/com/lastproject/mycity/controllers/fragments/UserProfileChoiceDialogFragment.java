@@ -16,6 +16,8 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.lastproject.mycity.R;
 import com.lastproject.mycity.controllers.activities.AuthenticationActivity;
+import com.lastproject.mycity.controllers.activities.TownHallActivity;
+import com.lastproject.mycity.models.TownHall;
 import com.lastproject.mycity.models.views.AuthenticationViewModel;
 import com.lastproject.mycity.utils.Toolbox;
 
@@ -96,8 +98,8 @@ public class UserProfileChoiceDialogFragment extends DialogFragment {
                     Toolbox.showSnackBar(((AuthenticationActivity)getActivity()).getConstraintLayout(),
                             getString(R.string.registration_succeed));
 
-                    // // Start Mayor Activity or Citizen Activity
-                    ((AuthenticationActivity) getActivity()).startInterface();
+                    // Start TownHall Activity
+                    Toolbox.startActivity(getActivity(), TownHallActivity.class);
                     break;
 
                 case REGISTRATION_MAYOR_UPDATE_USER_FAILED:
@@ -149,12 +151,12 @@ public class UserProfileChoiceDialogFragment extends DialogFragment {
 
         // Create Mayor in FireStore
         if (mRadioButtonMayor.isChecked()){
-            // Assigns the role of mayor to the user
-            mAuthenticationViewModel.updateMayorUserByCodeID(mMayorIDValue.getText().toString(),
-                    mAuthenticationViewModel.getCurrentUser().getUid());
+            // Create the user in FireStore and assign him the role of Mayor
+            mAuthenticationViewModel.createMayorUserByCodeID(mMayorIDValue.getText().toString(),
+                    mAuthenticationViewModel.getUserAuthentication().getUid());
         } else {
-            // Create Citizen in FireStore
-            mAuthenticationViewModel.createUser(false);
+            // Create User in FireStore and assign him the role of Citizen
+            mAuthenticationViewModel.createUserInFireStore(false);
 
             mAuthenticationViewModel.getRegistrationStatus()
                     .setValue(AuthenticationViewModel.RegistrationStatus.REGISTRATION_OK);

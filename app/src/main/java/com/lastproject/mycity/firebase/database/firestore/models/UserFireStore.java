@@ -2,43 +2,40 @@ package com.lastproject.mycity.firebase.database.firestore.models;
 
 import androidx.annotation.Nullable;
 
-public class User {
+public class UserFireStore {
 
-    private String userID;
     private String userName;
     private Boolean isMayor;
     @Nullable private String urlPicture;
     private String email;
     @Nullable private String phoneNumber;
+    private String inseeID;
 
     // Blank constructor necessary for use with FireBase
-    public User() { }
+    public UserFireStore() { }
 
-    public User(String userID, String userName, Boolean isMayor, @Nullable String urlPicture, String email, @Nullable String phoneNumber) {
-        this.userID = userID;
+    public UserFireStore(String userName, Boolean isMayor, @Nullable String urlPicture, String email, @Nullable String phoneNumber, String inseeID) {
         this.userName = userName;
         this.isMayor = isMayor;
         this.urlPicture = urlPicture;
         this.email = email;
         this.phoneNumber = phoneNumber;
+        this.inseeID = inseeID;
     }
 
     @Override
     public String toString() {
-        return "User{" +
-                "userID='" + userID + '\'' +
-                ", userName='" + userName + '\'' +
+        return "UserFireStore{" +
+                "userName='" + userName + '\'' +
                 ", isMayor=" + isMayor +
                 ", urlPicture='" + urlPicture + '\'' +
                 ", email='" + email + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
+                ", inseeID='" + inseeID + '\'' +
                 '}';
     }
 
-    // --- GETTERS ---
-
-
-    public String getUserID() {return userID;}
+// --- GETTERS ---
 
     public String getUserName() {
         return this.userName;
@@ -62,11 +59,11 @@ public class User {
         return this.phoneNumber;
     }
 
-// --- SETTERS ---
-
-    public void setUserID(String userID) {
-        this.userID = userID;
+    public String getInseeID() {
+        return inseeID;
     }
+
+    // --- SETTERS ---
 
     public void setUserName(String userName) {
         this.userName = userName;
@@ -86,5 +83,9 @@ public class User {
 
     public void setPhoneNumber(@Nullable String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public void setInseeID(String inseeID) {
+        this.inseeID = inseeID;
     }
 }

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -26,6 +27,8 @@ import com.lastproject.mycity.injections.ViewModelFactory;
 import com.lastproject.mycity.models.Event;
 import com.lastproject.mycity.models.views.EventViewModel;
 import com.lastproject.mycity.repositories.CurrentEventIDDataRepository;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -136,7 +139,8 @@ public class EventActivity extends AppCompatActivity {
         // Get and Observe Event In Room (no Observation)
         Log.d(TAG, "ConfigureMode_VIEW: mEventViewModel.getCurrentEventID() = "
                 +mEventViewModel.getCurrentEventID().getValue());
-        LiveData<Event> ldEvent = mEventViewModel.getEventInRoom(mEventViewModel.getCurrentEventID().getValue());
+        LiveData<Event> ldEvent = mEventViewModel.getEventInRoom(mEventViewModel.getCurrentEventID().getValue(),
+                mEventViewModel.getCurrentUser().getUserID());
         ldEvent.observe(this, new Observer<Event>() {
             @Override
             public void onChanged(Event event) {
@@ -223,22 +227,25 @@ public class EventActivity extends AppCompatActivity {
         Log.d(TAG, "onCreateOptionsMenu: mEventViewModel.getCurrentEvent().getValue() = "
                 +mEventViewModel.getCurrentEvent().getValue());
 
-        // In CREATE or UPDATE Mode
-        if (    mEventViewModel.getMode().getValue() == EventViewModel.EventMode.CREATE ||
-                mEventViewModel.getMode().getValue() == EventViewModel.EventMode.UPDATE
-        ) {
-            menu.findItem(R.id.menu_activity_event_CREATE).setVisible(true);
-            return true;
-        }
+        // Only a user of Mayor profile can have access to the "Publish" and "Update" buttons
+        if (mEventViewModel.getCurrentUser().isMayor()) {
+            // In CREATE or UPDATE Mode
+            if (mEventViewModel.getMode().getValue() == EventViewModel.EventMode.CREATE ||
+                    mEventViewModel.getMode().getValue() == EventViewModel.EventMode.UPDATE
+            ) {
+                menu.findItem(R.id.menu_activity_event_CREATE).setVisible(true);
+                return true;
+            }
 
-        // In VIEW Mode
-        if (mEventViewModel.getMode().getValue() == EventViewModel.EventMode.VIEW) {
-            // Active UPDATE Option
-            menu.findItem(R.id.menu_activity_event_UPDATE).setVisible(true);
-            // If Event Not published, Active PUBLISH Option
-            if (!mEventViewModel.getCurrentEvent().getValue().isPublished())
-                menu.findItem(R.id.menu_activity_event_PUBLISH).setVisible(true);
-            return true;
+            // In VIEW Mode
+            if (mEventViewModel.getMode().getValue() == EventViewModel.EventMode.VIEW) {
+                // Active UPDATE Option
+                menu.findItem(R.id.menu_activity_event_UPDATE).setVisible(true);
+                // If Event Not published, Active PUBLISH Option
+                if (!mEventViewModel.getCurrentEvent().getValue().isPublished())
+                    menu.findItem(R.id.menu_activity_event_PUBLISH).setVisible(true);
+                return true;
+            }
         }
         return true;
     }
@@ -313,7 +320,7 @@ public class EventActivity extends AppCompatActivity {
             case R.id.menu_activity_event_PUBLISH:
                 Log.d(TAG, "onOptionsItemSelected: PUBLISH");
 
-                // Create Event in FireBase
+                // Create/Update Event in FireBase
                 mEventViewModel.publishEvent(mEventViewModel.getCurrentEvent().getValue());
 
                 return true;

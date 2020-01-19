@@ -86,7 +86,7 @@ public class Toolbox {
         // Create a intent for call Activity
         Intent intent = new Intent(context, className);
 
-        // Call RestaurantCardActivity
+        // Call Activity
         context.startActivity(intent);
     }
 

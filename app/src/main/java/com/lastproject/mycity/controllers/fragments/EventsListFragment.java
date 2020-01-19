@@ -86,6 +86,9 @@ public class EventsListFragment extends Fragment {
         // Configure ViewModel
         configureViewModel();
 
+        // Configure the display of the UI according to the user's profile
+        configureProfileUI();
+
         // Call during UI creation
         this.configureRecyclerView();
 
@@ -104,7 +107,8 @@ public class EventsListFragment extends Fragment {
 
         // Observe a change of Current Events List in Room
         mListEventsViewModel.getAllEventsRoomByInseeID(
-                mListEventsViewModel.getCurrentTownHall().getValue().getInseeID())
+                mListEventsViewModel.getCurrentTownHall().getValue().getInseeID(),
+                mListEventsViewModel.getCurrentUser().getUserID())
                 .observe(this, this::updateEventsList);
 
         // Observe a change of Current Event (for update selected event)
@@ -159,7 +163,17 @@ public class EventsListFragment extends Fragment {
     }
     // Update the list of Events
     private void updateEventsList(String currentEventId){
+        Log.d(TAG, "updateEventsList: ");
 
         mEventsListAdapter.notifyDataSetChanged();
+    }
+    // configure the display of the UI according to the user's profile
+    private void configureProfileUI(){
+        Log.d(TAG, "configureProfileUI: ");
+
+        // The event creation button should only be visible if the user is a mayor
+        if (mListEventsViewModel.getCurrentUser().isMayor())
+            mButtonCreateEvent.setVisibility(View.VISIBLE);
+        else mButtonCreateEvent.setVisibility(View.GONE);
     }
 }

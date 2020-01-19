@@ -3,14 +3,14 @@ package com.lastproject.mycity.repositories;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.lastproject.mycity.firebase.database.firestore.models.TownHall;
+import com.lastproject.mycity.firebase.database.firestore.models.TownHallFireStore;
 
 public class CurrentTownHallDataRepository {
 
     private static CurrentTownHallDataRepository sInstance;
 
     // CurrentTownHall
-    private MutableLiveData<TownHall> mCurrentTownHall;
+    private MutableLiveData<TownHallFireStore> mCurrentTownHall;
 
     public static CurrentTownHallDataRepository getInstance() {
         if (sInstance == null) {
@@ -29,7 +29,7 @@ public class CurrentTownHallDataRepository {
     // ===========
 
     // Return the CurrentTownHall
-    public LiveData<TownHall> getCurrentTownHall(){
+    public LiveData<TownHallFireStore> getCurrentTownHall(){
         return mCurrentTownHall;
     }
 
@@ -37,7 +37,7 @@ public class CurrentTownHallDataRepository {
     // ===========
 
     // Set the CurrentTownHall
-    public void setCurrentTownHall(TownHall currentTownHall) {
-        mCurrentTownHall.setValue(currentTownHall);
+    public void setCurrentTownHall(TownHallFireStore currentTownHallFireStore) {
+        mCurrentTownHall.setValue(currentTownHallFireStore);
     }
 }

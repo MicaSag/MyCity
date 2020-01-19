@@ -5,7 +5,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.lastproject.mycity.firebase.database.firestore.models.User;
+import com.lastproject.mycity.firebase.database.firestore.models.UserFireStore;
 
 public class UserHelper {
 
@@ -19,8 +19,8 @@ public class UserHelper {
 
     // --- CREATE ---
 
-    public static Task<Void> createUser(User user) {
-        return UserHelper.getUsersCollection().document(user.getUserID()).set(user);
+    public static Task<Void> createUser(String userID, UserFireStore userFireStore) {
+        return UserHelper.getUsersCollection().document(userID).set(userFireStore);
     }
 
     // --- GET ---
@@ -41,6 +41,10 @@ public class UserHelper {
 
     public static Task<Void> updateUserName(String userName, String uid) {
         return UserHelper.getUsersCollection().document(uid).update("userName", userName);
+    }
+
+    public static Task<Void> updateUserInseeID(String inseeID, String uid) {
+        return UserHelper.getUsersCollection().document(uid).update("inseeID", inseeID);
     }
 
     // --- DELETE ---

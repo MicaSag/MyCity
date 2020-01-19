@@ -16,15 +16,13 @@ import androidx.fragment.app.Fragment;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.lastproject.mycity.R;
-import com.lastproject.mycity.controllers.activities.MayorActivity;
-import com.lastproject.mycity.firebase.database.firestore.models.TownHall;
-import com.lastproject.mycity.models.views.MayorViewModel;
+import com.lastproject.mycity.controllers.activities.TownHallActivity;
+import com.lastproject.mycity.firebase.database.firestore.models.TownHallFireStore;
+import com.lastproject.mycity.models.views.TownHallViewModel;
 import com.lastproject.mycity.network.retrofit.models.Insee;
 import com.lastproject.mycity.network.retrofit.models.townhall.TownH;
 import com.lastproject.mycity.network.retrofit.streams.InseeListStreams;
 import com.lastproject.mycity.network.retrofit.streams.TownHallStreams;
-import com.lastproject.mycity.repositories.CurrentMayorDataRepository;
-import com.lastproject.mycity.repositories.CurrentTownHallDataRepository;
 import com.lastproject.mycity.utils.Mapping;
 
 import java.util.ArrayList;
@@ -49,7 +47,7 @@ public class FirstConnexionFragment extends Fragment {
     public @BindView(R.id.fragment_first_connexion_auto_city_list) AutoCompleteTextView mAutoCityList;
 
     // Declare ViewModel
-    private MayorViewModel mMayorViewModel;
+    private TownHallViewModel mTownHallViewModel;
 
     //FOR DATA
     private Disposable disposable;
@@ -98,7 +96,7 @@ public class FirstConnexionFragment extends Fragment {
     private void configureViewModel() {
         Log.d(TAG, "configureViewModel: ");
 
-        mMayorViewModel = ((MayorActivity) getActivity()).getMayorViewModel();
+        mTownHallViewModel = ((TownHallActivity) getActivity()).getTownHallViewModel();
     }
     // ---------------------------------------------------------------------------------------------
     //                                          ACTIONS
@@ -109,14 +107,19 @@ public class FirstConnexionFragment extends Fragment {
         mAutoCityList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d(TAG, "onItemSelected() :");
+                Log.d(TAG, "onItemClick: ");
 
                 String item = parent.getItemAtPosition(position).toString();
-                Log.d(TAG, "onItemClick: item = "+item);
+                Log.d(TAG, "createAutoCompleteCityListListener onItemClick: item = "+item);
 
-                // Update Current Mayor with townHallID (Insee code)
-                mMayorViewModel.getCurrentMayor()
-                        .getMayorFireStore().setTownHallID(mMayorViewModel.getInseeList().get(position).getCode());
+                String inseeID = mTownHallViewModel.getInseeList().get(position).getCode();
+                Log.d(TAG, "createAutoCompleteCityListListener onItemClick: inseeID = "+inseeID);
+                mTownHallViewModel.setInseeSelected(inseeID);
+
+                // we update the user's document with the INSEE identifier
+                mTownHallViewModel.getCurrentUser().setInseeID(inseeID);
+                Log.d(TAG, "createAutoCompleteCityListListener onItemClick: getCurrentUser() = "+
+                        mTownHallViewModel.getCurrentUser());
             }
         });
     }
@@ -136,10 +139,10 @@ public class FirstConnexionFragment extends Fragment {
     public void onValidateClick(View view) {
         Log.d(TAG, "onValidateClick: ");
 
-        // Get TownH Data
+        // Get Town Hall Data
         // save its in viewModel and FireStore
         // And Show Town Hall Fragment
-        getTownHallInformations(mMayorViewModel.getCurrentMayor().getMayorFireStore().getTownHallID());
+        getTownHallInformations(mTownHallViewModel.getCurrentUser().getInseeID());
 
     }
     // ---------------------------------------------------------------------------------------------
@@ -156,70 +159,84 @@ public class FirstConnexionFragment extends Fragment {
                 .subscribeWith(new DisposableObserver<List<Insee>>() {
             @Override
             public void onNext(List<Insee> inseeList) {
-                Log.d(TAG, "onNext: ");
+                Log.d(TAG, "getInseeList: onNext: ");
                 // Update UI with list of users
                 displayInseeList(inseeList);
                 configureAutoCompleteInseeList(inseeList);
             }
             @Override
-            public void onError(Throwable e) {Log.d(TAG, "onError: ");}
+            public void onError(Throwable e) {Log.d(TAG, "getInseeList: onError: ");}
             @Override
-            public void onComplete() {Log.d(TAG, "onComplete: ");}
+            public void onComplete() {Log.d(TAG, "getInseeList: onComplete: ");}
         });
     }
     // Retrieves the information of a city according to its insee code
     private void getTownHallInformations(String insee) {
-        Log.d(TAG, "getTownHallInformations: ");
+        Log.d(TAG, "getTownHallInformations() called with: insee = [" + insee + "]");
 
         // Execute the stream subscribing to Observable defined inside GithubStream
         this.disposable = TownHallStreams.streamFetchTownHall(insee).subscribeWith(new DisposableObserver<TownH>() {
             @Override
             public void onNext(TownH townH) {
-                Log.d(TAG, "onNext: ");
+                Log.d(TAG, "getTownHallInformations: onNext: ");
                 // Update UI with list of users
                 displayTownHall(townH);
 
-                // Map TownH To TownHall
-                TownHall townHall = Mapping.mapTownHToTownHall(townH);
+                // Map TownH To TownHallFireStore
+                TownHallFireStore townHallFireStore = Mapping.mapTownHToTownHall(townH);
 
-                // Create TownHall in Fire Store
-                mMayorViewModel
-                        .createTownHall(townHall)
+                // Create TownHall in FireStore
+                mTownHallViewModel
+                        .createTownHall(townHallFireStore)
                         .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "onSuccess: ");
+                        Log.d(TAG, "getTownHallInformations: onSuccess: ");
 
-                        // Save TownHall in model
-                        mMayorViewModel.setCurrentTownHall(townHall);
+                        // Save TownHallFireStore in model
+                        mTownHallViewModel.setCurrentTownHall(townHallFireStore);
 
-                        // Update townHallID Mayor in Fire Store
-                        Log.d(TAG, "onSuccess: mMayorViewModel.getCurrentMayor().getMayorID() = "
-                                +mMayorViewModel.getCurrentMayor().getMayorID());
-                        Log.d(TAG, "onSuccess: documentReference.getId() = "+documentReference.getId());
-                        mMayorViewModel.updateMayorTownHallID(mMayorViewModel
-                                .getCurrentMayor().getMayorID(), documentReference.getId() )
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        Log.d(TAG, "onSuccess() : Update townHallID Mayor in Fire Store");
+                        // Update User in FireStore with InseeID
+                        mTownHallViewModel.setUserInseeID(mTownHallViewModel.getInseeSelected(),
+                                mTownHallViewModel.getCurrentUser().getUserID());
 
-                                        // Show Town Hall Fragment
-                                        ((MayorActivity) getActivity()).configureAndShowTownHallFragment();
-                                    }
-                                });
+                        // If the user is a mayor, we update Mayor Document with TownHallID
+                        if (mTownHallViewModel.getCurrentUser().isMayor()) {
+
+                            // Update townHallID Mayor in Fire Store
+                            Log.d(TAG, "onSuccess: mTownHallViewModel.getCurrentMayor().getMayorID() = "
+                                    + mTownHallViewModel.getCurrentMayor().getMayorID());
+                            Log.d(TAG, "onSuccess: documentReference.getId() = "
+                                    + documentReference.getId());
+
+                            mTownHallViewModel.updateMayorTownHallID(mTownHallViewModel
+                                    .getCurrentMayor().getMayorID(), documentReference.getId())
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Log.d(TAG, "onSuccess() : Update townHallID Mayor in Fire Store");
+
+                                            // Show Town Hall Fragment
+                                            mTownHallViewModel.setViewAction(TownHallViewModel.ViewAction.
+                                                    SHOW_TOWN_HALL_FRAGMENT);
+                                        }
+                                    });
+                        } else{
+                            // Show Town Hall Fragment
+                            mTownHallViewModel.setViewAction(TownHallViewModel.ViewAction.
+                                    SHOW_TOWN_HALL_FRAGMENT);
+                        }
                     }
                 });
             }
             @Override
-            public void onError(Throwable e) {Log.d(TAG, "onError: ");}
+            public void onError(Throwable e) {Log.d(TAG, "getTownHallInformations: onError: ");}
             @Override
             public void onComplete() {
-                Log.d(TAG, "onComplete: ");
+                Log.d(TAG, "getTownHallInformations: onComplete: ");
             }
         });
     }
-
     // ---------------------------------------------------------------------------------------------
     //                      AUTOCOMPLETE INSEE CONFIGURATION
     // ---------------------------------------------------------------------------------------------
@@ -227,12 +244,24 @@ public class FirstConnexionFragment extends Fragment {
         Log.d(TAG, "configureAutoCompleteType: ");
 
         // Save insee List in view Model
-        mMayorViewModel.setInseeList(inseeList);
+        mTownHallViewModel.setInseeList(inseeList);
 
         ArrayList<String> ar = new ArrayList<>();
 
+        String postalCode;
+        String nom;
         for (Insee insee : inseeList) {
-            ar.add(insee.getCodesPostaux().get(0) + " " + insee.getNom());
+            if (insee != null) {
+                if (insee.getCodesPostaux().size() >0 )
+                    postalCode = insee.getCodesPostaux().get(0);
+                else
+                    postalCode = "unknown";
+
+                if (insee.getNom() != null) nom = insee.getNom();
+                else
+                    nom = "unknown";
+                ar.add(postalCode + " " + nom);
+            }
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
@@ -247,9 +276,12 @@ public class FirstConnexionFragment extends Fragment {
         Log.d(TAG, "displayInseeList: ");
 
         for (Insee insee : inseeList) {
-            Log.d(TAG, "displayInseeList: ville = " + insee.getNom());
-            Log.d(TAG, "displayInseeList: code  = " + insee.getCode());
-            Log.d(TAG, "displayInseeList: code Postaux  = " + insee.getCodesPostaux().get(0));
+            if (insee.getNom() != null)
+                Log.d(TAG, "displayInseeList: ville = " + insee.getNom());
+            if (insee.getCode() != null)
+                Log.d(TAG, "displayInseeList: code  = " + insee.getCode());
+            if (insee.getCodesPostaux().size() > 0)
+                Log.d(TAG, "displayInseeList: code Postaux  = " + insee.getCodesPostaux().get(0));
         }
     }
     public void displayTownHall(TownH townH) {

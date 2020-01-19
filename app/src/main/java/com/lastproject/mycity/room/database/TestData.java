@@ -32,8 +32,11 @@ public class TestData {
         contentValues.put("address", Arrays.asList("\"3 rue de la chesnaie\"", "\"\"", "\"Cagneux\"", "\"Bailleval\"", "\"France\"").toString());
         contentValues.put("startDate", "01/10/2020");
         contentValues.put("endDate", "04/10/2020");
+        contentValues.put("userID", "emc77KANhJh8PHLFLgK2Nl12zvv2");
         contentValues.put("canceled", false);
         contentValues.put("published", false);
+        contentValues.put("atCreate", true);
+        contentValues.put("atUpdate", false);
 
         return contentValues;
     }
@@ -62,6 +65,9 @@ public class TestData {
         contentValues.put("endDate", "06/10/2020");
         contentValues.put("canceled", false);
         contentValues.put("published", false);
+        contentValues.put("atCreate", true);
+        contentValues.put("atUpdate", false);
+        contentValues.put("userID", "emc77KANhJh8PHLFLgK2Nl12zvv2");
 
         return contentValues;
     }
@@ -85,6 +91,9 @@ public class TestData {
         contentValues.put("endDate", "16/10/2020");
         contentValues.put("canceled", false);
         contentValues.put("published", false);
+        contentValues.put("atCreate", true);
+        contentValues.put("atUpdate", false);
+        contentValues.put("userID", "emc77KANhJh8PHLFLgK2Nl12zvv2");
 
         return contentValues;
     }
@@ -108,6 +117,9 @@ public class TestData {
         contentValues.put("endDate", "06/11/2021");
         contentValues.put("canceled", false);
         contentValues.put("published", false);
+        contentValues.put("atCreate", true);
+        contentValues.put("atUpdate", false);
+        contentValues.put("userID", "emc77KANhJh8PHLFLgK2Nl12zvv2");
 
         return contentValues;
     }
@@ -130,6 +142,9 @@ public class TestData {
         contentValues.put("endDate", "16/01/2019");
         contentValues.put("canceled", false);
         contentValues.put("published", false);
+        contentValues.put("atCreate", true);
+        contentValues.put("atUpdate", false);
+        contentValues.put("userID", "emc77KANhJh8PHLFLgK2Nl12zvv2");
 
         return contentValues;
     }
@@ -152,6 +167,9 @@ public class TestData {
         contentValues.put("endDate", "06/11/2019");
         contentValues.put("canceled", false);
         contentValues.put("published", false);
+        contentValues.put("atCreate", true);
+        contentValues.put("atUpdate", false);
+        contentValues.put("userID", "emc77KANhJh8PHLFLgK2Nl12zvv2");
 
         return contentValues;
     }
@@ -175,6 +193,9 @@ public class TestData {
         contentValues.put("endDate", "06/10/2018");
         contentValues.put("canceled", false);
         contentValues.put("published", false);
+        contentValues.put("atCreate", true);
+        contentValues.put("atUpdate", false);
+        contentValues.put("userID", "emc77KANhJh8PHLFLgK2Nl12zvv2");
 
         return contentValues;
     }

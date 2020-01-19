@@ -3,28 +3,40 @@ package com.lastproject.mycity.firebase.database.firestore.models;
 import com.lastproject.mycity.models.LatLng;
 import com.lastproject.mycity.network.retrofit.models.townhall.Horaire;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class TownHall {
+public class TownHallFireStore {
 
     private String inseeID;
     private String name;
-    private ArrayList<String> address;
+    private List<String> address;
     private String email;
     private String phoneNumber;
     private String url;
     private LatLng location;
-    //private ArrayList<String> hours;
     private List<Horaire> hours;
     private String photo;
 
     // Blank constructor necessary for use with FireBase
-    public TownHall() { }
+    public TownHallFireStore() { }
+
+    public TownHallFireStore(String inseeID, String name, List<String> address, String email,
+                             String phoneNumber, String url, LatLng location, List<Horaire> hours,
+                             String photo) {
+        this.inseeID = inseeID;
+        this.name = name;
+        this.address = address;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.url = url;
+        this.location = location;
+        this.hours = hours;
+        this.photo = photo;
+    }
 
     @Override
     public String toString() {
-        return "TownHall{" +
+        return "TownHallFireStore{" +
                 "inseeID='" + inseeID + '\'' +
                 ", name='" + name + '\'' +
                 ", address=" + address +
@@ -47,7 +59,7 @@ public class TownHall {
         return name;
     }
 
-    public ArrayList<String> getAddress() {
+    public List<String> getAddress() {
         return address;
     }
 
@@ -84,7 +96,7 @@ public class TownHall {
         this.name = name;
     }
 
-    public void setAddress(ArrayList<String> address) {
+    public void setAddress(List<String> address) {
         this.address = address;
     }
 

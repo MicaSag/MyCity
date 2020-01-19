@@ -6,7 +6,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.lastproject.mycity.firebase.database.firestore.models.TownHall;
+import com.lastproject.mycity.firebase.database.firestore.models.TownHallFireStore;
 
 public class TownHallHelper {
 
@@ -23,9 +23,9 @@ public class TownHallHelper {
 
     // --- CREATE ---
 
-    public static Task<DocumentReference> createTownHall(TownHall townHall) {
+    public static Task<DocumentReference> createTownHall(TownHallFireStore townHallFireStore) {
         return TownHallHelper.getTownHallCollection()
-                .add(townHall);
+                .add(townHallFireStore);
     }
 
     // --- GET ---

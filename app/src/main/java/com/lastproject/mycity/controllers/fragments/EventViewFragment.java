@@ -177,29 +177,39 @@ public class EventViewFragment extends Fragment implements  PhotosListAdapter.On
             if (event.getAddress() != null) {
                 String address = "";
                 if (event.getAddress().size() > 0) {
-                    mLocation_1.setText(event.getAddress().get(0));
-                    mLocation_1.setVisibility(View.VISIBLE);
-                    address += event.getAddress().get(0) + "+";
+                    if (!event.getAddress().get(0).isEmpty()){
+                        mLocation_1.setText(event.getAddress().get(0));
+                        mLocation_1.setVisibility(View.VISIBLE);
+                        address += event.getAddress().get(0) + "+";
+                    } else mLocation_1.setVisibility(View.GONE);
                 } else mLocation_1.setVisibility(View.GONE);
                 if (event.getAddress().size() > 1) {
-                    mLocation_2.setText(event.getAddress().get(1));
-                    mLocation_2.setVisibility(View.VISIBLE);
-                    address += event.getAddress().get(1) + "+";
+                    if (!event.getAddress().get(1).isEmpty()){
+                        mLocation_2.setText(event.getAddress().get(1));
+                        mLocation_2.setVisibility(View.VISIBLE);
+                        address += event.getAddress().get(1) + "+";
+                    } else mLocation_2.setVisibility(View.GONE);
                 } else mLocation_2.setVisibility(View.GONE);
                 if (event.getAddress().size() > 2) {
-                    mLocation_3.setText(event.getAddress().get(2));
-                    mLocation_3.setVisibility(View.VISIBLE);
-                    address += event.getAddress().get(2) + "+";
+                    if (!event.getAddress().get(2).isEmpty()) {
+                        mLocation_3.setText(event.getAddress().get(2));
+                        mLocation_3.setVisibility(View.VISIBLE);
+                        address += event.getAddress().get(2) + "+";
+                    } else mLocation_3.setVisibility(View.GONE);
                 } else mLocation_3.setVisibility(View.GONE);
                 if (event.getAddress().size() > 3) {
-                    mLocation_4.setText(event.getAddress().get(3));
-                    mLocation_4.setVisibility(View.VISIBLE);
-                    address += event.getAddress().get(3) + "+";
+                    if (!event.getAddress().get(3).isEmpty()) {
+                        mLocation_4.setText(event.getAddress().get(3));
+                        mLocation_4.setVisibility(View.VISIBLE);
+                        address += event.getAddress().get(3) + "+";
+                    } else mLocation_4.setVisibility(View.GONE);
                 } else mLocation_4.setVisibility(View.GONE);
                 if (event.getAddress().size() > 4) {
-                    mLocation_5.setText(event.getAddress().get(4));
-                    mLocation_5.setVisibility(View.VISIBLE);
-                    address += event.getAddress().get(4);
+                    if (!event.getAddress().get(4).isEmpty()) {
+                        mLocation_5.setText(event.getAddress().get(4));
+                        mLocation_5.setVisibility(View.VISIBLE);
+                        address += event.getAddress().get(4);
+                    } else mLocation_5.setVisibility(View.GONE);
                 } else mLocation_5.setVisibility(View.GONE);
 
                 // Created Uri to recover the static Mapping

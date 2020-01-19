@@ -48,8 +48,8 @@ public class EventDataFireStoreRepository {
     // --- UPDATE ---
 
     // Update Event
-    public Task<Void> updateEventInFireStore(Event event) {
-        return EventHelper.updateEvent(event);
+    public Task<Void> updateEventInFireStore(String eventID, EventFireStore eventFireStore) {
+        return EventHelper.updateEvent(eventID, eventFireStore);
     }
 
     // --- DELETE ---

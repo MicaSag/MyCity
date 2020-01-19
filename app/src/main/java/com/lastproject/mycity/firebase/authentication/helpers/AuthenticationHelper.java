@@ -7,7 +7,7 @@ public class AuthenticationHelper {
 
     // --- GET ---
 
-    // Return Current User
+    // Return Current UserFireStore
     public FirebaseUser getCurrentUser(){
         return FirebaseAuth.getInstance().getCurrentUser();
     }

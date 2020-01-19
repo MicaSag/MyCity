@@ -1,5 +1,6 @@
 package com.lastproject.mycity.controllers.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.firebase.ui.auth.AuthUI;
@@ -21,11 +23,13 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.lastproject.mycity.R;
 import com.lastproject.mycity.controllers.fragments.UserProfileChoiceDialogFragment;
 import com.lastproject.mycity.firebase.database.firestore.models.MayorFireStore;
+import com.lastproject.mycity.firebase.database.firestore.models.UserFireStore;
 import com.lastproject.mycity.models.Mayor;
-import com.lastproject.mycity.firebase.database.firestore.models.User;
 import com.lastproject.mycity.injections.Injection;
 import com.lastproject.mycity.injections.ViewModelFactory;
+import com.lastproject.mycity.models.User;
 import com.lastproject.mycity.models.views.AuthenticationViewModel;
+import com.lastproject.mycity.models.views.TownHallViewModel;
 import com.lastproject.mycity.repositories.CurrentMayorDataRepository;
 import com.lastproject.mycity.utils.Toolbox;
 
@@ -84,8 +88,37 @@ public class AuthenticationActivity  extends AppCompatActivity
         ViewModelFactory modelFactory = Injection.provideViewModelFactory(this);
         mAuthenticationViewModel = ViewModelProviders.of(this, modelFactory)
                 .get(AuthenticationViewModel.class);
-    }
 
+        mAuthenticationViewModel.getViewAction().
+                observe(this,new Observer<AuthenticationViewModel.ViewAction>() {
+                    @Override
+                    public void onChanged (AuthenticationViewModel.ViewAction viewAction){
+                        if (viewAction == null) {
+                            return;
+                        }
+
+                        switch (viewAction) {
+
+                            case START_TOWN_HALL_ACTIVITY:
+                                showSnackBar("START_TOWN_HALL_ACTIVITY");
+                                startActivity(TownHallActivity.class);
+
+                                break;
+
+                            case FINISH_ACTIVITY:
+                                /*Intent intent = new Intent();
+                                intent.putExtra(BUNDLE_UPDATE_OK, true);
+                                setResult(RESULT_OK, intent);
+                                // Close Activity and go back to previous activity
+                                finish();*/
+                                break;
+                        }
+                    }
+                });
+    }
+    public void startActivity(Class activityClass){
+        Toolbox.startActivity(this,activityClass);
+    }
     public AuthenticationViewModel getAuthenticationViewModel() {
         return mAuthenticationViewModel;
     }
@@ -254,22 +287,26 @@ public class AuthenticationActivity  extends AppCompatActivity
 
         // Retrieves the information of the user according to his ID in FireStore Database
         mAuthenticationViewModel.getUserInFireStore(
-                mAuthenticationViewModel.getCurrentUser().getUid()).addOnSuccessListener(documentSnapshot -> {
-            User user = documentSnapshot.toObject(User.class);
+                mAuthenticationViewModel.getUserAuthentication().getUid()).addOnSuccessListener(documentSnapshot -> {
+            UserFireStore userFireStore = documentSnapshot.toObject(UserFireStore.class);
 
-            // Does the user already exist in the database Cloud FireStore ?
-            if (user == null) {
-                // User not exist in Cloud FireStore (user is null)
-                Log.d(TAG, "checkUserRegistrationInFireStore: User not exist in Cloud FireStore (user is null)");
+            // Does the userFireStore already exist in the database Cloud FireStore ?
+            if (userFireStore == null) {
+                // UserFireStore not exist in Cloud FireStore (userFireStore is null)
+                Log.d(TAG, "checkUserRegistrationInFireStore: UserFireStore not exist in Cloud FireStore (userFireStore is null)");
 
-                // Ask the new user if he is a citizen or a mayor.
+                // Ask the new userFireStore if he is a citizen or a mayor.
                 this.openUserTypeChoiceDialog();
-            } else {
-                Log.d(TAG, "checkUserRegistrationInFireStore: User exist in Cloud FireStore");
 
-                // Save the User in Model
-                mAuthenticationViewModel.setUserInModel(user);
-                Log.d(TAG, "checkUserRegistrationInFireStore: user.getUserID() = "+user);
+            } else {
+                Log.d(TAG, "checkUserRegistrationInFireStore: UserFireStore exist in Cloud FireStore");
+
+                // Save the UserFireStore in Current User
+                User user = new User(mAuthenticationViewModel.getUserAuthentication().getUid(), userFireStore);
+                mAuthenticationViewModel.setCurrentUser(user);
+
+                Log.d(TAG, "checkUserRegistrationInFireStore: user = "+ user);
+
                 if (user.isMayor()) {
                     Log.d(TAG, "checkUserRegistrationInFireStore: User is a Mayor");
                     mAuthenticationViewModel.getMayorByUserID(user.getUserID())
@@ -284,6 +321,7 @@ public class AuthenticationActivity  extends AppCompatActivity
                                                 Log.d(TAG, document.getId() + " => " + document.getData());
 
                                                 MayorFireStore mayorFireStore = document.toObject(MayorFireStore.class);
+
                                                 Log.d(TAG, "onComplete: mayorFireStore = "+mayorFireStore);
                                                 // If the userID corresponds to the mayor document being read
                                                 // As a precaution, only the first document found will be used
@@ -294,8 +332,10 @@ public class AuthenticationActivity  extends AppCompatActivity
                                                    Mayor mayor = new Mayor(document.getId(), mayorFireStore);
                                                    CurrentMayorDataRepository.getInstance().setCurrentMayor(mayor);
 
-                                                   // Start Citizen Activity
-                                                   startInterface();
+                                                   // Start TownHall Activity
+                                                  mAuthenticationViewModel
+                                                          .setViewAction(AuthenticationViewModel.ViewAction
+                                                                  .START_TOWN_HALL_ACTIVITY);
                                                }
                                             }
                                         } else {
@@ -309,29 +349,12 @@ public class AuthenticationActivity  extends AppCompatActivity
                                 }
                             });
                 } else {
-                    Log.d(TAG, "checkUserRegistrationInFireStore: User is a Citizen");
-                    // Start Citizen Activity
-                    startInterface();
+                    Log.d(TAG, "checkUserRegistrationInFireStore: UserFireStore is a Citizen");
+                    // Start TownHall Activity
+                    Toolbox.startActivity(this,TownHallActivity.class);
                 }
             }
         });
-    }
-    // ---------------------------------------------------------------------------------------------
-    //                                      CALL ACTIVITY
-    // ---------------------------------------------------------------------------------------------
-    public void startInterface(){
-        Log.d(TAG, "startInterface: ");
-
-        Intent intent;
-        if (mAuthenticationViewModel.getUserInModel().isMayor()) {
-
-            // Create intent for call Mayor Activity
-            intent = new Intent(this, MayorActivity.class);
-        }else{
-            // Create intent for call Citizen Activity
-            intent = new Intent(this, CitizenActivity.class);
-        }
-        startActivity(intent);
     }
     // ---------------------------------------------------------------------------------------------
     //                                          UI

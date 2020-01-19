@@ -13,12 +13,14 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.lastproject.mycity.firebase.database.firestore.models.EventFireStore;
+import com.lastproject.mycity.firebase.database.firestore.models.TownHallFireStore;
 import com.lastproject.mycity.models.Mayor;
-import com.lastproject.mycity.firebase.database.firestore.models.TownHall;
 import com.lastproject.mycity.models.Event;
+import com.lastproject.mycity.models.User;
 import com.lastproject.mycity.repositories.CurrentEventIDDataRepository;
 import com.lastproject.mycity.repositories.CurrentMayorDataRepository;
 import com.lastproject.mycity.repositories.CurrentTownHallDataRepository;
+import com.lastproject.mycity.repositories.CurrentUserDataRepository;
 import com.lastproject.mycity.repositories.EventDataFireStoreRepository;
 import com.lastproject.mycity.repositories.EventDataRoomRepository;
 
@@ -67,8 +69,9 @@ public class ListEventsViewModel extends ViewModel {
                     EventFireStore eventFireStore = document.toObject(EventFireStore.class);
                     Log.d(TAG, "onEvent: event Fire Base = " + eventFireStore);
 
-                    // Find in room dataBase if the event is already present
-                    LiveData<Event> lEvent = getEventByEventIDRoom(document.getId());
+                    // Find in room dataBase if the event is already present for current User
+                    LiveData<Event> lEvent = getEventByEventIDRoom(document.getId(),
+                            getCurrentUser().getUserID());
 
                     lEvent.observeForever(new Observer<Event>() {
                         @Override
@@ -78,7 +81,8 @@ public class ListEventsViewModel extends ViewModel {
                             lEvent.removeObserver(this);
 
                             // Prepare the event to be integrated into the room
-                            Event eventRoom = new Event(document.getId(), true, eventFireStore);
+                            Event eventRoom = new Event(document.getId(),
+                                    getCurrentUser().getUserID(), eventFireStore);
 
                             // If the event exists
                             if (event != null) {
@@ -104,24 +108,14 @@ public class ListEventsViewModel extends ViewModel {
         });
     }
 
-    // --- CURRENT MAYOR ---
+    // --- CURRENT USER ---
     //
-    public Mayor getCurrentMayor() {
-        return CurrentMayorDataRepository.getInstance().getCurrentMayor();
-    }
-
-    public void setCurrentMayor(Mayor mayor) {
-        CurrentMayorDataRepository.getInstance().setCurrentMayor(mayor);
-    }
+    public User getCurrentUser() {return CurrentUserDataRepository.getInstance().getCurrentUser();}
 
     // --- CURRENT TOWN HALL ---
     //
-    public LiveData<TownHall> getCurrentTownHall() {
+    public LiveData<TownHallFireStore> getCurrentTownHall() {
         return CurrentTownHallDataRepository.getInstance().getCurrentTownHall();
-    }
-
-    public void setCurrentTownHall(TownHall townHall) {
-        CurrentTownHallDataRepository.getInstance().setCurrentTownHall(townHall);
     }
 
     // --- CURRENT EVENT SELECTED ---
@@ -150,13 +144,13 @@ public class ListEventsViewModel extends ViewModel {
     }
 
     // Get the whole list of events in Room by InseeID
-    public LiveData<List<Event>> getAllEventsRoomByInseeID(String inseeID) {
-        return eventDataRoomSource.getAllEventsByInseeID(inseeID);
+    public LiveData<List<Event>> getAllEventsRoomByInseeID(String inseeID, String userID) {
+        return eventDataRoomSource.getAllEventsByInseeID(inseeID, userID);
     }
 
-    // Get event in Room by eventID
-    public LiveData<Event> getEventByEventIDRoom(String eventID) {
-        return eventDataRoomSource.getEvent(eventID);
+    // Get event in Room by eventID et userID
+    public LiveData<Event> getEventByEventIDRoom(String eventID, String userID) {
+        return eventDataRoomSource.getEvent(eventID, userID);
     }
 
     // Create Event in Room

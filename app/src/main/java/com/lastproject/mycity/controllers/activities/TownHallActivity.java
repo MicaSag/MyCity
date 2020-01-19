@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -13,24 +14,21 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.lastproject.mycity.R;
 import com.lastproject.mycity.adapter.eventslist.EventsListAdapter;
 import com.lastproject.mycity.controllers.bases.BaseActivity;
 import com.lastproject.mycity.controllers.fragments.EventsListFragment;
 import com.lastproject.mycity.controllers.fragments.FirstConnexionFragment;
 import com.lastproject.mycity.controllers.fragments.TownHallFragment;
-import com.lastproject.mycity.firebase.database.firestore.models.TownHall;
 import com.lastproject.mycity.injections.Injection;
 import com.lastproject.mycity.injections.ViewModelFactory;
 import com.lastproject.mycity.models.Event;
 import com.lastproject.mycity.models.views.EventViewModel;
-import com.lastproject.mycity.models.views.MayorViewModel;
+import com.lastproject.mycity.models.views.TownHallViewModel;
 import com.lastproject.mycity.repositories.CurrentEventIDDataRepository;
 import com.lastproject.mycity.utils.Toolbox;
 
@@ -40,14 +38,14 @@ import butterknife.BindView;
  * Created by Michaël SAGOT on 28/12/2019.
  */
 
-public class MayorActivity extends BaseActivity implements  NavigationView.OnNavigationItemSelectedListener,
+public class TownHallActivity extends BaseActivity implements  NavigationView.OnNavigationItemSelectedListener,
                                                             EventsListAdapter.OnEventClick {
 
     // For Debug
-    private static final String TAG = MayorActivity.class.getSimpleName();
+    private static final String TAG = TownHallActivity.class.getSimpleName();
 
-    // Declare MayorViewModel
-    private MayorViewModel mMayorViewModel;
+    // Declare TownHallViewModel
+    private TownHallViewModel mTownHallViewModel;
 
     // Fragments Declarations
     private FirstConnexionFragment mFirstConnexionFragment;
@@ -56,11 +54,22 @@ public class MayorActivity extends BaseActivity implements  NavigationView.OnNav
 
 
     // Adding @BindView in order to indicate to ButterKnife to get & serialise it
-    public @BindView(R.id.toolbar) Toolbar mToolBar;
-    public @BindView(R.id.activity_mayor_root) ConstraintLayout mConstraintLayout;
-    public @BindView(R.id.activity_mayor_drawer_layout) DrawerLayout mDrawerLayout;
-    public @BindView(R.id.activity_mayor_nav_view) NavigationView mNavigationView;
-    public @BindView(R.id.activity_mayor_fragment_events_list) FrameLayout mFragmentEventList;
+    public @BindView(R.id.toolbar)
+    Toolbar mToolBar;
+    public @BindView(R.id.activity_town_hall_root)
+    LinearLayout mRoot;
+
+    public @BindView(R.id.activity_town_hall_fragment_first_connexion)
+    LinearLayout mTownHallChoice;
+    public @BindView(R.id.activity_town_hall_fragment)
+    LinearLayout mTownHall;
+
+    public @BindView(R.id.activity_mayor_drawer_layout)
+    DrawerLayout mDrawerLayout;
+    public @BindView(R.id.activity_mayor_nav_view)
+    NavigationView mNavigationView;
+    public @BindView(R.id.activity_town_hall_fragment_events_list)
+    FrameLayout mFragmentEventList;
 
     // ---------------------------------------------------------------------------------------------
     //                                DECLARATION BASE METHODS
@@ -70,7 +79,7 @@ public class MayorActivity extends BaseActivity implements  NavigationView.OnNav
     // CALLED BY BASE METHOD 'onCreate(...)'
     @Override
     protected int getActivityLayout() {
-        return R.layout.activity_mayor;
+        return R.layout.activity_townhall;
     }
 
     // BASE METHOD Implementation
@@ -78,7 +87,7 @@ public class MayorActivity extends BaseActivity implements  NavigationView.OnNav
     // CALLED BY BASE METHOD
     @Override
     protected View getConstraintLayout() {
-        return mConstraintLayout;
+        return mRoot;
     }
 
     // BASE METHOD Implementation
@@ -104,86 +113,102 @@ public class MayorActivity extends BaseActivity implements  NavigationView.OnNav
         this.configureNavigationView();
         this.configureNavigationMenuItem();
 
-        // display switching according to the progress of the mayor's profile
-        this.switchingDisplay();
+        // display switching according to the progress of the user's profile
+        this.switchingDisplayFragment();
 
         /*ConstraintLayout.LayoutParams params =
                 (ConstraintLayout.LayoutParams)mFragmentEventList.getLayoutParams();
         params.topToBottom = mTownHallFragment.mHoursMCV.getId();
         mFragmentEventList.requestLayout();*/
     }
+
     // ---------------------------------------------------------------------------------------------
     //                                        VIEW MODEL
     // ---------------------------------------------------------------------------------------------
     // Configure ViewModel
     private void configureViewModel() {
         ViewModelFactory modelFactory = Injection.provideViewModelFactory(this);
-        mMayorViewModel = ViewModelProviders.of(this, modelFactory)
-                .get(MayorViewModel.class);
-    }
+        mTownHallViewModel = ViewModelProviders.of(this, modelFactory)
+                .get(TownHallViewModel.class);
 
-    public MayorViewModel getMayorViewModel() {return mMayorViewModel;}
-
-    // ---------------------------------------------------------------------------------------------
-    //                                         DISPLAY
-    // ---------------------------------------------------------------------------------------------
-    public void switchingDisplay() {
-        Log.d(TAG, "switchingDisplay: ");
-        if (mMayorViewModel.getCurrentMayor().getMayorFireStore().getTownHallID().equals("")){
-            Log.d(TAG, "switchingDisplay: First Connexion");
-            // Show First Connexion Fragment
-            configureAndShowFirstConnexionFragment();
-        } else {
-            Log.d(TAG, "switchingDisplay: Go To Town Hall _ townHallID = "
-                    +mMayorViewModel.getCurrentMayor().getMayorFireStore().getTownHallID());
-            // retrieves town hall data from the Fire Store and stores it in the view Model
-            mMayorViewModel.getTownHallByTownHallID(mMayorViewModel
-                                            .getCurrentMayor().getMayorFireStore().getTownHallID())
-                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            Log.d(TAG, "onComplete: ");
-                            if (task.isSuccessful()) {
-                                DocumentSnapshot document = task.getResult();
-                                TownHall townHall = document.toObject(TownHall.class);
-
-                                // Set Current TownHall
-                                mMayorViewModel.setCurrentTownHall(townHall);
-                                Log.d(TAG, "onComplete: townHall = "+mMayorViewModel.getCurrentTownHall().getValue());
-
-                                // Show Town Hall Fragment
-                                configureAndShowTownHallFragment();
-                            } else {
-                                Log.d(TAG, "Error getting documents: ", task.getException());
-                            }
+        mTownHallViewModel.getViewAction().
+                observe(this,new Observer<TownHallViewModel.ViewAction>() {
+                    @Override
+                    public void onChanged (TownHallViewModel.ViewAction viewAction){
+                        if (viewAction == null) {
+                            return;
                         }
-                    });
-        }
+
+                        switch (viewAction) {
+
+                            case TOWN_HALL_NOT_FOUND:
+                                showSnackBar("No Town Hall found in FireStore Database\");");
+                                break;
+
+                            case SHOW_FIRST_CONNEXION_FRAGMENT:
+                                showSnackBar("SHOW_FIRST_CONNEXION_FRAGMENT");
+                                configureAndShowFirstConnexionFragment();
+                                break;
+
+                            case SHOW_TOWN_HALL_FRAGMENT:
+                                showSnackBar("SHOW_TOWN_HALL_FRAGMENT");
+                                configureAndShowTownHallFragment();
+                                break;
+
+                            case FIRE_STORE_ERROR:
+                                showSnackBar("error during the search of the town hall in the fireStore base");
+                                break;
+
+                            case FINISH_ACTIVITY:
+                                /*Intent intent = new Intent();
+                                intent.putExtra(BUNDLE_UPDATE_OK, true);
+                                setResult(RESULT_OK, intent);
+                                // Close Activity and go back to previous activity
+                                finish();*/
+                                break;
+                        }
+                    }
+                });
     }
+
+    public TownHallViewModel getTownHallViewModel() {return mTownHallViewModel;}
 
     // ---------------------------------------------------------------------------------------------
     //                                        FRAGMENTS
     // ---------------------------------------------------------------------------------------------
     public void configureAndShowFirstConnexionFragment() {
         Log.d(TAG, "configureAndShowFirstConnexionFragment: ");
+
+        // Events List fragment should not be visible
+        mTownHallChoice.setVisibility(View.VISIBLE);
+        mTownHall.setVisibility(View.GONE);
+
         // Get FragmentManager (Support) and Try to find existing instance of fragment in FrameLayout container
         mFirstConnexionFragment = (FirstConnexionFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.activity_mayor_fragment);
+                .findFragmentById(R.id.activity_town_hall_fragment_first_connexion);
 
         if (mFirstConnexionFragment == null) {
             // Create new fragment
             mFirstConnexionFragment = FirstConnexionFragment.newInstance();
             // Add it to FrameLayout container
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.activity_mayor_fragment, mFirstConnexionFragment)
+                    .add(R.id.activity_town_hall_fragment_first_connexion, mFirstConnexionFragment)
                     .commit();
         }
     }
 
     public void configureAndShowTownHallFragment() {
         Log.d(TAG, "configureAndShowTownHallFragment: ");
+
+        // Events List fragment must be visible
+        mTownHallChoice.setVisibility(View.GONE);
+        mTownHall.setVisibility(View.VISIBLE);
+
+        // if a fragment already exists, then we remove it
+        if (mFirstConnexionFragment != null) getSupportFragmentManager().beginTransaction().remove(mFirstConnexionFragment).commit();
+
         // Get FragmentManager (Support) and Try to find existing instance of fragment in FrameLayout container
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.activity_mayor_fragment);
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.activity_town_hall_fragment_details);
 
         // if a fragment already exists, then we remove it
         if (fragment != null) getSupportFragmentManager().beginTransaction().remove(fragment).commit();
@@ -192,11 +217,11 @@ public class MayorActivity extends BaseActivity implements  NavigationView.OnNav
         mTownHallFragment = mTownHallFragment.newInstance();
         // Add it to FrameLayout container
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.activity_mayor_fragment, mTownHallFragment)
+                .add(R.id.activity_town_hall_fragment_details, mTownHallFragment)
                 .commit();
 
         // Get FragmentManager (Support) and Try to find existing instance of fragment in FrameLayout container
-        Fragment fragmentEventsList = getSupportFragmentManager().findFragmentById(R.id.activity_mayor_fragment_events_list);
+        Fragment fragmentEventsList = getSupportFragmentManager().findFragmentById(R.id.activity_town_hall_fragment_events_list);
 
         // if a fragment already exists, then we remove it
         if (fragmentEventsList != null) getSupportFragmentManager().beginTransaction().remove(fragmentEventsList).commit();
@@ -204,7 +229,7 @@ public class MayorActivity extends BaseActivity implements  NavigationView.OnNav
         mEventsListFragment = mEventsListFragment.newInstance();
         // Add it to FrameLayout container
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.activity_mayor_fragment_events_list, mEventsListFragment)
+                .add(R.id.activity_town_hall_fragment_events_list, mEventsListFragment)
                 .commit();
     }
     // ---------------------------------------------------------------------------------------------
@@ -306,4 +331,21 @@ public class MayorActivity extends BaseActivity implements  NavigationView.OnNav
     // ---------------------------------------------------------------------------------------------
     //                                          UI
     // ---------------------------------------------------------------------------------------------
+    //
+    public void switchingDisplayFragment() {
+        Log.d(TAG, "switchingDisplay: ");
+
+        // If no town hall has yet been chosen by the user
+        if (mTownHallViewModel.getCurrentUser().getInseeID() == null){
+            Log.d(TAG, "First Connexion Fragment");
+
+            // Show First Connexion Fragment
+            mTownHallViewModel.setViewAction(TownHallViewModel.ViewAction.SHOW_FIRST_CONNEXION_FRAGMENT);
+        } else {
+            Log.d(TAG, "Search Town Hall In Fire Store and Show It");
+
+            // Search and Show Town Hall Fragment
+            mTownHallViewModel.searchAndShowTownHall();
+        }
+    }
 }

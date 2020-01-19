@@ -110,9 +110,10 @@ public class EventCreateFragment extends Fragment implements    PhotosListAdapte
         this.manageDateFields();
 
         // Configure Mode CREATE/UPDATE
-        if (mEventViewModel.getMode().getValue() == EventViewModel.EventMode.UPDATE)
-            this.updateUI(mEventViewModel.getCurrentEvent().getValue());
-
+        if (mEventViewModel.getMode().getValue() == EventViewModel.EventMode.UPDATE) {
+            // Restore Estate on the View
+            mEventViewModel.getCurrentEvent().observe(this, this::restoreData);
+        }
         return view;
     }
     // ---------------------------------------------------------------------------------------------
@@ -268,6 +269,23 @@ public class EventCreateFragment extends Fragment implements    PhotosListAdapte
         if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
             getActivity().startActivityForResult(intent, EventViewModel.REQUEST_IMAGE_GET);
         }
+    }
+    // ---------------------------------------------------------------------------------------------
+    //                                         RESTORE DATA
+    // ---------------------------------------------------------------------------------------------
+    protected void restoreData(Event event) {
+
+        // Restore Start Date
+        mEventViewModel.getStartDate().setValue(event.getStartDate());
+
+        // Restore End Date
+        mEventViewModel.getEndDate().setValue(event.getEndDate());
+
+        // Restore Photo List
+        mEventViewModel.setPhotos(event.getPhotos());
+
+        // Display Data
+        updateUI(event);
     }
     // ---------------------------------------------------------------------------------------------
     //                                             UI

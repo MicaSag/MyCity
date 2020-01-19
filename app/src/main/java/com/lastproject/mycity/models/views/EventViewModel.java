@@ -14,10 +14,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.GeoPoint;
 import com.lastproject.mycity.firebase.database.firestore.models.EventFireStore;
-import com.lastproject.mycity.firebase.database.firestore.models.TownHall;
+import com.lastproject.mycity.firebase.database.firestore.models.TownHallFireStore;
 import com.lastproject.mycity.models.Event;
+import com.lastproject.mycity.models.User;
 import com.lastproject.mycity.repositories.CurrentEventIDDataRepository;
 import com.lastproject.mycity.repositories.CurrentTownHallDataRepository;
+import com.lastproject.mycity.repositories.CurrentUserDataRepository;
 import com.lastproject.mycity.repositories.EventDataFireStoreRepository;
 import com.lastproject.mycity.repositories.EventDataRoomRepository;
 import com.lastproject.mycity.utils.Toolbox;
@@ -95,29 +97,33 @@ public class EventViewModel extends ViewModel {
         this.message.setValue(message);
     }
 
+    // --- CURRENT USER ---
+    //
+    public User getCurrentUser() {return CurrentUserDataRepository.getInstance().getCurrentUser();}
+    public void setCurrentUser(User user) {CurrentUserDataRepository.getInstance().setCurrentUser(user);}
+
     // --- CURRENT TOWN HALL ---
     //
-    public LiveData<TownHall> getCurrentTownHall() {return CurrentTownHallDataRepository.getInstance().getCurrentTownHall();}
+    public LiveData<TownHallFireStore> getCurrentTownHall() {return CurrentTownHallDataRepository.getInstance().getCurrentTownHall();}
 
     // Get Event of the Room DataBase
-    public LiveData<Event> getEventInRoom(String eventId) {
+    public LiveData<Event> getEventInRoom(String eventId, String userID) {
         Log.d(TAG, "getEventInRoom: ");
 
-        return eventDataRoomSource.getEvent(eventId);
+        return eventDataRoomSource.getEvent(eventId, userID);
     }
-    // Get Current Event ID
+    // --- CURRENT EVENT ID ---
+    //
     @NonNull
     public LiveData<String> getCurrentEventID() {
         return CurrentEventIDDataRepository.getInstance().getCurrentEventID();
     }
-
-    // Set Current Event ID
     @NonNull
     public void setCurrentEventID(String eventID) {
         CurrentEventIDDataRepository.getInstance().setCurrentEventID(eventID);
     }
-
-    // Get Current Event
+    // --- CURRENT EVENT ---
+    //
     @NonNull
     public LiveData<Event> getCurrentEvent() {
         return mCurrentEvent;
@@ -171,8 +177,14 @@ public class EventViewModel extends ViewModel {
 
             // Build NEW Room Event
             Event roomEvent = new Event(getCurrentEvent().getValue().getEventID(),
-                    false,
+                    getCurrentUser().getUserID(),
                     eventFireStore);
+
+            // Event not published
+            roomEvent.setPublished(false);
+
+            // Event at Update
+            roomEvent.setAtUpdate(true);
 
             // Update Event iN Room DataBase
             executor.execute(() -> {
@@ -229,7 +241,13 @@ public class EventViewModel extends ViewModel {
             }
 
             // builds the event
-            Event event = new Event( eventID, false, eventFireStore);
+            Event roomEvent = new Event( eventID, getCurrentUser().getUserID(), eventFireStore);
+
+            // Event not published
+            roomEvent.setPublished(false);
+
+            // Event at Create
+            roomEvent.setAtCreate(true);
 
             // Change Event Current ID
             CurrentEventIDDataRepository.getInstance().setCurrentEventID(eventID);
@@ -237,7 +255,7 @@ public class EventViewModel extends ViewModel {
             // Create Event in Room DataBase
             executor.execute(() -> {
                 // Create event in Room DataBase
-                eventDataRoomSource.createEvent(event);
+                eventDataRoomSource.createEvent(roomEvent);
 
                 // Activity goes into VIEW MODE
                 this.mode.postValue(EventMode.VIEW);
@@ -300,9 +318,7 @@ public class EventViewModel extends ViewModel {
             }
             localAddress.add(street);
             // -- Complement Not required
-            if (!complement.isEmpty()) {
-                localAddress.add(complement);
-            }
+            localAddress.add(complement);
             // -- Postal code Is required
             if (postalCode.isEmpty()) {
                 Log.d(TAG, "validateData: postalCode.isEmpty()");
@@ -358,35 +374,85 @@ public class EventViewModel extends ViewModel {
         Log.d(TAG, "publishEvent() called with: event = [" + event + "]");
         Log.d(TAG, "publishEvent: getMode = "+getMode().getValue());
 
-        // Create new event in FireStore Database
-        // The addition of this event in FireStore triggers the update of the list of events in the Mayor activity
-        createEventInFireStore(event).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentReference> task) {
-                if (task.isSuccessful()) {
+        EventFireStore eventFireStore = new EventFireStore(
+                event.getInseeID(),
+                event.getTitle(),
+                event.getDescription(),
+                event.getPhotos(),
+                event.getAddress(),
+                event.getLocation(),
+                event.getStartDate(),
+                event.getEndDate(),
+                event.isCanceled()
+        );
 
-                    DocumentReference document = task.getResult();
+        if (event.isAtCreate()) {
+            // Create new event in FireStore Database
+            // The addition of this event in FireStore triggers the update of the list of events in the Mayor activity
+            createEventInFireStore(eventFireStore).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentReference> task) {
+                    if (task.isSuccessful()) {
 
-                    // Build NEW Room Event
-                    Event roomEvent = new Event(document.getId(),true, event.getEventFireStore());
+                        DocumentReference document = task.getResult();
 
-                    // Create new Event iN Room DataBase
-                    executor.execute(() -> {
-                        // Create NEW Event in Room DataBase
-                        eventDataRoomSource.createEvent(roomEvent);
+                        // Build NEW Room Event
+                        Event roomEvent = new Event(document.getId(), getCurrentUser().getUserID(), event);
 
-                        // Delete OLD Event in Room DataBase
-                        eventDataRoomSource.deleteEvent(event.getEventID());
+                        // Event published
+                        roomEvent.setPublished(true);
 
-                        // Finish Activity
-                        mode.postValue(EventMode.FINISH);
-                    });
+                        // More event to create
+                        roomEvent.setAtCreate(false);
 
-                } else {
-                    Log.d(TAG, "get failed with ", task.getException());
+                        // Create new Event iN Room DataBase
+                        executor.execute(() -> {
+                            // Create NEW Event in Room DataBase
+                            eventDataRoomSource.createEvent(roomEvent);
+
+                            // Delete OLD Event in Room DataBase
+                            eventDataRoomSource.deleteEvent(event.getEventID());
+
+                            // Finish Activity
+                            mode.postValue(EventMode.FINISH);
+                        });
+
+                    } else {
+                        Log.d(TAG, "get failed with ", task.getException());
+                    }
                 }
-            }
-        });
+            });
+        }
+        if (event.isAtUpdate()) {
+            // Update event in FireStore Database
+            // The update of this event in FireStore triggers the update of the list of events in the Event activity
+            updateEventInFireStore(event.getEventID(),eventFireStore).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+
+                        // Event published
+                        event.setPublished(true);
+
+                        // More event to update
+                        event.setAtUpdate(false);
+
+                        // Create new Event In Room DataBase
+                        executor.execute(() -> {
+
+                            // The key exists, so the creation will replace the already existing event
+                            eventDataRoomSource.createEvent(event);
+
+                            // Finish Activity
+                            mode.postValue(EventMode.FINISH);
+                        });
+
+                    } else {
+                        Log.d(TAG, "get failed with ", task.getException());
+                    }
+                }
+            });
+        }
     }
 
     public void deleteEventInRoom(String eventID){
@@ -395,9 +461,14 @@ public class EventViewModel extends ViewModel {
         });
     }
 
-    public Task<DocumentReference> createEventInFireStore(Event event) {
+    public Task<DocumentReference> createEventInFireStore(EventFireStore eventFireStore) {
         Log.d(TAG, "createEventInFireStore: ");
-        return eventDataFireStoreSource.createEventInFireStore(event.getEventFireStore());
+        return eventDataFireStoreSource.createEventInFireStore(eventFireStore);
+    }
+
+    public Task<Void> updateEventInFireStore(String eventID, EventFireStore eventFireStore) {
+        Log.d(TAG, "updateEventInFireStore: ");
+        return eventDataFireStoreSource.updateEventInFireStore(eventID, eventFireStore);
     }
 
     // For Manage Dates
@@ -417,6 +488,10 @@ public class EventViewModel extends ViewModel {
     // For Manage Photos
     public LiveData<ArrayList<String>> getPhotos() {
         return mPhotos;
+    }
+    public void setPhotos(ArrayList<String> photos) {
+        Log.d(TAG, "setPhotos: ");
+        this.mPhotos.setValue(photos);
     }
     public void addPhoto(String photo) {
         Log.d(TAG, "addPhoto() called with: photo = [" + photo + "]");

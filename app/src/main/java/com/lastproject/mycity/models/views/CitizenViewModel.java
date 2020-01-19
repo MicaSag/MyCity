@@ -64,7 +64,7 @@ public class CitizenViewModel extends ViewModel {
 
     // --- FIRE BASE : AUTHENTICATION ---
     // ==================================
-    // Get the Current User Connected
+    // Get the Current UserFireStore Connected
     public FirebaseUser getCurrentUser(){
         return this.userDataAuthenticationSource.getCurrentUser();
     }

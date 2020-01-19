@@ -35,26 +35,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!-- 1 => MAYOR Activity -->
+        <!-- 1 => TOWN HALL Activity -->
         <activity
-            android:name=".controllers.activities.MayorActivity"
-            android:label="MAYOR Interface" />
-        <!-- 2 => CITIZEN Activity -->
-        <activity
-            android:name=".controllers.activities.CitizenActivity"
-            android:label="CITIZEN Interface" />
+            android:name=".controllers.activities.TownHallActivity"
+            android:label="Town Hall" />
         <!-- 3 => EVENTS Activity -->
         <!-- 3.1 => A child of the Events Activity -->
         <!-- EVENT Activity -->
         <activity
             android:name=".controllers.activities.EventActivity"
             android:label="Event"
-            android:parentActivityName=".controllers.activities.MayorActivity">
+            android:parentActivityName=".controllers.activities.TownHallActivity">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".controllers.activities.MayorActivity" />
+                android:value=".controllers.activities.TownHallActivity" />
         </activity>
         <!-- FULL SCREEN IMAGE Activity -->
         <activity
@@ -67,7 +63,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".controllers.activities.EventActivity" />
         </activity>
-
+        <!-- FOR SAVE FILES -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.lastproject.mycity.fileprovider"

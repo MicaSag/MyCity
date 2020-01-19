@@ -17,11 +17,13 @@ public class EventDataRoomRepository {
 
     public LiveData<List<Event>> getAllEvents(){ return this.eventDao.getAllEvents(); }
 
-    public LiveData<List<Event>> getAllEventsByInseeID(String inseeID){
-        return this.eventDao.getAllEventsByInseeID(inseeID);
+    public LiveData<List<Event>> getAllEventsByInseeID(String inseeID, String userID){
+        return this.eventDao.getAllEventsByInseeID(inseeID, userID);
     }
 
-    public LiveData<Event> getEvent(String eventId){ return this.eventDao.getEvent(eventId); }
+    public LiveData<Event> getEvent(String eventID, String userID){
+        return this.eventDao.getEvent(eventID, userID);
+    }
 
     // --- CREATE ---
 

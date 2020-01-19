@@ -92,8 +92,13 @@ public class EventsListViewHolder extends RecyclerView.ViewHolder implements Vie
         }
 
         // Display Event Photo
-        if (event.getPhotos() !=null) if (event.getPhotos().get(0) != null)
-            glide.load(event.getPhotos().get(0)).into(mImage);
+        Log.d(TAG, "updateWithProperty: event.getPhotos() = "+event.getPhotos());
+        if (event.getPhotos() !=null && event.getPhotos().size() > 0) {
+            Log.d(TAG, "updateWithProperty: event.getPhotos().get(0) = "+event.getPhotos().get(0));
+            if (event.getPhotos().get(0) != null) {
+                glide.load(event.getPhotos().get(0)).into(mImage);
+            }
+        }
 
         // Display Canceled
         Log.d(TAG, "updateWithProperty: event.isCanceled() = "+event.isCanceled());

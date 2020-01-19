@@ -17,9 +17,9 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.card.MaterialCardView;
 import com.lastproject.mycity.BuildConfig;
 import com.lastproject.mycity.R;
-import com.lastproject.mycity.controllers.activities.MayorActivity;
-import com.lastproject.mycity.firebase.database.firestore.models.TownHall;
-import com.lastproject.mycity.models.views.MayorViewModel;
+import com.lastproject.mycity.controllers.activities.TownHallActivity;
+import com.lastproject.mycity.firebase.database.firestore.models.TownHallFireStore;
+import com.lastproject.mycity.models.views.TownHallViewModel;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -59,7 +59,7 @@ public class TownHallFragment extends Fragment {
     public @BindView(R.id.fragment_town_hall_static_map) ImageView mStaticMap;
 
     // Declare ViewModel
-    private MayorViewModel mMayorViewModel;
+    private TownHallViewModel mTownHallViewModel;
 
     //FOR DATA
     private Disposable disposable;
@@ -104,10 +104,10 @@ public class TownHallFragment extends Fragment {
     private void configureViewModel() {
         Log.d(TAG, "configureViewModel: ");
 
-        mMayorViewModel = ((MayorActivity) getActivity()).getMayorViewModel();
+        mTownHallViewModel = ((TownHallActivity) getActivity()).getTownHallViewModel();
 
-        // Observe a change of Current TownHall
-        mMayorViewModel.getCurrentTownHall().observe(this, this::updateUI);
+        // Observe a change of Current TownHallFireStore
+        mTownHallViewModel.getCurrentTownHall().observe(this, this::updateUI);
     }
     // ---------------------------------------------------------------------------------------------
     //                                      DESTROY ACTIVITY
@@ -124,75 +124,75 @@ public class TownHallFragment extends Fragment {
     // ---------------------------------------------------------------------------------------------
     //                                             UI
     // ---------------------------------------------------------------------------------------------
-    public void updateUI(TownHall townHall){
+    public void updateUI(TownHallFireStore townHallFireStore){
         Log.d(TAG, "updateUI: ");
 
-        if (townHall != null) {
-            mName.setText(townHall.getName());
+        if (townHallFireStore != null) {
+            mName.setText(townHallFireStore.getName());
 
             // Display Hours
             String hourAtDisplay = "";
-            if (townHall.getHours() != null) {
+            if (townHallFireStore.getHours() != null) {
                 // Display Hour Line 1
-                if (townHall.getHours().size() > 0) {
-                    hourAtDisplay = "Du " + townHall.getHours().get(0).getDu() +
-                                    " au " + townHall.getHours().get(0).getAu() +
-                                    " de " + townHall.getHours().get(0).getHeures().get(0).getDe() +
-                                    " a  " + townHall.getHours().get(0).getHeures().get(0).getA();
+                if (townHallFireStore.getHours().size() > 0) {
+                    hourAtDisplay = "Du " + townHallFireStore.getHours().get(0).getDu() +
+                                    " au " + townHallFireStore.getHours().get(0).getAu() +
+                                    " de " + townHallFireStore.getHours().get(0).getHeures().get(0).getDe() +
+                                    " a  " + townHallFireStore.getHours().get(0).getHeures().get(0).getA();
                     mHour1.setText(hourAtDisplay);
                     mHour1.setVisibility(View.VISIBLE);
                 } else mHour1.setVisibility(View.GONE);
                 // Display Hour Line 2
-                if (townHall.getHours().size() > 1) {
-                    hourAtDisplay = "Du " + townHall.getHours().get(1).getDu() +
-                                    " au " + townHall.getHours().get(1).getAu() +
-                                    " de " + townHall.getHours().get(1).getHeures().get(0).getDe() +
-                                    " a  " + townHall.getHours().get(1).getHeures().get(0).getA();
+                if (townHallFireStore.getHours().size() > 1) {
+                    hourAtDisplay = "Du " + townHallFireStore.getHours().get(1).getDu() +
+                                    " au " + townHallFireStore.getHours().get(1).getAu() +
+                                    " de " + townHallFireStore.getHours().get(1).getHeures().get(0).getDe() +
+                                    " a  " + townHallFireStore.getHours().get(1).getHeures().get(0).getA();
                     mHour2.setText(hourAtDisplay);
                     mHour2.setVisibility(View.VISIBLE);
                 } else mHour2.setVisibility(View.GONE);
                 // Display Hour Line 3
-                if (townHall.getHours().size() > 2) {
-                    hourAtDisplay = "Du " + townHall.getHours().get(2).getDu() +
-                                    " au " + townHall.getHours().get(2).getAu() +
-                                    " de " + townHall.getHours().get(2).getHeures().get(0).getDe() +
-                                    " a  " + townHall.getHours().get(2).getHeures().get(0).getA();
+                if (townHallFireStore.getHours().size() > 2) {
+                    hourAtDisplay = "Du " + townHallFireStore.getHours().get(2).getDu() +
+                                    " au " + townHallFireStore.getHours().get(2).getAu() +
+                                    " de " + townHallFireStore.getHours().get(2).getHeures().get(0).getDe() +
+                                    " a  " + townHallFireStore.getHours().get(2).getHeures().get(0).getA();
                     mHour3.setText(hourAtDisplay);
                     mHour3.setVisibility(View.VISIBLE);
                 } else mHour3.setVisibility(View.GONE);
                 // Display Hour Line 4
-                if (townHall.getHours().size() > 3) {
-                    hourAtDisplay = "Du " + townHall.getHours().get(3).getDu() +
-                                    " au " + townHall.getHours().get(3).getAu() +
-                                    " de " + townHall.getHours().get(3).getHeures().get(0).getDe() +
-                                    " a  " + townHall.getHours().get(3).getHeures().get(0).getA();
+                if (townHallFireStore.getHours().size() > 3) {
+                    hourAtDisplay = "Du " + townHallFireStore.getHours().get(3).getDu() +
+                                    " au " + townHallFireStore.getHours().get(3).getAu() +
+                                    " de " + townHallFireStore.getHours().get(3).getHeures().get(0).getDe() +
+                                    " a  " + townHallFireStore.getHours().get(3).getHeures().get(0).getA();
                     mHour4.setText(hourAtDisplay);
                     mHour4.setVisibility(View.VISIBLE);
                 } else mHour4.setVisibility(View.GONE);
                 // Display Hour Line 5
-                if (townHall.getHours().size() > 4) {
-                    hourAtDisplay = "Du " + townHall.getHours().get(4).getDu() +
-                                    " au " + townHall.getHours().get(4).getAu() +
-                                    " de " + townHall.getHours().get(4).getHeures().get(0).getDe() +
-                                    " a  " + townHall.getHours().get(4).getHeures().get(0).getA();
+                if (townHallFireStore.getHours().size() > 4) {
+                    hourAtDisplay = "Du " + townHallFireStore.getHours().get(4).getDu() +
+                                    " au " + townHallFireStore.getHours().get(4).getAu() +
+                                    " de " + townHallFireStore.getHours().get(4).getHeures().get(0).getDe() +
+                                    " a  " + townHallFireStore.getHours().get(4).getHeures().get(0).getA();
                     mHour5.setText(hourAtDisplay);
                     mHour5.setVisibility(View.VISIBLE);
                 } else mHour5.setVisibility(View.GONE);
                 // Display Hour Line 6
-                if (townHall.getHours().size() > 5) {
-                    hourAtDisplay = "Du " + townHall.getHours().get(5).getDu() +
-                                    " au " + townHall.getHours().get(5).getAu() +
-                                    " de " + townHall.getHours().get(5).getHeures().get(0).getDe() +
-                                    " a  " + townHall.getHours().get(5).getHeures().get(0).getA();
+                if (townHallFireStore.getHours().size() > 5) {
+                    hourAtDisplay = "Du " + townHallFireStore.getHours().get(5).getDu() +
+                                    " au " + townHallFireStore.getHours().get(5).getAu() +
+                                    " de " + townHallFireStore.getHours().get(5).getHeures().get(0).getDe() +
+                                    " a  " + townHallFireStore.getHours().get(5).getHeures().get(0).getA();
                     mHour6.setText(hourAtDisplay);
                     mHour6.setVisibility(View.VISIBLE);
                 } else mHour6.setVisibility(View.GONE);
                 // Display Hour Line 7
-                if (townHall.getHours().size() > 6) {
-                    hourAtDisplay = "Du " + townHall.getHours().get(6).getDu() +
-                                    " au " + townHall.getHours().get(6).getAu() +
-                                    " de " + townHall.getHours().get(6).getHeures().get(0).getDe() +
-                                    " a  " + townHall.getHours().get(6).getHeures().get(0).getA();
+                if (townHallFireStore.getHours().size() > 6) {
+                    hourAtDisplay = "Du " + townHallFireStore.getHours().get(6).getDu() +
+                                    " au " + townHallFireStore.getHours().get(6).getAu() +
+                                    " de " + townHallFireStore.getHours().get(6).getHeures().get(0).getDe() +
+                                    " a  " + townHallFireStore.getHours().get(6).getHeures().get(0).getA();
                     mHour7.setText(hourAtDisplay);
                     mHour7.setVisibility(View.VISIBLE);
                 } else mHour7.setVisibility(View.GONE);
@@ -202,48 +202,48 @@ public class TownHallFragment extends Fragment {
 
             // Display Address
             String address = "";
-            if (townHall.getAddress() != null) {
+            if (townHallFireStore.getAddress() != null) {
                 // Display address Line 1
-                if (townHall.getAddress().size() > 0) {
-                    mAddressLine1.setText(townHall.getAddress().get(0));
+                if (townHallFireStore.getAddress().size() > 0) {
+                    mAddressLine1.setText(townHallFireStore.getAddress().get(0));
                     mAddressLine1.setVisibility(View.VISIBLE);
-                    address+= townHall.getAddress().get(0)+"+";
+                    address+= townHallFireStore.getAddress().get(0)+"+";
                 } else mAddressLine1.setVisibility(View.GONE);
                 // Display address Line 2
-                if (townHall.getAddress().size() > 1) {
-                    mAddressLine2.setText(townHall.getAddress().get(1));
+                if (townHallFireStore.getAddress().size() > 1) {
+                    mAddressLine2.setText(townHallFireStore.getAddress().get(1));
                     mAddressLine2.setVisibility(View.VISIBLE);
-                    address+= townHall.getAddress().get(1)+"+";
+                    address+= townHallFireStore.getAddress().get(1)+"+";
                 } else mAddressLine2.setVisibility(View.GONE);
                 // Display address Line 3
-                if (townHall.getAddress().size() > 2) {
-                    mAddressLine3.setText(townHall.getAddress().get(2));
+                if (townHallFireStore.getAddress().size() > 2) {
+                    mAddressLine3.setText(townHallFireStore.getAddress().get(2));
                     mAddressLine3.setVisibility(View.VISIBLE);
-                    address+= townHall.getAddress().get(2)+"+";
+                    address+= townHallFireStore.getAddress().get(2)+"+";
                 } else mAddressLine3.setVisibility(View.GONE);
                 // Display address Line 4
-                if (townHall.getAddress().size() > 3) {
-                    mAddressLine4.setText(townHall.getAddress().get(3));
+                if (townHallFireStore.getAddress().size() > 3) {
+                    mAddressLine4.setText(townHallFireStore.getAddress().get(3));
                     mAddressLine4.setVisibility(View.VISIBLE);
-                    address+= townHall.getAddress().get(3);
+                    address+= townHallFireStore.getAddress().get(3);
                 } else mAddressLine4.setVisibility(View.GONE);
             }
 
             // Display Email
-            if (townHall.getEmail() != null) {
-                mEmail.setText(townHall.getEmail());
+            if (townHallFireStore.getEmail() != null) {
+                mEmail.setText(townHallFireStore.getEmail());
                 mEmail.setVisibility(View.VISIBLE);
             } else  mEmail.setVisibility(View.GONE);
 
             // Display PhoneNumber
-            if (townHall.getPhoneNumber() != null) {
-                mPhone.setText(townHall.getPhoneNumber());
+            if (townHallFireStore.getPhoneNumber() != null) {
+                mPhone.setText(townHallFireStore.getPhoneNumber());
                 mPhone.setVisibility(View.VISIBLE);
             } else  mPhone.setVisibility(View.GONE);
 
             // Display Url
-            if (townHall.getUrl() != null) {
-                mUrl.setText(townHall.getUrl());
+            if (townHallFireStore.getUrl() != null) {
+                mUrl.setText(townHallFireStore.getUrl());
                 mUrl.setVisibility(View.VISIBLE);
             } else  mUrl.setVisibility(View.GONE);
 

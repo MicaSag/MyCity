@@ -12,7 +12,7 @@ public class UserDataAuthenticationRepository {
 
     // --- GET ---
 
-    // Return Current User
+    // Return Current UserFireStore
     public FirebaseUser getCurrentUser(){
         return authenticationHelper.getCurrentUser();
     }

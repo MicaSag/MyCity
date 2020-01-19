@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.RequestManager;
 import com.lastproject.mycity.R;
+import com.lastproject.mycity.controllers.fragments.EventCreateFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -44,12 +45,9 @@ public class PhotosListViewHolder extends RecyclerView.ViewHolder implements Vie
         if (photo !=null) glide.load(photo).into(mImage);
 
         // Button Visibility
-        /*if (caller == CreateEstateActivity.class) {
+        if (caller == EventCreateFragment.class) {
             mDeleteButton.setVisibility(View.VISIBLE);
         }
-        if (caller == UpdateEstateActivity.class) {
-            mDeleteButton.setVisibility(View.VISIBLE);
-        }*/
     }
 
     @Override

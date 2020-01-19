@@ -21,11 +21,11 @@ public interface EventDao {
     @Query("SELECT * FROM Event")
     LiveData<List<Event>> getAllEvents();
 
-    @Query("SELECT * FROM Event where inseeID = :inseeID")
-    LiveData<List<Event>> getAllEventsByInseeID(@NonNull String inseeID);
+    @Query("SELECT * FROM Event where inseeID = :inseeID and userID = :userID")
+    LiveData<List<Event>> getAllEventsByInseeID(@NonNull String inseeID, String userID);
 
-    @Query("SELECT * FROM Event where eventID = :eventID")
-    LiveData<Event> getEvent(@NonNull String eventID);
+    @Query("SELECT * FROM Event where eventID = :eventID and userID = :userID")
+    LiveData<Event> getEvent(@NonNull String eventID, String userID);
 
     @Update
     int updateEvent(Event event);

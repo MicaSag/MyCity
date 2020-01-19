@@ -41,7 +41,7 @@ public class EventHelper {
         return EventHelper.getEventsCollection().document(eventID).get();
     }
 
-    // Get all Events by InseeID (TownHall identification )
+    // Get all Events by InseeID (TownHallFireStore identification )
     public static Query getEventsByInseeID(String inseeID){
         return EventHelper.getEventsCollection().whereEqualTo("inseeID",inseeID);
     }
@@ -49,9 +49,8 @@ public class EventHelper {
     // --- UPDATE ---
 
     // Update Event
-    public static Task<Void> updateEvent(Event event) {
-        EventFireStore eventFireStore = event;
-        return EventHelper.getEventsCollection().document(event.getEventID())
+    public static Task<Void> updateEvent(String eventID, EventFireStore eventFireStore) {
+        return EventHelper.getEventsCollection().document(eventID)
                 .set(eventFireStore);
     }
 

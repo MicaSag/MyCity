@@ -3,6 +3,7 @@ package com.lastproject.mycity.models.views;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -15,9 +16,11 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.lastproject.mycity.firebase.database.firestore.models.MayorFireStore;
-import com.lastproject.mycity.firebase.database.firestore.models.User;
+import com.lastproject.mycity.firebase.database.firestore.models.UserFireStore;
 import com.lastproject.mycity.models.Mayor;
+import com.lastproject.mycity.models.User;
 import com.lastproject.mycity.repositories.CurrentMayorDataRepository;
+import com.lastproject.mycity.repositories.CurrentUserDataRepository;
 import com.lastproject.mycity.repositories.MayorDataFireStoreRepository;
 import com.lastproject.mycity.repositories.UserDataAuthenticationRepository;
 import com.lastproject.mycity.repositories.UserDataFireStoreRepository;
@@ -33,6 +36,18 @@ public class AuthenticationViewModel extends ViewModel {
     private final MayorDataFireStoreRepository mayorDataFireStoreSource;
 
     // Data
+    // --- Manage Actions ---
+    private MutableLiveData<ViewAction> mViewAction = new MutableLiveData<>();
+    public enum ViewAction {
+        START_TOWN_HALL_ACTIVITY,
+        FINISH_ACTIVITY
+    }
+    public LiveData<ViewAction> getViewAction() {
+        return mViewAction;
+    }
+    public void setViewAction(ViewAction viewAction) {
+        mViewAction.setValue(viewAction);
+    }
     // - Registration Status
     private MutableLiveData<RegistrationStatus> registrationStatus = new MutableLiveData<>();
     public enum RegistrationStatus {
@@ -41,8 +56,6 @@ public class AuthenticationViewModel extends ViewModel {
         REGISTRATION_MAYOR_UPDATE_USER_FAILED,
         REGISTRATION_MAYOR_WRONG_CODE_ID
     }
-    // - Current User in the model
-    private User userInModel;
 
     public AuthenticationViewModel(UserDataAuthenticationRepository userDataAuthenticationSource,
                                    UserDataFireStoreRepository userDataFireStoreSource,
@@ -52,14 +65,19 @@ public class AuthenticationViewModel extends ViewModel {
         this.mayorDataFireStoreSource = mayorDataFireStoreSource;
     }
 
-    // --- USER IN MODEL ---
+    // --- USER AUTHENTICATION ---
     //
-    public User getUserInModel() {
-        return userInModel;
+    public FirebaseUser getUserAuthentication() {
+        return userDataAuthenticationSource.getCurrentUser();
     }
 
-    public void setUserInModel(User userInModel) {
-        this.userInModel = userInModel;
+    // --- CURRENT USER ---
+    //
+    public User getCurrentUser() {
+        return CurrentUserDataRepository.getInstance().getCurrentUser();
+    }
+    public void setCurrentUser(User user) {
+        CurrentUserDataRepository.getInstance().setCurrentUser(user);
     }
 
     // --- REGISTRATION STATUS ---
@@ -72,40 +90,40 @@ public class AuthenticationViewModel extends ViewModel {
     //
     public void setCurrentMayor(Mayor mayor) {CurrentMayorDataRepository.getInstance().setCurrentMayor(mayor);}
 
-    // --- FIRE BASE : AUTHENTICATION ---
-    //
-    // Get the Current User Connected
-    public FirebaseUser getCurrentUser(){
-        return this.userDataAuthenticationSource.getCurrentUser();
-    }
-
-    // --- FIRE BASE : FIRE STORE ---
+       // --- FIRE BASE : FIRE STORE ---
     //
     // Get a user in Fire Store
     public Task<DocumentSnapshot> getUserInFireStore(String uid){
         return this.userDataFireStoreSource.getUser(uid);
     }
 
-    // Create user in Fire Store
-    public void createUser(boolean isMayor) {
-        Log.d(TAG, "createUser: ");
+    // Create new user in FireStore
+    public void createUserInFireStore(boolean isMayor) {
+        Log.d(TAG, "createUserInFireStore: ");
 
-        // Create new User
+        // Create new User in FireStore
         String uri;
-        if (this.getCurrentUser().getPhotoUrl() != null)
-            uri =  this.getCurrentUser().getPhotoUrl().toString();
+        if (this.getUserAuthentication().getPhotoUrl() != null)
+            uri =  this.getUserAuthentication().getPhotoUrl().toString();
         else uri = "";
-        User user = new User(   this.getCurrentUser().getUid(),
-                                this.getCurrentUser().getDisplayName(),
-                                isMayor,
-                                uri,
-                                this.getCurrentUser().getEmail(),
-                                this.getCurrentUser().getPhoneNumber());
 
-        // -- Save It In Fire Store
-        this.userDataFireStoreSource.createUser(user);
-        // -- Save It In Model
-        this.setUserInModel(user);
+        UserFireStore userFireStore = new UserFireStore(
+                this.getUserAuthentication().getDisplayName(),
+                isMayor,
+                uri,
+                this.getUserAuthentication().getEmail(),
+                this.getUserAuthentication().getPhoneNumber(),
+                null
+        );
+
+        // -- Save New user In FireStore
+        String userID = this.getUserAuthentication().getUid();
+        this.userDataFireStoreSource.createUser(userID, userFireStore);
+
+        // -- Save Current User
+        User user = new User(userID, userFireStore);
+        this.setCurrentUser(user);
+
     }
 
     // Get a Mayor in Fire Store (by CodeID)
@@ -131,8 +149,8 @@ public class AuthenticationViewModel extends ViewModel {
         return mayorDataFireStoreSource.updateMayorUserID(mayorID,userID);
     }
 
-    // Update Mayor User by CodeID
-    public void updateMayorUserByCodeID(String codeID, String userID){
+    // Update Mayor User In FireStore by CodeID
+    public void createMayorUserByCodeID(String codeID, String userID){
         Log.d(TAG, "updateMayorUserByCodeID: ");
 
         this.getMayorByCodeID(codeID)
@@ -174,7 +192,7 @@ public class AuthenticationViewModel extends ViewModel {
                                                 setCurrentMayor(mayor);
 
                                                 // create the user in fireStore as mayor
-                                                createUser(true);
+                                                createUserInFireStore(true);
 
                                                 registrationStatus.setValue(RegistrationStatus.REGISTRATION_OK);
                                             }
