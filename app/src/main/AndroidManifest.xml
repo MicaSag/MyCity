@@ -10,7 +10,9 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- Used to store files -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-    <uses-feature android:name="android.hardware.camera" android:required="true"/>
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
 
     <application
         android:name=".MainApplication"
@@ -21,7 +23,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-
+        <activity android:name=".controllers.activities.TownHallSelectionActivity"></activity>
         <!-- GOOGLE Maps APi Key -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -34,12 +36,10 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <!-- 1 => TOWN HALL Activity -->
+        </activity> <!-- 1 => TOWN HALL Activity -->
         <activity
             android:name=".controllers.activities.TownHallActivity"
-            android:label="Town Hall" />
-        <!-- 3 => EVENTS Activity -->
+            android:label="Town Hall" /> <!-- 3 => EVENTS Activity -->
         <!-- 3.1 => A child of the Events Activity -->
         <!-- EVENT Activity -->
         <activity
@@ -51,8 +51,7 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".controllers.activities.TownHallActivity" />
-        </activity>
-        <!-- FULL SCREEN IMAGE Activity -->
+        </activity> <!-- FULL SCREEN IMAGE Activity -->
         <activity
             android:name=".controllers.activities.FullScreenImageActivity"
             android:label="Full Screen Image"
@@ -62,8 +61,7 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".controllers.activities.EventActivity" />
-        </activity>
-        <!-- FOR SAVE FILES -->
+        </activity> <!-- FOR SAVE FILES -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.lastproject.mycity.fileprovider"
@@ -73,7 +71,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-
     </application>
 
 </manifest>

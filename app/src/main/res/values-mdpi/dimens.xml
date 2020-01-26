@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+
     <!-- MAIN ACTIVITY DIMENS -->
     <dimen name="title_size">35sp</dimen>
     <dimen name="button_height_size">38dp</dimen>

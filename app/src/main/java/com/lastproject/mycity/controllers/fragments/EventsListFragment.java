@@ -7,8 +7,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,11 +21,13 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.lastproject.mycity.R;
 import com.lastproject.mycity.adapter.eventslist.EventsListAdapter;
 import com.lastproject.mycity.controllers.activities.EventActivity;
+import com.lastproject.mycity.controllers.activities.TownHallActivity;
 import com.lastproject.mycity.injections.Injection;
 import com.lastproject.mycity.injections.ViewModelFactory;
 import com.lastproject.mycity.models.Event;
 import com.lastproject.mycity.models.views.EventViewModel;
 import com.lastproject.mycity.models.views.ListEventsViewModel;
+import com.lastproject.mycity.models.views.TownHallViewModel;
 import com.lastproject.mycity.repositories.CurrentEventIDDataRepository;
 import com.lastproject.mycity.utils.Toolbox;
 
@@ -54,8 +59,13 @@ public class EventsListFragment extends Fragment {
     private EventsListAdapter.OnEventClick mOnPropertyClick;
 
     // For Design
-    @BindView(R.id.fragment_list_events_recycler_view) RecyclerView mRecyclerView;
+    public @BindView(R.id.fragment_list_events_recycler_view) RecyclerView mRecyclerView;
     public @BindView(R.id.fragment_list_events_fab) FloatingActionButton mButtonCreateEvent;
+    public @BindView(R.id.fragment_event_list_information) TextView mInformation;
+
+    public LinearLayout getRootActivity() {
+        return ((TownHallActivity) getActivity()).mRoot;
+    }
 
     public EventsListFragment() {
         // Required empty public constructor
@@ -104,6 +114,30 @@ public class EventsListFragment extends Fragment {
         ViewModelFactory mViewModelFactory = Injection.provideViewModelFactory(getContext());
         mListEventsViewModel = ViewModelProviders.of(this, mViewModelFactory)
                 .get(ListEventsViewModel.class);
+
+        mListEventsViewModel.getViewAction().
+                observe(this,new Observer<ListEventsViewModel.ViewAction>() {
+                    @Override
+                    public void onChanged (ListEventsViewModel.ViewAction viewAction){
+                        if (viewAction == null) {
+                            return;
+                        }
+
+                        switch (viewAction) {
+
+                            case NO_EVENT_FOUND:
+                                //Toolbox.showSnackBar(getRootActivity(),"NO_EVENT_FOUND");
+                                break;
+
+                            case EVENT_FOUND:
+                                //Toolbox.showSnackBar(getRootActivity(),"EVENT_FOUND");
+                                break;
+
+                            case FINISH_ACTIVITY:
+                                break;
+                        }
+                    }
+                });
 
         // Observe a change of Current Events List in Room
         mListEventsViewModel.getAllEventsRoomByInseeID(
@@ -160,6 +194,7 @@ public class EventsListFragment extends Fragment {
         Log.d(TAG, "updateEventsList() called with: events = [" + events + "]");
 
         if (events != null) mEventsListAdapter.updateData(events);
+        configureEventMessage(events.size());
     }
     // Update the list of Events
     private void updateEventsList(String currentEventId){
@@ -175,5 +210,15 @@ public class EventsListFragment extends Fragment {
         if (mListEventsViewModel.getCurrentUser().isMayor())
             mButtonCreateEvent.setVisibility(View.VISIBLE);
         else mButtonCreateEvent.setVisibility(View.GONE);
+
+    }
+
+    // configure event message
+    private void configureEventMessage(int eventListSize) {
+        Log.d(TAG, "configureEventMessage: ");
+
+        // The information text changes depending on the presence or not of upcoming events
+        if (eventListSize == 0) mInformation.setText("aucun événement a venir pour le moment");
+        else mInformation.setText(eventListSize+" événements a venir");
     }
 }

@@ -4,6 +4,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 
@@ -37,6 +38,21 @@ public class ListEventsViewModel extends ViewModel {
     private final EventDataFireStoreRepository eventDataFireStoreSource;
     private final Executor executor;
 
+    // Data
+    // --- Manage Actions ---
+    private MutableLiveData<ViewAction> mViewAction = new MutableLiveData<>();
+    public enum ViewAction {
+        NO_EVENT_FOUND,
+        EVENT_FOUND,
+        FINISH_ACTIVITY
+    }
+    public LiveData<ViewAction> getViewAction() {
+        return mViewAction;
+    }
+    public void setViewAction(ViewAction viewAction) {
+        mViewAction.setValue(viewAction);
+    }
+
     public ListEventsViewModel(EventDataRoomRepository eventDataRoomSource,
                                EventDataFireStoreRepository eventDataFireStoreSource,
                                Executor executor) {
@@ -64,6 +80,9 @@ public class ListEventsViewModel extends ViewModel {
                 // ==> Purge of published events present in the local Room database
 
                 // Loop on all events found
+                Log.d(TAG, "onEvent: queryDocumentSnapshots.size() = "+
+                        queryDocumentSnapshots.size());
+                // There is at least one returned response
                 for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
 
                     EventFireStore eventFireStore = document.toObject(EventFireStore.class);
@@ -100,9 +119,13 @@ public class ListEventsViewModel extends ViewModel {
                                 // Create Event in Room
                                 createEventRoom(eventRoom);
                             }
-
                         }
                     });
+                }
+                // There is no response to this request
+                if (queryDocumentSnapshots.size() == 0) {
+                    Log.d(TAG, "onEvent: There is no response to this request");
+                    setViewAction(ViewAction.NO_EVENT_FOUND);
                 }
             }
         });

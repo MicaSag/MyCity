@@ -8,6 +8,7 @@ import com.lastproject.mycity.models.views.AuthenticationViewModel;
 import com.lastproject.mycity.models.views.CitizenViewModel;
 import com.lastproject.mycity.models.views.EventViewModel;
 import com.lastproject.mycity.models.views.ListEventsViewModel;
+import com.lastproject.mycity.models.views.TownHallSelectionViewModel;
 import com.lastproject.mycity.models.views.TownHallViewModel;
 import com.lastproject.mycity.repositories.EventDataFireStoreRepository;
 import com.lastproject.mycity.repositories.EventDataRoomRepository;
@@ -60,6 +61,13 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
                                             this.mayorDataFireStoreSource,
                                             this.townHallDataFireStoreSource,
                                             this.executor);
+        }
+        if (modelClass.isAssignableFrom(TownHallSelectionViewModel.class)) {
+            return (T) new TownHallSelectionViewModel(  this.userDataAuthenticationSource,
+                                                        this.userDataFireStoreSource,
+                                                        this.mayorDataFireStoreSource,
+                                                        this.townHallDataFireStoreSource,
+                                                        this.executor);
         }
         if (modelClass.isAssignableFrom(CitizenViewModel.class)) {
             return (T) new CitizenViewModel(this.userDataAuthenticationSource,

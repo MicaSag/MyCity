@@ -25,9 +25,9 @@ public class TestData {
         contentValues.put("description", "Chineurs, chineuses, vous trouverez ce que vous cherchez depuis longtemps dans notre" +
                 "borquante annuelle.");
         contentValues.put("photos", "[" +
-                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/brocante1/brocante1_01.jpg\"," +
-                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/brocante1/brocante1_02.jpg\"," +
-                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/brocante1/brocante1_03.jpg\"]");
+                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/brocante1/room_brocante1_01.jpg\"," +
+                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/brocante1/room_brocante1_02.jpg\"," +
+                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/brocante1/room_brocante1_03.jpg\"]");
         contentValues.put("location", "");
         contentValues.put("address", Arrays.asList("\"3 rue de la chesnaie\"", "\"\"", "\"Cagneux\"", "\"Bailleval\"", "\"France\"").toString());
         contentValues.put("startDate", "01/10/2020");
@@ -52,13 +52,13 @@ public class TestData {
                 "Profitez-en pour découvrir notre marché de Noël 2019. C’est une bonne occasion pour commencer ou finir ses achats de Noël " +
                 "ou bien tout simplement pour passer un bon moment en famille ou avec ses amis.");
         contentValues.put("photos", "[" +
-                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/marchenoel1/marchenoel1_01.jpg\"," +
-                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/marchenoel1/marchenoel1_02.jpg\"," +
-                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/marchenoel1/marchenoel1_03.jpg\"," +
-                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/marchenoel1/marchenoel1_04.jpg\"," +
-                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/marchenoel1/marchenoel1_05.jpg\"," +
-                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/marchenoel1/marchenoel1_06.jpg\"," +
-                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/marchenoel1/marchenoel1_07.jpg\"]");
+                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/marchenoel1/room_marchenoel1_01.jpg\"," +
+                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/marchenoel1/room_marchenoel1_02.jpg\"," +
+                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/marchenoel1/room_marchenoel1_03.jpg\"," +
+                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/marchenoel1/room_marchenoel1_04.jpg\"," +
+                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/marchenoel1/room_marchenoel1_05.jpg\"," +
+                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/marchenoel1/room_marchenoel1_06.jpg\"," +
+                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/marchenoel1/room_marchenoel1_07.jpg\"]");
         contentValues.put("location", "");
         contentValues.put("address", Arrays.asList("\"3 rue de la chesnaie\"", "\"\"", "\"Cagneux\"", "\"Bailleval\"", "\"France\"").toString());
         contentValues.put("startDate", "02/10/2020");
@@ -81,11 +81,11 @@ public class TestData {
         contentValues.put("description", "Toute une soirée pour remporter les meilleurs lots de cette nouvelle édition " +
                 "du LOTO de la commune.");
         contentValues.put("photos", "[" +
-                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/loto1/loto1_01.jpg\"," +
-                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/loto1/loto1_02.jpg\"," +
-                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/loto1/loto1_03.jpg\"," +
-                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/loto1/loto1_04.jpg\"," +
-                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/loto1/loto1_05.jpg\"]");
+                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/loto1/room_loto1_01.jpg\"," +
+                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/loto1/room_loto1_02.jpg\"," +
+                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/loto1/room_loto1_03.jpg\"," +
+                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/loto1/room_loto1_04.jpg\"," +
+                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/loto1/room_loto1_05.jpg\"]");
         contentValues.put("address", Arrays.asList("\"3 rue de la chesnaie\"", "\"\"", "\"Cagneux\"", "\"Bailleval\"", "\"France\"").toString());
         contentValues.put("startDate", "12/10/2020");
         contentValues.put("endDate", "16/10/2020");
@@ -107,11 +107,11 @@ public class TestData {
         contentValues.put("description", "18 course cycliste sur la commune. Venez participer ou tout simplement encourager" +
                 "les meilleurs cyclistes qui seront au départ de cette nouvelle édition.");
         contentValues.put("photos", "[" +
-                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/velo1/velo1_01.jpg\"," +
-                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/velo1/velo1_02.jpg\"," +
-                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/velo1/velo1_03.jpg\"," +
-                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/velo1/velo1_04.jpg\"," +
-                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/velo1/velo1_05.jpg\"]");
+                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/velo1/room_velo1_01.jpg\"," +
+                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/velo1/room_velo1_02.jpg\"," +
+                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/velo1/room_velo1_03.jpg\"," +
+                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/velo1/room_velo1_04.jpg\"," +
+                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/velo1/room_velo1_05.jpg\"]");
         contentValues.put("address", Arrays.asList("\"3 rue de la chesnaie\"", "\"\"", "\"Cagneux\"", "\"Bailleval\"", "\"France\"").toString());
         contentValues.put("startDate", "02/10/2021");
         contentValues.put("endDate", "06/11/2021");
@@ -133,10 +133,10 @@ public class TestData {
         contentValues.put("description", "C'est le bon moment pour venir visiter les lieux classés de la commune." +
                 "Venir admirer l'ancienne église, la picine du 14ième sciècle, et bien d'autres choses encore.");
         contentValues.put("photos", "[" +
-                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/porte1/porte1_01.jpg\"," +
-                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/porte1/porte1_02.jpg\"," +
-                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/porte1/porte1_03.jpg\"," +
-                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/porte1/porte1_04.jpg\"]");
+                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/porte1/room_porte1_01.jpg\"," +
+                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/porte1/room_porte1_02.jpg\"," +
+                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/porte1/room_porte1_03.jpg\"," +
+                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/porte1/room_porte1_04.jpg\"]");
         contentValues.put("address", Arrays.asList("\"3 rue de la chesnaie\"", "\"\"", "\"Cagneux\"", "\"Bailleval\"", "\"France\"").toString());
         contentValues.put("startDate", "02/01/2019");
         contentValues.put("endDate", "16/01/2019");
@@ -158,10 +158,10 @@ public class TestData {
         contentValues.put("description", "Les petits bottes de pailles et notre nouvel événement musical." +
                 "Venez y écouter les meilleurs groupes de la région du moment.");
         contentValues.put("photos", "[" +
-                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/musique1/musique1_01.jpg\"," +
-                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/musique1/musique1_02.jpg\"," +
-                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/musique1/musique1_03.jpg\"," +
-                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/musique1/musique1_04.jpg\"]");
+                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/musique1/room_musique1_01.jpg\"," +
+                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/musique1/room_musique1_02.jpg\"," +
+                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/musique1/room_musique1_03.jpg\"," +
+                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/musique1/room_musique1_04.jpg\"]");
         contentValues.put("address", Arrays.asList("\"3 rue de la chesnaie\"", "\"\"", "\"Cagneux\"", "\"Bailleval\"", "\"France\"").toString());
         contentValues.put("startDate", "02/11/2019");
         contentValues.put("endDate", "06/11/2019");
@@ -182,11 +182,11 @@ public class TestData {
         contentValues.put("title", "Ball trap");
         contentValues.put("description", "Les meillerus tireurs de la region seront présents. Nous vous attendons nombreux.");
         contentValues.put("photos", "[" +
-                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/balltrap1/balltrap1_01.jpg\"," +
-                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/balltrap1/balltrap1_02.jpg\"," +
-                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/balltrap1/balltrap1_03.jpg\"," +
-                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/balltrap1/balltrap1_04.jpg\"," +
-                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/balltrap1/balltrap1_05.jpg\"]");
+                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/balltrap1/room_balltrap1_01.jpg\"," +
+                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/balltrap1/room_balltrap1_02.jpg\"," +
+                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/balltrap1/room_balltrap1_03.jpg\"," +
+                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/balltrap1/room_balltrap1_04.jpg\"," +
+                "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/balltrap1/room_balltrap1_05.jpg\"]");
         contentValues.put("address", Arrays.asList("\"3 rue de la chesnaie\"", "\"\"", "\"Cagneux\"", "\"Bailleval\"", "\"France\"").toString());
         contentValues.put("location", Converters.fromGeoPointToString(new GeoPoint(50.6105,1.88136)));
         contentValues.put("startDate", "02/10/2018");

@@ -21,7 +21,7 @@
 
             <!-- TITLE -->
             <TextView
-                android:id="@+id/hours_title"
+                android:id="@+id/fragment_event_list_information"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"

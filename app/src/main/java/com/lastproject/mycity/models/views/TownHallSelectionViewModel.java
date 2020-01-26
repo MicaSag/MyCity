@@ -29,10 +29,10 @@ import com.lastproject.mycity.repositories.UserDataFireStoreRepository;
 import java.util.List;
 import java.util.concurrent.Executor;
 
-public class TownHallViewModel extends ViewModel {
+public class TownHallSelectionViewModel extends ViewModel {
 
     // For Debug
-    private static final String TAG = TownHallViewModel.class.getSimpleName();
+    private static final String TAG = TownHallSelectionViewModel.class.getSimpleName();
 
     // Repositories
     private final UserDataAuthenticationRepository userDataAuthenticationSource;
@@ -51,7 +51,7 @@ public class TownHallViewModel extends ViewModel {
     private MutableLiveData<ViewAction> mViewAction = new MutableLiveData<>();
     public enum ViewAction {
         TOWN_HALL_NOT_FOUND,
-        SHOW_TOWN_HALL_FRAGMENT,
+        CALL_TOWN_HALL_ACTIVITY,
         FIRE_STORE_ERROR,
         FINISH_ACTIVITY
     }
@@ -62,11 +62,11 @@ public class TownHallViewModel extends ViewModel {
         mViewAction.setValue(viewAction);
     }
 
-    public TownHallViewModel(UserDataAuthenticationRepository userDataAuthenticationSource,
-                             UserDataFireStoreRepository userDataFireStoreSource,
-                             MayorDataFireStoreRepository mayorDataFireStoreSource,
-                             TownHallDataFireStoreRepository townHallDataFireStoreSource,
-                             Executor executor) {
+    public TownHallSelectionViewModel(UserDataAuthenticationRepository userDataAuthenticationSource,
+                                      UserDataFireStoreRepository userDataFireStoreSource,
+                                      MayorDataFireStoreRepository mayorDataFireStoreSource,
+                                      TownHallDataFireStoreRepository townHallDataFireStoreSource,
+                                      Executor executor) {
         this.userDataAuthenticationSource = userDataAuthenticationSource;
         this.userDataFireStoreSource = userDataFireStoreSource;
         this.mayorDataFireStoreSource = mayorDataFireStoreSource;
@@ -95,17 +95,6 @@ public class TownHallViewModel extends ViewModel {
     //
     public LiveData<TownHallFireStore> getCurrentTownHall() {return CurrentTownHallDataRepository.getInstance().getCurrentTownHall();}
     public void setCurrentTownHall(TownHallFireStore townHallFireStore) {CurrentTownHallDataRepository.getInstance().setCurrentTownHall(townHallFireStore);}
-
-    // --- FIRE BASE : AUTHENTICATION ---
-    //
-    // Get the Current UserFireStore Connected
-    public FirebaseUser getUserAuthentication(){
-        return this.userDataAuthenticationSource.getCurrentUser();
-    }
-    // Check if current user is logged in
-    public Boolean isCurrentUserLogged(){
-        return this.userDataAuthenticationSource.isCurrentUserLogged();
-    }
 
     // --- FIRE BASE : FIRE STORE ---
     //
@@ -191,7 +180,7 @@ public class TownHallViewModel extends ViewModel {
                                         Log.d(TAG, "onComplete: townHallFireStore = " + getCurrentTownHall().getValue());
 
                                         // Show Town Hall Fragment
-                                        mViewAction.setValue(ViewAction.SHOW_TOWN_HALL_FRAGMENT);
+                                        mViewAction.setValue(ViewAction.CALL_TOWN_HALL_ACTIVITY);
 
                                         break;
                                     }

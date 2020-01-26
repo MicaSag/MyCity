@@ -24,7 +24,7 @@
             app:layout_constraintStart_toStartOf="parent"
             android:gravity="center"
             android:text="Coordonnées"
-            android:textSize="20sp"
+            android:textSize="@dimen/size_text_title"
             android:textStyle="bold"
             />
         <!-- ADDRESS LINE 1 -->
@@ -36,7 +36,7 @@
             app:layout_constraintTop_toBottomOf="@+id/fragment_town_hall_address_title"
             app:layout_constraintStart_toStartOf="parent"
             android:hint="address line 1"
-            android:textSize="16sp"
+            android:textSize="@dimen/size_text"
             />
         <!-- ADDRESS LINE 2 -->
         <TextView
@@ -46,7 +46,7 @@
             app:layout_constraintTop_toBottomOf="@+id/fragment_town_hall_address_line_1"
             app:layout_constraintStart_toStartOf="@+id/fragment_town_hall_address_line_1"
             android:hint="address line 2"
-            android:textSize="16sp"
+            android:textSize="@dimen/size_text"
             />
         <!-- ADDRESS LINE 3 -->
         <TextView
@@ -56,7 +56,7 @@
             app:layout_constraintTop_toBottomOf="@+id/fragment_town_hall_address_line_2"
             app:layout_constraintStart_toStartOf="@+id/fragment_town_hall_address_line_1"
             android:hint="address line 3"
-            android:textSize="16sp"
+            android:textSize="@dimen/size_text"
             />
         <!-- ADDRESS LINE 4 -->
         <TextView
@@ -66,7 +66,7 @@
             app:layout_constraintTop_toBottomOf="@+id/fragment_town_hall_address_line_3"
             app:layout_constraintStart_toStartOf="@+id/fragment_town_hall_address_line_1"
             android:hint="address line 4"
-            android:textSize="16sp"
+            android:textSize="@dimen/size_text"
             />
         <!-- EMAIL -->
         <TextView
@@ -76,7 +76,7 @@
             app:layout_constraintTop_toBottomOf="@+id/fragment_town_hall_address_line_4"
             app:layout_constraintStart_toStartOf="@+id/fragment_town_hall_address_line_1"
             android:hint="email"
-            android:textSize="16sp"
+            android:textSize="@dimen/size_text"
             />
         <!-- PHONE -->
         <TextView
@@ -86,7 +86,7 @@
             app:layout_constraintTop_toBottomOf="@+id/fragment_town_hall_email"
             app:layout_constraintStart_toStartOf="@+id/fragment_town_hall_address_line_1"
             android:hint="phone"
-            android:textSize="16sp"
+            android:textSize="@dimen/size_text"
             />
         <!-- URL -->
         <TextView
@@ -96,7 +96,7 @@
             app:layout_constraintTop_toBottomOf="@+id/fragment_town_hall_phone"
             app:layout_constraintStart_toStartOf="@+id/fragment_town_hall_address_line_1"
             android:hint="url"
-            android:textSize="16sp"
+            android:textSize="@dimen/size_text"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

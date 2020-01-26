@@ -45,6 +45,7 @@ import com.lastproject.mycity.firebase.database.firestore.models.EventFireStore;
                 ", published=" + published +
                 ", create=" + atCreate +
                 ", update=" + atUpdate +
+                ", update=" + super.getPhotos() +
                 '}';
     }
 

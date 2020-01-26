@@ -1,6 +1,7 @@
 package com.lastproject.mycity.controllers.fragments;
 
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,15 +11,16 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.lastproject.mycity.R;
-import com.lastproject.mycity.controllers.activities.TownHallActivity;
+import com.lastproject.mycity.controllers.activities.TownHallSelectionActivity;
 import com.lastproject.mycity.firebase.database.firestore.models.TownHallFireStore;
-import com.lastproject.mycity.models.views.TownHallViewModel;
+import com.lastproject.mycity.models.views.TownHallSelectionViewModel;
 import com.lastproject.mycity.network.retrofit.models.Insee;
 import com.lastproject.mycity.network.retrofit.models.townhall.TownH;
 import com.lastproject.mycity.network.retrofit.streams.InseeListStreams;
@@ -45,9 +47,11 @@ public class FirstConnexionFragment extends Fragment {
     // Adding @BindView in order to indicate to ButterKnife to get & serialise it
     public @BindView(R.id.fragment_first_connexion_ed_city_value) EditText mCityValue;
     public @BindView(R.id.fragment_first_connexion_auto_city_list) AutoCompleteTextView mAutoCityList;
+    public @BindView(R.id.fragment_first_connexion_message_1) TextView mMessage1;
+    public @BindView(R.id.fragment_first_connexion_message_2) TextView mMessage2;
 
     // Declare ViewModel
-    private TownHallViewModel mTownHallViewModel;
+    private TownHallSelectionViewModel mTownHallSelectionViewModel;
 
     //FOR DATA
     private Disposable disposable;
@@ -83,6 +87,9 @@ public class FirstConnexionFragment extends Fragment {
         // Configure ViewModel
         configureViewModel();
 
+        // Personalization of the display according to the role of the user
+        configureProfileUI();
+
         // ButterKnife does not support an autocomplete view,
         // so you have to create a classic listener for this view
         createAutoCompleteCityListListener();
@@ -96,7 +103,7 @@ public class FirstConnexionFragment extends Fragment {
     private void configureViewModel() {
         Log.d(TAG, "configureViewModel: ");
 
-        mTownHallViewModel = ((TownHallActivity) getActivity()).getTownHallViewModel();
+        mTownHallSelectionViewModel = ((TownHallSelectionActivity) getActivity()).getTownHallSelectionViewModel();
     }
     // ---------------------------------------------------------------------------------------------
     //                                          ACTIONS
@@ -112,14 +119,14 @@ public class FirstConnexionFragment extends Fragment {
                 String item = parent.getItemAtPosition(position).toString();
                 Log.d(TAG, "createAutoCompleteCityListListener onItemClick: item = "+item);
 
-                String inseeID = mTownHallViewModel.getInseeList().get(position).getCode();
+                String inseeID = mTownHallSelectionViewModel.getInseeList().get(position).getCode();
                 Log.d(TAG, "createAutoCompleteCityListListener onItemClick: inseeID = "+inseeID);
-                mTownHallViewModel.setInseeSelected(inseeID);
+                mTownHallSelectionViewModel.setInseeSelected(inseeID);
 
                 // we update the user's document with the INSEE identifier
-                mTownHallViewModel.getCurrentUser().setInseeID(inseeID);
+                mTownHallSelectionViewModel.getCurrentUser().setInseeID(inseeID);
                 Log.d(TAG, "createAutoCompleteCityListListener onItemClick: getCurrentUser() = "+
-                        mTownHallViewModel.getCurrentUser());
+                        mTownHallSelectionViewModel.getCurrentUser());
             }
         });
     }
@@ -142,8 +149,7 @@ public class FirstConnexionFragment extends Fragment {
         // Get Town Hall Data
         // save its in viewModel and FireStore
         // And Show Town Hall Fragment
-        getTownHallInformations(mTownHallViewModel.getCurrentUser().getInseeID());
-
+        getTownHallInformations(mTownHallSelectionViewModel.getCurrentUser().getInseeID());
     }
     // ---------------------------------------------------------------------------------------------
     //                                       HTTP (RxJAVA)
@@ -154,12 +160,13 @@ public class FirstConnexionFragment extends Fragment {
 
         // Retrieves cities based on an input character string
         String citySearch = mCityValue.getText().toString();
+        Log.d(TAG, "getInseeList: citySearch = "+citySearch);
         // Execute the stream subscribing to Observable defined inside GithubStream
         this.disposable = InseeListStreams.streamFetchInseeList(citySearch)
                 .subscribeWith(new DisposableObserver<List<Insee>>() {
             @Override
             public void onNext(List<Insee> inseeList) {
-                Log.d(TAG, "getInseeList: onNext: ");
+                Log.d(TAG, "getInseeList: onNext: inseeList = "+inseeList);
                 // Update UI with list of users
                 displayInseeList(inseeList);
                 configureAutoCompleteInseeList(inseeList);
@@ -186,7 +193,7 @@ public class FirstConnexionFragment extends Fragment {
                 TownHallFireStore townHallFireStore = Mapping.mapTownHToTownHall(townH);
 
                 // Create TownHall in FireStore
-                mTownHallViewModel
+                mTownHallSelectionViewModel
                         .createTownHall(townHallFireStore)
                         .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
@@ -194,22 +201,22 @@ public class FirstConnexionFragment extends Fragment {
                         Log.d(TAG, "getTownHallInformations: onSuccess: ");
 
                         // Save TownHallFireStore in model
-                        mTownHallViewModel.setCurrentTownHall(townHallFireStore);
+                        mTownHallSelectionViewModel.setCurrentTownHall(townHallFireStore);
 
                         // Update User in FireStore with InseeID
-                        mTownHallViewModel.setUserInseeID(mTownHallViewModel.getInseeSelected(),
-                                mTownHallViewModel.getCurrentUser().getUserID());
+                        mTownHallSelectionViewModel.setUserInseeID(mTownHallSelectionViewModel.getInseeSelected(),
+                                mTownHallSelectionViewModel.getCurrentUser().getUserID());
 
                         // If the user is a mayor, we update Mayor Document with TownHallID
-                        if (mTownHallViewModel.getCurrentUser().isMayor()) {
+                        if (mTownHallSelectionViewModel.getCurrentUser().isMayor()) {
 
                             // Update townHallID Mayor in Fire Store
                             Log.d(TAG, "onSuccess: mTownHallViewModel.getCurrentMayor().getMayorID() = "
-                                    + mTownHallViewModel.getCurrentMayor().getMayorID());
+                                    + mTownHallSelectionViewModel.getCurrentMayor().getMayorID());
                             Log.d(TAG, "onSuccess: documentReference.getId() = "
                                     + documentReference.getId());
 
-                            mTownHallViewModel.updateMayorTownHallID(mTownHallViewModel
+                            mTownHallSelectionViewModel.updateMayorTownHallID(mTownHallSelectionViewModel
                                     .getCurrentMayor().getMayorID(), documentReference.getId())
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
@@ -217,14 +224,14 @@ public class FirstConnexionFragment extends Fragment {
                                             Log.d(TAG, "onSuccess() : Update townHallID Mayor in Fire Store");
 
                                             // Show Town Hall Fragment
-                                            mTownHallViewModel.setViewAction(TownHallViewModel.ViewAction.
-                                                    SHOW_TOWN_HALL_FRAGMENT);
+                                            mTownHallSelectionViewModel.setViewAction(TownHallSelectionViewModel.ViewAction.
+                                                    CALL_TOWN_HALL_ACTIVITY);
                                         }
                                     });
                         } else{
                             // Show Town Hall Fragment
-                            mTownHallViewModel.setViewAction(TownHallViewModel.ViewAction.
-                                    SHOW_TOWN_HALL_FRAGMENT);
+                            mTownHallSelectionViewModel.setViewAction(TownHallSelectionViewModel.ViewAction.
+                                    CALL_TOWN_HALL_ACTIVITY);
                         }
                     }
                 });
@@ -244,7 +251,7 @@ public class FirstConnexionFragment extends Fragment {
         Log.d(TAG, "configureAutoCompleteType: ");
 
         // Save insee List in view Model
-        mTownHallViewModel.setInseeList(inseeList);
+        mTownHallSelectionViewModel.setInseeList(inseeList);
 
         ArrayList<String> ar = new ArrayList<>();
 
@@ -327,5 +334,27 @@ public class FirstConnexionFragment extends Fragment {
 
     private void disposeWhenDestroy() {
         if (this.disposable != null && !this.disposable.isDisposed()) this.disposable.dispose();
+    }
+    // ---------------------------------------------------------------------------------------------
+    //                                          UI
+    // ---------------------------------------------------------------------------------------------
+    // configure the display of the UI according to the user's profile
+    private void configureProfileUI(){
+        Log.d(TAG, "configureProfileUI: ");
+
+        Resources res = getResources();
+        String message1;
+        String message2;
+        // Message personalization
+        if (mTownHallSelectionViewModel.getCurrentUser().isMayor()) {
+            message1 = res.getString(R.string.city_choice_mayor_message_1);
+            message2 = res.getString(R.string.city_choice_mayor_message_2);
+        }
+        else {
+            message1 = res.getString(R.string.city_choice_citizen_message_1);
+            message2 = res.getString(R.string.city_choice_citizen_message_2);
+        }
+        mMessage1.setText(message1);
+        mMessage2.setText(message2);
     }
 }

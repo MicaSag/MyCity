@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- COMMON SIZE -->
+    <!-- Text -->
+    <dimen name="size_text_title">20sp</dimen>
+    <dimen name="size_text">16sp</dimen>
+
+    <!-- Image -->
+    <dimen name="size_width_image">210dp</dimen>
+    <dimen name="size_height_image">150dp</dimen>
+
     <!-- MAIN ACTIVITY DIMENS -->
     <dimen name="title_size">50sp</dimen>
     <dimen name="button_height_size">50dp</dimen>

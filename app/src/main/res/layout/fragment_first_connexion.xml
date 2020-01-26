@@ -19,8 +19,6 @@
             android:id="@+id/fragment_first_connexion_background_picture"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleX="1"
-            android:scaleY="1"
             android:gravity="center"
             android:background="@drawable/firstconnexion"/>
 
@@ -66,7 +64,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/fragment_first_connexion_guideline_horizontal_01"
-                android:text="@string/city_choice_message_1"
+                android:text="@string/city_choice_citizen_message_1"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:gravity="center|top"
@@ -78,7 +76,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/fragment_first_connexion_message_1"
-                android:text="@string/city_choice_message_2"
+                android:text="@string/city_choice_citizen_message_2"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:gravity="center|top"
@@ -174,7 +172,6 @@
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
 
     </FrameLayout>
 

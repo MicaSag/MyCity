@@ -2,6 +2,7 @@ package com.lastproject.mycity.models.views;
 
 import android.app.Activity;
 import android.location.Address;
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -10,9 +11,13 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.lastproject.mycity.firebase.database.firestore.models.EventFireStore;
 import com.lastproject.mycity.firebase.database.firestore.models.TownHallFireStore;
 import com.lastproject.mycity.models.Event;
@@ -26,8 +31,10 @@ import com.lastproject.mycity.utils.Toolbox;
 
 import org.threeten.bp.LocalDateTime;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.Executor;
 
 public class EventViewModel extends ViewModel {
@@ -48,6 +55,7 @@ public class EventViewModel extends ViewModel {
         CREATE,
         UPDATE,
         DELETE,
+        PUBLISH,
         FINISH
     }
 
@@ -362,6 +370,93 @@ public class EventViewModel extends ViewModel {
         return eventFireStore;
     }
 
+    public void publishPhotos() {
+        Log.d(TAG, "publishPhotos: ");
+
+        // get current event
+        Event event = getCurrentEvent().getValue();
+
+        if (event.getPhotos().size() !=0) {
+            int photoCount = 0;
+
+            // Creation photos of the event in FireBase
+            Log.d(TAG, "publishPhotos: event.getPhotos().size() = " + event.getPhotos().size());
+
+            for (int i = 0; i < event.getPhotos().size(); i++) {
+                Log.d(TAG, "publishPhotos: photoPath : " + event.getPhotos().get(i));
+                Log.d(TAG, "publishPhotos: event.getPhotos().get(i).indexOf(\"room_\") = "
+                        + event.getPhotos().get(i).indexOf("room_"));
+
+                // only save new photos
+                if (event.getPhotos().get(i).indexOf("firebasestorage") == -1) {
+                    Log.d(TAG, "publishPhotos: i = " + i);
+                    uploadPhotoInFireBase(i);
+                } else photoCount++;
+            }
+            // If no photo is to be published, we publish the event
+            Log.d(TAG, "publishPhotos: photoCount = "+photoCount);
+            if (photoCount == event.getPhotos().size()) mode.postValue(EventMode.PUBLISH);
+        } else  //if there is no photo for the event
+                // we publish the event
+                mode.postValue(EventMode.PUBLISH);
+    }
+
+
+    // Upload a picture in FireBase
+    private void uploadPhotoInFireBase(int i) {
+        Log.d(TAG, "uploadPhotoInFireBase: ");
+
+        Uri photoURI;
+
+        if (getCurrentEvent().getValue().getPhotos().get(i).indexOf("content://") != -1){
+            photoURI = Uri.parse(getCurrentEvent().getValue().getPhotos().get(i));
+        } else{
+            String photoPath = getCurrentEvent().getValue().getPhotos().get(i);
+            File f = new File(photoPath);
+            photoURI = Uri.fromFile(f);
+        }
+        Log.d(TAG, "uploadPhotoInFireBase: photoURI = "+photoURI);
+        String uuid = UUID.randomUUID().toString(); // GENERATE UNIQUE STRING
+        // Save photo in Fire Storage
+        StorageReference mImageRef = FirebaseStorage.getInstance().getReference(uuid);
+        mImageRef.putFile(photoURI)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                        Log.d(TAG, "onSuccess: taskSnapshot.getMetadata().getReference().getDownloadUrl().toString() = "+
+                                taskSnapshot.getMetadata().getReference().getDownloadUrl().toString());
+
+                        Task<Uri> result = taskSnapshot.getMetadata().getReference().getDownloadUrl();
+
+                        result.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+
+                                String photoStringLink = uri.toString();
+                                Log.d(TAG, "onSuccess: uri = "+photoStringLink);
+
+                                // Update photo Reference in Current Event
+                                getCurrentEvent().getValue().getPhotos().set(i, photoStringLink);
+
+                                // If this is the last updated photo
+                                // then we can create/update the event in Room and FireStore
+                                if (i == getCurrentEvent().getValue().getPhotos().size() -1) {
+
+                                    // Update Event in Room
+                                    executor.execute(() -> {
+                                        eventDataRoomSource.updateEvent(getCurrentEvent().getValue());
+
+                                        mode.postValue(EventMode.PUBLISH);
+
+                                    });
+                                }
+                            }
+                        });
+                    }
+                });
+    }
+
     /***
      *
      *  Publish an event in fireBase
@@ -373,6 +468,7 @@ public class EventViewModel extends ViewModel {
     public void publishEvent(Event event) {
         Log.d(TAG, "publishEvent() called with: event = [" + event + "]");
         Log.d(TAG, "publishEvent: getMode = "+getMode().getValue());
+
 
         EventFireStore eventFireStore = new EventFireStore(
                 event.getInseeID(),
@@ -458,6 +554,13 @@ public class EventViewModel extends ViewModel {
     public void deleteEventInRoom(String eventID){
         executor.execute(() -> {
             eventDataRoomSource.deleteEvent(eventID);
+        });
+    }
+
+    public void updateEventInRoom(Event event){
+        Log.d(TAG, "updateEventInRoom: ");
+        executor.execute(() -> {
+            eventDataRoomSource.updateEvent(event);
         });
     }
 

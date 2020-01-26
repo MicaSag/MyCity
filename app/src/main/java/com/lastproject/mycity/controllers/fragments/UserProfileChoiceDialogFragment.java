@@ -17,6 +17,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.lastproject.mycity.R;
 import com.lastproject.mycity.controllers.activities.AuthenticationActivity;
 import com.lastproject.mycity.controllers.activities.TownHallActivity;
+import com.lastproject.mycity.controllers.activities.TownHallSelectionActivity;
 import com.lastproject.mycity.models.TownHall;
 import com.lastproject.mycity.models.views.AuthenticationViewModel;
 import com.lastproject.mycity.utils.Toolbox;
@@ -98,8 +99,8 @@ public class UserProfileChoiceDialogFragment extends DialogFragment {
                     Toolbox.showSnackBar(((AuthenticationActivity)getActivity()).getConstraintLayout(),
                             getString(R.string.registration_succeed));
 
-                    // Start TownHall Activity
-                    Toolbox.startActivity(getActivity(), TownHallActivity.class);
+                    // Start TownHall Selection Activity
+                    Toolbox.startActivity(getActivity(), TownHallSelectionActivity.class);
                     break;
 
                 case REGISTRATION_MAYOR_UPDATE_USER_FAILED:

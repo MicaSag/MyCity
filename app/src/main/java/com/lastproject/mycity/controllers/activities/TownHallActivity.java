@@ -10,7 +10,6 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -22,7 +21,6 @@ import com.lastproject.mycity.R;
 import com.lastproject.mycity.adapter.eventslist.EventsListAdapter;
 import com.lastproject.mycity.controllers.bases.BaseActivity;
 import com.lastproject.mycity.controllers.fragments.EventsListFragment;
-import com.lastproject.mycity.controllers.fragments.FirstConnexionFragment;
 import com.lastproject.mycity.controllers.fragments.TownHallFragment;
 import com.lastproject.mycity.injections.Injection;
 import com.lastproject.mycity.injections.ViewModelFactory;
@@ -48,28 +46,17 @@ public class TownHallActivity extends BaseActivity implements  NavigationView.On
     private TownHallViewModel mTownHallViewModel;
 
     // Fragments Declarations
-    private FirstConnexionFragment mFirstConnexionFragment;
     private TownHallFragment mTownHallFragment;
     private EventsListFragment mEventsListFragment;
 
 
     // Adding @BindView in order to indicate to ButterKnife to get & serialise it
-    public @BindView(R.id.toolbar)
-    Toolbar mToolBar;
-    public @BindView(R.id.activity_town_hall_root)
-    LinearLayout mRoot;
-
-    public @BindView(R.id.activity_town_hall_fragment_first_connexion)
-    LinearLayout mTownHallChoice;
-    public @BindView(R.id.activity_town_hall_fragment)
-    LinearLayout mTownHall;
-
-    public @BindView(R.id.activity_mayor_drawer_layout)
-    DrawerLayout mDrawerLayout;
-    public @BindView(R.id.activity_mayor_nav_view)
-    NavigationView mNavigationView;
-    public @BindView(R.id.activity_town_hall_fragment_events_list)
-    FrameLayout mFragmentEventList;
+    public @BindView(R.id.toolbar) Toolbar mToolBar;
+    public @BindView(R.id.activity_town_hall_root) LinearLayout mRoot;
+    public @BindView(R.id.activity_town_hall_fragment) LinearLayout mTownHall;
+    public @BindView(R.id.activity_mayor_drawer_layout) DrawerLayout mDrawerLayout;
+    public @BindView(R.id.activity_mayor_nav_view) NavigationView mNavigationView;
+    public @BindView(R.id.activity_town_hall_fragment_events_list) FrameLayout mFragmentEventList;
 
     // ---------------------------------------------------------------------------------------------
     //                                DECLARATION BASE METHODS
@@ -113,8 +100,8 @@ public class TownHallActivity extends BaseActivity implements  NavigationView.On
         this.configureNavigationView();
         this.configureNavigationMenuItem();
 
-        // display switching according to the progress of the user's profile
-        this.switchingDisplayFragment();
+        // Search and Show Town Hall Fragment
+        mTownHallViewModel.searchAndShowTownHall();
 
         /*ConstraintLayout.LayoutParams params =
                 (ConstraintLayout.LayoutParams)mFragmentEventList.getLayoutParams();
@@ -141,15 +128,6 @@ public class TownHallActivity extends BaseActivity implements  NavigationView.On
 
                         switch (viewAction) {
 
-                            case TOWN_HALL_NOT_FOUND:
-                                showSnackBar("No Town Hall found in FireStore Database\");");
-                                break;
-
-                            case SHOW_FIRST_CONNEXION_FRAGMENT:
-                                showSnackBar("SHOW_FIRST_CONNEXION_FRAGMENT");
-                                configureAndShowFirstConnexionFragment();
-                                break;
-
                             case SHOW_TOWN_HALL_FRAGMENT:
                                 showSnackBar("SHOW_TOWN_HALL_FRAGMENT");
                                 configureAndShowTownHallFragment();
@@ -160,11 +138,6 @@ public class TownHallActivity extends BaseActivity implements  NavigationView.On
                                 break;
 
                             case FINISH_ACTIVITY:
-                                /*Intent intent = new Intent();
-                                intent.putExtra(BUNDLE_UPDATE_OK, true);
-                                setResult(RESULT_OK, intent);
-                                // Close Activity and go back to previous activity
-                                finish();*/
                                 break;
                         }
                     }
@@ -176,36 +149,8 @@ public class TownHallActivity extends BaseActivity implements  NavigationView.On
     // ---------------------------------------------------------------------------------------------
     //                                        FRAGMENTS
     // ---------------------------------------------------------------------------------------------
-    public void configureAndShowFirstConnexionFragment() {
-        Log.d(TAG, "configureAndShowFirstConnexionFragment: ");
-
-        // Events List fragment should not be visible
-        mTownHallChoice.setVisibility(View.VISIBLE);
-        mTownHall.setVisibility(View.GONE);
-
-        // Get FragmentManager (Support) and Try to find existing instance of fragment in FrameLayout container
-        mFirstConnexionFragment = (FirstConnexionFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.activity_town_hall_fragment_first_connexion);
-
-        if (mFirstConnexionFragment == null) {
-            // Create new fragment
-            mFirstConnexionFragment = FirstConnexionFragment.newInstance();
-            // Add it to FrameLayout container
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.activity_town_hall_fragment_first_connexion, mFirstConnexionFragment)
-                    .commit();
-        }
-    }
-
     public void configureAndShowTownHallFragment() {
         Log.d(TAG, "configureAndShowTownHallFragment: ");
-
-        // Events List fragment must be visible
-        mTownHallChoice.setVisibility(View.GONE);
-        mTownHall.setVisibility(View.VISIBLE);
-
-        // if a fragment already exists, then we remove it
-        if (mFirstConnexionFragment != null) getSupportFragmentManager().beginTransaction().remove(mFirstConnexionFragment).commit();
 
         // Get FragmentManager (Support) and Try to find existing instance of fragment in FrameLayout container
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.activity_town_hall_fragment_details);
@@ -331,21 +276,4 @@ public class TownHallActivity extends BaseActivity implements  NavigationView.On
     // ---------------------------------------------------------------------------------------------
     //                                          UI
     // ---------------------------------------------------------------------------------------------
-    //
-    public void switchingDisplayFragment() {
-        Log.d(TAG, "switchingDisplay: ");
-
-        // If no town hall has yet been chosen by the user
-        if (mTownHallViewModel.getCurrentUser().getInseeID() == null){
-            Log.d(TAG, "First Connexion Fragment");
-
-            // Show First Connexion Fragment
-            mTownHallViewModel.setViewAction(TownHallViewModel.ViewAction.SHOW_FIRST_CONNEXION_FRAGMENT);
-        } else {
-            Log.d(TAG, "Search Town Hall In Fire Store and Show It");
-
-            // Search and Show Town Hall Fragment
-            mTownHallViewModel.searchAndShowTownHall();
-        }
-    }
 }

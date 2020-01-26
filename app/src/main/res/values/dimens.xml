@@ -3,9 +3,12 @@
 
     <!-- COMMON SIZE -->
     <!-- Text -->
-    <dimen name="size_text_title">21sp</dimen>
-    <dimen name="size_text">20sp</dimen>
-    <dimen name="size_prize">25sp</dimen>
+    <dimen name="size_text_title">20sp</dimen>
+    <dimen name="size_text">14sp</dimen>
+
+    <!-- Image -->
+    <dimen name="size_width_image">180dp</dimen>
+    <dimen name="size_height_image">120dp</dimen>
 
     <!-- CUSTOM SIZE -->
     <!-- AUTHENTICATION ACTIVITY DIMENS -->

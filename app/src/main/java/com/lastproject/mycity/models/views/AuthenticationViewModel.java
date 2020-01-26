@@ -40,6 +40,7 @@ public class AuthenticationViewModel extends ViewModel {
     private MutableLiveData<ViewAction> mViewAction = new MutableLiveData<>();
     public enum ViewAction {
         START_TOWN_HALL_ACTIVITY,
+        START_TOWN_HALL_SELECTION_ACTIVITY,
         FINISH_ACTIVITY
     }
     public LiveData<ViewAction> getViewAction() {

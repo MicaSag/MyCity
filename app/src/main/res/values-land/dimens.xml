@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- AUTHENTICATION ACTIVITY DIMENS -->
+    <!-- COMMON SIZE -->
+    <!-- Text -->
+    <dimen name="size_text_title">20sp</dimen>
+    <dimen name="size_text">16sp</dimen>
 
+    <!-- Image -->
+    <dimen name="size_width_image">210dp</dimen>
+    <dimen name="size_height_image">150dp</dimen>
 
 
 </resources>

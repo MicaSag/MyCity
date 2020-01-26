@@ -1,6 +1,5 @@
 package com.lastproject.mycity.controllers.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,12 +23,11 @@ import com.lastproject.mycity.R;
 import com.lastproject.mycity.controllers.fragments.UserProfileChoiceDialogFragment;
 import com.lastproject.mycity.firebase.database.firestore.models.MayorFireStore;
 import com.lastproject.mycity.firebase.database.firestore.models.UserFireStore;
-import com.lastproject.mycity.models.Mayor;
 import com.lastproject.mycity.injections.Injection;
 import com.lastproject.mycity.injections.ViewModelFactory;
+import com.lastproject.mycity.models.Mayor;
 import com.lastproject.mycity.models.User;
 import com.lastproject.mycity.models.views.AuthenticationViewModel;
-import com.lastproject.mycity.models.views.TownHallViewModel;
 import com.lastproject.mycity.repositories.CurrentMayorDataRepository;
 import com.lastproject.mycity.utils.Toolbox;
 
@@ -65,6 +63,7 @@ public class AuthenticationActivity  extends AppCompatActivity
     public ConstraintLayout getConstraintLayout() {
         return mConstraintLayout;
     }
+    public void startActivity(Class activityClass){Toolbox.startActivity(this,activityClass);}
     // ---------------------------------------------------------------------------------------------
     //                                        ENTRY POINT
     // ---------------------------------------------------------------------------------------------
@@ -105,6 +104,12 @@ public class AuthenticationActivity  extends AppCompatActivity
 
                                 break;
 
+                            case START_TOWN_HALL_SELECTION_ACTIVITY:
+                                showSnackBar("START_TOWN_HALL_SELECTION_ACTIVITY");
+                                startActivity(TownHallSelectionActivity.class);
+
+                                break;
+
                             case FINISH_ACTIVITY:
                                 /*Intent intent = new Intent();
                                 intent.putExtra(BUNDLE_UPDATE_OK, true);
@@ -116,9 +121,7 @@ public class AuthenticationActivity  extends AppCompatActivity
                     }
                 });
     }
-    public void startActivity(Class activityClass){
-        Toolbox.startActivity(this,activityClass);
-    }
+
     public AuthenticationViewModel getAuthenticationViewModel() {
         return mAuthenticationViewModel;
     }
@@ -332,7 +335,7 @@ public class AuthenticationActivity  extends AppCompatActivity
                                                    Mayor mayor = new Mayor(document.getId(), mayorFireStore);
                                                    CurrentMayorDataRepository.getInstance().setCurrentMayor(mayor);
 
-                                                   // Start TownHall Activity
+                                                   // Start Town Hall Selection Activity
                                                   mAuthenticationViewModel
                                                           .setViewAction(AuthenticationViewModel.ViewAction
                                                                   .START_TOWN_HALL_ACTIVITY);
@@ -350,8 +353,9 @@ public class AuthenticationActivity  extends AppCompatActivity
                             });
                 } else {
                     Log.d(TAG, "checkUserRegistrationInFireStore: UserFireStore is a Citizen");
-                    // Start TownHall Activity
-                    Toolbox.startActivity(this,TownHallActivity.class);
+                    // Start Town Hall Selection Activity
+                    mAuthenticationViewModel.setViewAction(AuthenticationViewModel.ViewAction
+                                    .START_TOWN_HALL_ACTIVITY);
                 }
             }
         });

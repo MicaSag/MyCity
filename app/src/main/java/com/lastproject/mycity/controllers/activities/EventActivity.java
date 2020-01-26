@@ -110,6 +110,11 @@ public class EventActivity extends AppCompatActivity {
                         finish();
                         break;
 
+                    case PUBLISH:
+                        Snackbar.make(mConstraintLayout,"PUBLISH Event",Snackbar.LENGTH_LONG).show();
+                        mEventViewModel.publishEvent(mEventViewModel.getCurrentEvent().getValue());
+                        break;
+
                     case FINISH:
                         Snackbar.make(mConstraintLayout,"Finish",Snackbar.LENGTH_LONG).show();
                         finish();
@@ -321,7 +326,7 @@ public class EventActivity extends AppCompatActivity {
                 Log.d(TAG, "onOptionsItemSelected: PUBLISH");
 
                 // Create/Update Event in FireBase
-                mEventViewModel.publishEvent(mEventViewModel.getCurrentEvent().getValue());
+                mEventViewModel.publishPhotos();
 
                 return true;
 
@@ -349,7 +354,7 @@ public class EventActivity extends AppCompatActivity {
         }
     }
     // ---------------------------------------------------------------------------------------------
-    //                              MANGE INTENTS RETURN
+    //                              MANAGE INTENTS RETURN
     // ---------------------------------------------------------------------------------------------
     // For Manage Intents Return
     @Override

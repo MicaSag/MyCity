@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 
-import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -111,7 +110,7 @@ public class EventCreateFragment extends Fragment implements    PhotosListAdapte
 
         // Configure Mode CREATE/UPDATE
         if (mEventViewModel.getMode().getValue() == EventViewModel.EventMode.UPDATE) {
-            // Restore Estate on the View
+            // Restore Event on the View
             mEventViewModel.getCurrentEvent().observe(this, this::restoreData);
         }
         return view;
@@ -240,8 +239,10 @@ public class EventCreateFragment extends Fragment implements    PhotosListAdapte
                 Log.d(TAG, "dispatchTakePictureIntent: photoURI = "+photoURI);
 
                 // Save a file: path for use with ACTION_VIEW intents
-                mEventViewModel.setCurrentPhotoPath(photoFile.getAbsolutePath());
-                Log.d(TAG, "dispatchTakePictureIntent: mCurrentPhotoPath = "+mEventViewModel);
+                mEventViewModel.setCurrentPhotoPath(photoURI.toString());
+                //mEventViewModel.setCurrentPhotoPath(photoFile.getAbsolutePath());
+                Log.d(TAG, "dispatchTakePictureIntent: mCurrentPhotoPath = "
+                        +mEventViewModel.getCurrentPhotoPath());
 
                 getActivity().startActivityForResult(takePictureIntent, EventViewModel.REQUEST_TAKE_PHOTO);
             }
@@ -249,15 +250,17 @@ public class EventCreateFragment extends Fragment implements    PhotosListAdapte
     }
     // Create à image File name
     private File createImageFile() throws IOException {
+        Log.d(TAG, "createImageFile: ");
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "event_" + timeStamp + "_";
+        String imageFileName = "room_" + timeStamp + "_";
         File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
                 imageFileName,  /* prefix */
                 ".jpg",    /* suffix */
                 storageDir      /* directory */
         );
+        Log.d(TAG, "createImageFile: image = "+image);
         return image;
     }
     // Selects a photo in a device location
@@ -270,6 +273,10 @@ public class EventCreateFragment extends Fragment implements    PhotosListAdapte
             getActivity().startActivityForResult(intent, EventViewModel.REQUEST_IMAGE_GET);
         }
     }
+    // ---------------------------------------------------------------------------------------------
+    //                                       FIRE BASE STORAGE
+    // ---------------------------------------------------------------------------------------------
+
     // ---------------------------------------------------------------------------------------------
     //                                         RESTORE DATA
     // ---------------------------------------------------------------------------------------------

@@ -26,9 +26,11 @@
     <string name="button_login_text_logged">View Profile</string>
     <string name="button_login_text_not_logged">Connection</string>
 
-    <!-- MAYOR ACTIVITY -->
-    <string name="city_choice_message_1">Hello Mayor, is this your first connection?</string>
-    <string name="city_choice_message_2">The first thing to do is to choose your city.</string>
+    <!-- FIRST CONNEXION ACTIVITY -->
+    <string name="city_choice_mayor_message_1">Hello Mayor, is this your first connection?</string>
+    <string name="city_choice_mayor_message_2">The first thing to do is choose the city you administer.</string>
+    <string name="city_choice_citizen_message_1">Hello Citizen, is this your first connection?</string>
+    <string name="city_choice_citizen_message_2">The first thing to do is to choose your city of residence.</string>
     <string name="city_choice_message_3">Enter it below.</string>
 
     <!-- Registration -->
