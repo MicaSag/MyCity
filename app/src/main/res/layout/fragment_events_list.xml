@@ -6,7 +6,7 @@
     style="@style/Widget.MaterialComponents.CardView"
     android:id="@+id/fragment_list_estate_root"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     app:cardBackgroundColor="@color/colorBackground">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -53,6 +53,7 @@
             app:elevation="6dp"
             app:fabSize="normal"
             />
+
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

@@ -239,7 +239,7 @@ public class EventViewFragment extends Fragment implements  PhotosListAdapter.On
     public void refreshPhotosList(Event event) {
 
         if (event.getPhotos() != null) {
-            //mPhotosListAdapter.setNewPhotos(event.getPhotos());
+            mPhotosListAdapter.setNewPhotos(event.getPhotos());
 
             mPhotosSFL.setRefreshing(false);
 

@@ -1,21 +1,18 @@
 package com.lastproject.mycity.controllers.activities;
 
+import android.os.Bundle;
+import android.util.Log;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-
 import com.lastproject.mycity.R;
 import com.lastproject.mycity.controllers.fragments.FirstConnexionFragment;
 import com.lastproject.mycity.injections.Injection;
 import com.lastproject.mycity.injections.ViewModelFactory;
-import com.lastproject.mycity.models.views.AuthenticationViewModel;
 import com.lastproject.mycity.models.views.TownHallSelectionViewModel;
-import com.lastproject.mycity.models.views.TownHallViewModel;
 import com.lastproject.mycity.utils.Toolbox;
 
 import butterknife.BindView;

@@ -53,7 +53,6 @@ public class TownHallActivity extends BaseActivity implements  NavigationView.On
     // Adding @BindView in order to indicate to ButterKnife to get & serialise it
     public @BindView(R.id.toolbar) Toolbar mToolBar;
     public @BindView(R.id.activity_town_hall_root) LinearLayout mRoot;
-    public @BindView(R.id.activity_town_hall_fragment) LinearLayout mTownHall;
     public @BindView(R.id.activity_mayor_drawer_layout) DrawerLayout mDrawerLayout;
     public @BindView(R.id.activity_mayor_nav_view) NavigationView mNavigationView;
     public @BindView(R.id.activity_town_hall_fragment_events_list) FrameLayout mFragmentEventList;

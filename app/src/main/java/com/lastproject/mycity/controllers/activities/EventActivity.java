@@ -18,6 +18,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.snackbar.Snackbar;
 import com.lastproject.mycity.R;
 import com.lastproject.mycity.controllers.fragments.EventCreateFragment;
@@ -39,7 +40,7 @@ public class EventActivity extends AppCompatActivity {
     private static final String TAG = EventActivity.class.getSimpleName();
 
     // Adding @BindView in order to indicate to ButterKnife to get & serialise it
-    public @BindView(R.id.activity_event_constraint_layout) ConstraintLayout mConstraintLayout;
+    public @BindView(R.id.activity_mayor_mcv) MaterialCardView mConstraintLayout;
     public @BindView(R.id.toolbar) Toolbar mToolBar;
 
     // For toolBar configuration

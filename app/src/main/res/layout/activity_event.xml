@@ -1,11 +1,13 @@
-<androidx.constraintlayout.widget.ConstraintLayout
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_event_constraint_layout"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/Widget.MaterialComponents.CardView"
+    android:id="@+id/activity_mayor_mcv"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:focusableInTouchMode="true"
+    app:cardBackgroundColor="@color/colorBackground"
     tools:context=".controllers.activities.EventActivity">
 
     <LinearLayout
@@ -22,19 +24,20 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fillViewport="false">
+            android:fillViewport="true">
 
             <LinearLayout
+                android:id="@+id/activity_town_hall_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <!-- DETAIL FRAGMENT -->
-                <FrameLayout
-                    android:id="@+id/fragment_event"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    />
+                android:orientation="vertical"
+                >
+                    <!-- DETAIL FRAGMENT -->
+                    <FrameLayout
+                        android:id="@+id/fragment_event"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        />
 
             </LinearLayout>
 
@@ -42,4 +45,4 @@
 
     </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

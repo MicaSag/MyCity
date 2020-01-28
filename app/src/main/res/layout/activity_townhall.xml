@@ -29,43 +29,41 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
-                <ScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fillViewport="true">
 
-                        <LinearLayout
-                            android:id="@+id/activity_town_hall_fragment"
+                    <LinearLayout
+                        android:id="@+id/activity_town_hall_fragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        >
+
+                        <!-- FRAGMENT FIRST CONNEXION/TOWN HALL -->
+                        <FrameLayout
+                            android:id="@+id/activity_town_hall_fragment_details"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            >
+                            android:layout_height="match_parent"
+                            />
 
-                            <!-- FRAGMENT FIRST CONNEXION/TOWN HALL -->
-                            <FrameLayout
-                                android:id="@+id/activity_town_hall_fragment_details"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-
-                                app:layout_constraintTop_toTopOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                />
+                        <androidx.core.widget.NestedScrollView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
 
                             <!-- FRAGMENT EVENTS LIST -->
                             <FrameLayout
                                 android:id="@+id/activity_town_hall_fragment_events_list"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-
-                                app:layout_constraintTop_toBottomOf="@+id/activity_town_hall_fragment_details"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintBottom_toBottomOf="parent"
                                 />
 
-                        </LinearLayout>
+                        </androidx.core.widget.NestedScrollView>
 
-                </ScrollView>
+                    </LinearLayout>
+
+            </ScrollView>
 
         </LinearLayout>
 
