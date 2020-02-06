@@ -45,13 +45,15 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:clickable="true"
-            android:src="@drawable/baseline_add_circle_outline_black_24"
+            android:src="@drawable/baseline_add_white_24"
+            app:rippleColor="@android:color/white"
             app:layout_anchor="@id/fragment_list_events_recycler_view"
             app:layout_anchorGravity="top"
             app:backgroundTint="@color/colorAccent"
             app:borderWidth="0dp"
             app:elevation="6dp"
             app:fabSize="normal"
+            app:cardElevation="8dp"
             />
 
 

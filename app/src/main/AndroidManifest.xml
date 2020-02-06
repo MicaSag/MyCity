@@ -61,7 +61,21 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".controllers.activities.EventActivity" />
-        </activity> <!-- FOR SAVE FILES -->
+        </activity>
+        <!-- WEB VIEW Activity -->
+        <!-- A child of the Welcome Activity -->
+        <activity
+            android:name=".controllers.activities.WebViewActivity"
+            android:label="Town Hall Web Site"
+            android:parentActivityName=".controllers.activities.TownHallActivity">
+
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".controllers.activities.TownHallActivity" />
+        </activity>
+
+        <!-- FOR SAVE FILES -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.lastproject.mycity.fileprovider"

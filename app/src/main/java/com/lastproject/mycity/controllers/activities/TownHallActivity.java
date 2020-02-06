@@ -1,11 +1,13 @@
 package com.lastproject.mycity.controllers.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -14,6 +16,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.navigation.NavigationView;
@@ -31,6 +34,7 @@ import com.lastproject.mycity.repositories.CurrentEventIDDataRepository;
 import com.lastproject.mycity.utils.Toolbox;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * Created by Michaël SAGOT on 28/12/2019.
@@ -114,7 +118,7 @@ public class TownHallActivity extends BaseActivity implements  NavigationView.On
     // Configure ViewModel
     private void configureViewModel() {
         ViewModelFactory modelFactory = Injection.provideViewModelFactory(this);
-        mTownHallViewModel = ViewModelProviders.of(this, modelFactory)
+        mTownHallViewModel = new ViewModelProvider(this, modelFactory)
                 .get(TownHallViewModel.class);
 
         mTownHallViewModel.getViewAction().
@@ -154,27 +158,31 @@ public class TownHallActivity extends BaseActivity implements  NavigationView.On
         // Get FragmentManager (Support) and Try to find existing instance of fragment in FrameLayout container
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.activity_town_hall_fragment_details);
 
-        // if a fragment already exists, then we remove it
-        if (fragment != null) getSupportFragmentManager().beginTransaction().remove(fragment).commit();
-
-        // Create new fragment
-        mTownHallFragment = mTownHallFragment.newInstance();
-        // Add it to FrameLayout container
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.activity_town_hall_fragment_details, mTownHallFragment)
-                .commit();
+        // if the fragment does not yet exist, we create it.
+        // if we pass again in this part of code and that the fragment already exists,
+        // then it is that there has been a rotation of the screen
+        if (fragment == null) {
+            // Create new fragment
+            mTownHallFragment = mTownHallFragment.newInstance();
+            // Add it to FrameLayout container
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.activity_town_hall_fragment_details, mTownHallFragment)
+                    .commit();
+        }
 
         // Get FragmentManager (Support) and Try to find existing instance of fragment in FrameLayout container
         Fragment fragmentEventsList = getSupportFragmentManager().findFragmentById(R.id.activity_town_hall_fragment_events_list);
 
-        // if a fragment already exists, then we remove it
-        if (fragmentEventsList != null) getSupportFragmentManager().beginTransaction().remove(fragmentEventsList).commit();
-
-        mEventsListFragment = mEventsListFragment.newInstance();
-        // Add it to FrameLayout container
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.activity_town_hall_fragment_events_list, mEventsListFragment)
-                .commit();
+        // if the fragment does not yet exist, we create it.
+        // if we pass again in this part of code and that the fragment already exists,
+        // then it is that there has been a rotation of the screen
+        if (fragmentEventsList == null) {
+            mEventsListFragment = mEventsListFragment.newInstance();
+            // Add it to FrameLayout container
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.activity_town_hall_fragment_events_list, mEventsListFragment)
+                    .commit();
+        }
     }
     // ---------------------------------------------------------------------------------------------
     //                                     NAVIGATION DRAWER
@@ -200,6 +208,7 @@ public class TownHallActivity extends BaseActivity implements  NavigationView.On
 
     // Configure NavigationView
     private void configureNavigationMenuItem() {
+        Log.d(TAG, "configureNavigationMenuItem: ");
         //Disable tint icons
         this.mNavigationView.setItemIconTintList(null);
     }
@@ -272,7 +281,4 @@ public class TownHallActivity extends BaseActivity implements  NavigationView.On
                                     EventViewModel.MODE,
                                     EventViewModel.EventMode.VIEW.name());
     }
-    // ---------------------------------------------------------------------------------------------
-    //                                          UI
-    // ---------------------------------------------------------------------------------------------
 }

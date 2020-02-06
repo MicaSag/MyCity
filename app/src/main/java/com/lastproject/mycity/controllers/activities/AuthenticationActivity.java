@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.firebase.ui.auth.AuthUI;
@@ -85,7 +86,7 @@ public class AuthenticationActivity  extends AppCompatActivity
     // Configure ViewModel
     private void configureViewModel(){
         ViewModelFactory modelFactory = Injection.provideViewModelFactory(this);
-        mAuthenticationViewModel = ViewModelProviders.of(this, modelFactory)
+        mAuthenticationViewModel = new ViewModelProvider(this, modelFactory)
                 .get(AuthenticationViewModel.class);
 
         mAuthenticationViewModel.getViewAction().

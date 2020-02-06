@@ -1,6 +1,7 @@
 package com.lastproject.mycity.controllers.fragments;
 
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,12 +19,13 @@ import com.google.android.material.card.MaterialCardView;
 import com.lastproject.mycity.BuildConfig;
 import com.lastproject.mycity.R;
 import com.lastproject.mycity.controllers.activities.TownHallActivity;
+import com.lastproject.mycity.controllers.activities.WebViewActivity;
 import com.lastproject.mycity.firebase.database.firestore.models.TownHallFireStore;
 import com.lastproject.mycity.models.views.TownHallViewModel;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.disposables.Disposable;
+import butterknife.OnClick;
 
 /**
  * Created by Michaël SAGOT on 28/12/2019.
@@ -61,9 +63,6 @@ public class TownHallFragment extends Fragment {
     // Declare ViewModel
     private TownHallViewModel mTownHallViewModel;
 
-    //FOR DATA
-    private Disposable disposable;
-
     public TownHallFragment() {
         // Required empty public constructor
     }
@@ -78,7 +77,6 @@ public class TownHallFragment extends Fragment {
 
         return fragment;
     }
-
     // ---------------------------------------------------------------------------------------------
     //                                    ENTRY POINT
     // ---------------------------------------------------------------------------------------------
@@ -107,19 +105,20 @@ public class TownHallFragment extends Fragment {
         mTownHallViewModel = ((TownHallActivity) getActivity()).getTownHallViewModel();
 
         // Observe a change of Current TownHallFireStore
-        mTownHallViewModel.getCurrentTownHall().observe(this, this::updateUI);
+        mTownHallViewModel.getCurrentTownHall().observe(getActivity(), this::updateUI);
     }
     // ---------------------------------------------------------------------------------------------
-    //                                      DESTROY ACTIVITY
+    //                                          ACTIONS
     // ---------------------------------------------------------------------------------------------
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        this.disposeWhenDestroy();
-    }
-
-    private void disposeWhenDestroy() {
-        if (this.disposable != null && !this.disposable.isDisposed()) this.disposable.dispose();
+    @OnClick(R.id.fragment_town_hall_url)
+    public void onUrlClick(View v) {
+        Log.d(TAG, "onUrlClick: ");
+        // Launch WebViewActivity
+        // Param : Url to display
+        Intent myIntent = new Intent(getActivity(), WebViewActivity.class);
+        Log.d(TAG, "onUrlClick: mUrlAddress.getText() = "+mUrl.getText().toString());
+        myIntent.putExtra(WebViewActivity.KEY_TOWN_HALL_WEB_SITE_URL, mUrl.getText().toString());
+        this.startActivity(myIntent);
     }
     // ---------------------------------------------------------------------------------------------
     //                                             UI

@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -49,6 +50,7 @@ public class FirstConnexionFragment extends Fragment {
     public @BindView(R.id.fragment_first_connexion_auto_city_list) AutoCompleteTextView mAutoCityList;
     public @BindView(R.id.fragment_first_connexion_message_1) TextView mMessage1;
     public @BindView(R.id.fragment_first_connexion_message_2) TextView mMessage2;
+    public @BindView(R.id.fragment_first_connexion_bt_validate) Button mValidateBt;
 
     // Declare ViewModel
     private TownHallSelectionViewModel mTownHallSelectionViewModel;
@@ -94,6 +96,9 @@ public class FirstConnexionFragment extends Fragment {
         // so you have to create a classic listener for this view
         createAutoCompleteCityListListener();
 
+        mAutoCityList.setEnabled(false);
+        mValidateBt.setEnabled(false);
+
         return view;
     }
     // ---------------------------------------------------------------------------------------------
@@ -127,6 +132,9 @@ public class FirstConnexionFragment extends Fragment {
                 mTownHallSelectionViewModel.getCurrentUser().setInseeID(inseeID);
                 Log.d(TAG, "createAutoCompleteCityListListener onItemClick: getCurrentUser() = "+
                         mTownHallSelectionViewModel.getCurrentUser());
+
+                // Activation of the validate button
+                mValidateBt.setEnabled(true);
             }
         });
     }
@@ -138,7 +146,13 @@ public class FirstConnexionFragment extends Fragment {
 
         // If the desired character string is not empty
         // we start searching for Insee codes
-        if (!mCityValue.getText().toString().equals("")) getInseeList();
+        if (!mCityValue.getText().toString().equals("")){
+            mAutoCityList.setText("");
+            getInseeList();
+        } else{
+            mValidateBt.setEnabled(false);
+            mAutoCityList.setText("bad research");
+        }
     }
 
     // When you click on the Button Validate
@@ -167,7 +181,8 @@ public class FirstConnexionFragment extends Fragment {
             @Override
             public void onNext(List<Insee> inseeList) {
                 Log.d(TAG, "getInseeList: onNext: inseeList = "+inseeList);
-                // Update UI with list of users
+
+                // Update UI with list of Insee code
                 displayInseeList(inseeList);
                 configureAutoCompleteInseeList(inseeList);
             }
@@ -269,6 +284,15 @@ public class FirstConnexionFragment extends Fragment {
                     nom = "unknown";
                 ar.add(postalCode + " " + nom);
             }
+        }
+
+        // Displays in the comboBox the number of cities found
+        if (inseeList.size() > 0) {
+            mAutoCityList.setEnabled(true);
+            mAutoCityList.setText(inseeList.size() + " city found");
+        }else{
+            mAutoCityList.setText("no city found");
+            mValidateBt.setEnabled(false);
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),

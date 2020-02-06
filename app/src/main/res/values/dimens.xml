@@ -18,7 +18,7 @@
     <dimen name="dialog_minor_size">55%</dimen>
 
     <!-- Default NavigationView Header height -->
-    <dimen name="nav_header_height">176dp</dimen>
+    <dimen name="nav_header_height">230dp</dimen>
 
 
 </resources>

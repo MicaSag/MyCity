@@ -7,12 +7,10 @@ import androidx.room.Room;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.firestore.GeoPoint;
 import com.lastproject.mycity.firebase.database.firestore.models.EventFireStore;
 import com.lastproject.mycity.models.Event;
 import com.lastproject.mycity.room.database.MyCityDatabase;
-import com.lastproject.mycity.utils.Converters;
 
 import org.junit.After;
 import org.junit.Before;
@@ -49,12 +47,13 @@ public class EventDaoTest {
             new ArrayList<>(Arrays.asList("3 rue de la chesnaie",
                     "hameau de cagneux",
                     "60140","BAILLEVAL")),
-            new GeoPoint(3.0d,0.5d),
-            Converters.fromLocalDateTimeToTimestamp(LocalDateTime.now().withDayOfMonth(10).withYear(2019).withMonth(8)),
-            Converters.fromLocalDateTimeToTimestamp(LocalDateTime.now()),
-            false );
-    private static String eventID_1 = LocalDateTime.now().toString();
-    private static Event newEvent_1 = new Event(eventID_1, efs );
+            new GeoPoint(10.0d,20.0d),
+            "12/10/2020",
+            "16/10/2020",
+            false);
+    private static String eventID_1 = LocalDateTime.now().toString() + "C";
+    private static String userID_1 = "emc77KANhJh8PHLFLgK2Nl12zvv2";
+    private static Event newEvent_1 = new Event(eventID_1,userID_1 , efs );
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     private static EventFireStore efs2 = new EventFireStore(
             "33333",
@@ -66,11 +65,12 @@ public class EventDaoTest {
                     "hameau de bétancourt",
                     "60170","BAILLEVAL")),
             new GeoPoint(10.0d,20.0d),
-            Converters.fromLocalDateTimeToTimestamp(LocalDateTime.now().withDayOfMonth(10).withYear(2019).withMonth(8)),
-            Converters.fromLocalDateTimeToTimestamp(LocalDateTime.now()),
+            "12/10/2020",
+            "16/10/2020",
             true);
-    private static String eventID_2 = LocalDateTime.now().toString();
-    private static Event newEvent_2 = new Event(eventID_2, efs2 );
+    private static String eventID_2 = LocalDateTime.now().toString() + "C";
+    private static String userID_2 = "emc77KANhJh8PHLFLgK2Nl12zZZ8";
+    private static Event newEvent_2 = new Event(eventID_2,userID_2 , efs2 );
 
 
     @Rule
@@ -98,7 +98,7 @@ public class EventDaoTest {
         this.database.eventDao().createEvent(newEvent_1);
         // TEST
         List<Event> events =
-                LiveDataTestUtil.getValue(this.database.eventDao().getEvents());
+                LiveDataTestUtil.getValue(this.database.eventDao().getAllEvents());
 
         assertTrue(events.get(0).getTitle().equals("Noël des enfants"));
 
@@ -115,21 +115,21 @@ public class EventDaoTest {
 
         Log.d(TAG, "getAndUpdateEvent : BEFORE");
         List<Event> events =
-                LiveDataTestUtil.getValue(this.database.eventDao().getEvents());
+                LiveDataTestUtil.getValue(this.database.eventDao().getAllEvents());
         this.displayEvents(events);
 
-        Event eventUpdate = LiveDataTestUtil.getValue(this.database.eventDao().getEvent(eventID_1));
+        Event eventUpdate = LiveDataTestUtil.getValue(this.database.eventDao().getEvent(eventID_1, userID_1));
         eventUpdate.setTitle("Sortie picine");
         this.database.eventDao().updateEvent(eventUpdate);
 
         //TEST
-        Event event = LiveDataTestUtil.getValue(this.database.eventDao().getEvent(eventID_1));
+        Event event = LiveDataTestUtil.getValue(this.database.eventDao().getEvent(eventID_1, userID_1));
 
         assertTrue(event.getTitle().equals("Sortie picine"));
 
         Log.d(TAG, "getAndUpdateEvent : AFTER");
         events =
-                LiveDataTestUtil.getValue(this.database.eventDao().getEvents());
+                LiveDataTestUtil.getValue(this.database.eventDao().getAllEvents());
         this.displayEvents(events);
     }
 
@@ -142,11 +142,11 @@ public class EventDaoTest {
 
         Log.d(TAG, "deleteEvent : BEFORE");
         List<Event> events =
-                LiveDataTestUtil.getValue(this.database.eventDao().getEvents());
+                LiveDataTestUtil.getValue(this.database.eventDao().getAllEvents());
         this.displayEvents(events);
 
         // BEFORE : Adding demo user & demo item. Next, get the item added & delete it.
-        List<Event> eventsDelete = LiveDataTestUtil.getValue(this.database.eventDao().getEvents());
+        List<Event> eventsDelete = LiveDataTestUtil.getValue(this.database.eventDao().getAllEvents());
         int i = 0;
         for(Event event : eventsDelete){
             Log.d(TAG, "deleteEvent: Delete Event ("+i+")");
@@ -154,7 +154,7 @@ public class EventDaoTest {
             i++;
         }
         //TEST
-        events = LiveDataTestUtil.getValue(this.database.eventDao().getEvents());
+        events = LiveDataTestUtil.getValue(this.database.eventDao().getAllEvents());
         assertTrue(events.isEmpty());
 
         Log.d(TAG, "deleteEvent: AFTER");

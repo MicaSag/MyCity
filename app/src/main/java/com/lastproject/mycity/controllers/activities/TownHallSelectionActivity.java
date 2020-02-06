@@ -32,9 +32,6 @@ public class TownHallSelectionActivity extends AppCompatActivity {
     // ---------------------------------------------------------------------------------------------
     //                                        METHODS
     // ---------------------------------------------------------------------------------------------
-    public ConstraintLayout getConstraintLayout() {
-        return mConstraintLayout;
-    }
     public void startActivity(Class activityClass){Toolbox.startActivity(this,activityClass);}
     // ---------------------------------------------------------------------------------------------
     //                                        ENTRY POINT
@@ -87,11 +84,6 @@ public class TownHallSelectionActivity extends AppCompatActivity {
                                 break;
 
                             case FINISH_ACTIVITY:
-                                /*Intent intent = new Intent();
-                                intent.putExtra(BUNDLE_UPDATE_OK, true);
-                                setResult(RESULT_OK, intent);
-                                // Close Activity and go back to previous activity
-                                finish();*/
                                 break;
                         }
                     }

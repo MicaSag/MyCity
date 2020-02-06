@@ -62,5 +62,13 @@
 
     <!-- For Animation -->
     <string name="animation_full_screen_image" translatable="false">AnimationFullScreenImage</string>
+    <string name="contact_information">contact information</string>
+    <string name="address_line_1">address line 1</string>
+    <string name="address_line_2">address line 2</string>
+    <string name="address_line_3">address line 3</string>
+    <string name="address_line_4">address line 4</string>
+    <string name="email">email</string>
+    <string name="phone">phone</string>
+    <string name="url">url</string>
 
 </resources>
