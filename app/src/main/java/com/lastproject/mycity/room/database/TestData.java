@@ -14,6 +14,8 @@ public class TestData {
 
     private static final String TAG = TestData.class.getSimpleName();
 
+    private static final String userID = "Rxcob7pKMaUJ0YH7t1wl2Vuybtm2";
+
     static ContentValues event1(){
         Log.d(TAG, "event1: ");
 
@@ -32,7 +34,7 @@ public class TestData {
         contentValues.put("address", Arrays.asList("\"3 rue de la chesnaie\"", "\"\"", "\"Cagneux\"", "\"Bailleval\"", "\"France\"").toString());
         contentValues.put("startDate", "01/10/2020");
         contentValues.put("endDate", "04/10/2020");
-        contentValues.put("userID", "emc77KANhJh8PHLFLgK2Nl12zvv2");
+        contentValues.put("userID", userID);
         contentValues.put("canceled", false);
         contentValues.put("published", false);
         contentValues.put("atCreate", true);
@@ -67,7 +69,7 @@ public class TestData {
         contentValues.put("published", false);
         contentValues.put("atCreate", true);
         contentValues.put("atUpdate", false);
-        contentValues.put("userID", "emc77KANhJh8PHLFLgK2Nl12zvv2");
+        contentValues.put("userID", userID);
 
         return contentValues;
     }
@@ -93,7 +95,7 @@ public class TestData {
         contentValues.put("published", false);
         contentValues.put("atCreate", true);
         contentValues.put("atUpdate", false);
-        contentValues.put("userID", "emc77KANhJh8PHLFLgK2Nl12zvv2");
+        contentValues.put("userID", userID);
 
         return contentValues;
     }
@@ -119,7 +121,7 @@ public class TestData {
         contentValues.put("published", false);
         contentValues.put("atCreate", true);
         contentValues.put("atUpdate", false);
-        contentValues.put("userID", "emc77KANhJh8PHLFLgK2Nl12zvv2");
+        contentValues.put("userID", userID);
 
         return contentValues;
     }
@@ -144,7 +146,7 @@ public class TestData {
         contentValues.put("published", false);
         contentValues.put("atCreate", true);
         contentValues.put("atUpdate", false);
-        contentValues.put("userID", "emc77KANhJh8PHLFLgK2Nl12zvv2");
+        contentValues.put("userID", userID);
 
         return contentValues;
     }
@@ -169,7 +171,7 @@ public class TestData {
         contentValues.put("published", false);
         contentValues.put("atCreate", true);
         contentValues.put("atUpdate", false);
-        contentValues.put("userID", "emc77KANhJh8PHLFLgK2Nl12zvv2");
+        contentValues.put("userID", userID);
 
         return contentValues;
     }
@@ -195,7 +197,7 @@ public class TestData {
         contentValues.put("published", false);
         contentValues.put("atCreate", true);
         contentValues.put("atUpdate", false);
-        contentValues.put("userID", "emc77KANhJh8PHLFLgK2Nl12zvv2");
+        contentValues.put("userID", userID);
 
         return contentValues;
     }

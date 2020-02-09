@@ -111,7 +111,7 @@ public class EventCreateFragment extends Fragment implements    PhotosListAdapte
         // Configure Mode CREATE/UPDATE
         if (mEventViewModel.getMode().getValue() == EventViewModel.EventMode.UPDATE) {
             // Restore Event on the View
-            mEventViewModel.getCurrentEvent().observe(this, this::restoreData);
+            mEventViewModel.getCurrentEvent().observe(getActivity(), this::restoreData);
         }
         return view;
     }
@@ -124,11 +124,11 @@ public class EventCreateFragment extends Fragment implements    PhotosListAdapte
         mEventViewModel = ((EventActivity)getActivity()).getEventViewModel();
 
         // Observe a change of Start Date
-        mEventViewModel.getStartDate().observe(this,this::refreshStartDate);
+        mEventViewModel.getStartDate().observe(getActivity(),this::refreshStartDate);
         // Observe a change of End Date
-        mEventViewModel.getEndDate().observe(this,this::refreshEndDate);
+        mEventViewModel.getEndDate().observe(getActivity(),this::refreshEndDate);
         // Observe a change of the photo list
-        mEventViewModel.getPhotos().observe(this,this::refreshPhotos);
+        mEventViewModel.getPhotos().observe(getActivity(),this::refreshPhotos);
     }
     // --------------------------------------------------------------------------------------------
     //                                    CONFIGURATION
@@ -273,10 +273,6 @@ public class EventCreateFragment extends Fragment implements    PhotosListAdapte
             getActivity().startActivityForResult(intent, EventViewModel.REQUEST_IMAGE_GET);
         }
     }
-    // ---------------------------------------------------------------------------------------------
-    //                                       FIRE BASE STORAGE
-    // ---------------------------------------------------------------------------------------------
-
     // ---------------------------------------------------------------------------------------------
     //                                         RESTORE DATA
     // ---------------------------------------------------------------------------------------------

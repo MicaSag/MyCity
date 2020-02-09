@@ -9,10 +9,10 @@ import com.lastproject.mycity.firebase.database.firestore.models.EventFireStore;
 @Entity public class Event extends EventFireStore {
 
     @PrimaryKey @NonNull private String eventID;
-    private String userID;
-    private Boolean published;
-    private Boolean atCreate;
-    private Boolean atUpdate;
+    private String userID;              // UserID who created the event in Room
+    private Boolean published;          // Event to publish in FireBase?
+    private Boolean atCreate;           // Event to create in FireBase?
+    private Boolean atUpdate;           // Event to update in FireBase?
 
     // Blank constructor necessary for use with FireBase
     public Event() {}

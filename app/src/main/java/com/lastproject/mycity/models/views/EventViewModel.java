@@ -8,6 +8,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -77,6 +78,8 @@ public class EventViewModel extends ViewModel {
     // For use intents to retrieve photos
     public static final int REQUEST_TAKE_PHOTO = 1;
     public static final int REQUEST_IMAGE_GET = 10;
+    // For Photo Processed
+    private MutableLiveData<Integer> mNumberPhotoProcessed = new MutableLiveData();
 
     public EventViewModel(  EventDataRoomRepository eventDataRoomSource,
                             EventDataFireStoreRepository eventDataFireStoreSource,
@@ -191,8 +194,14 @@ public class EventViewModel extends ViewModel {
             // Event not published
             roomEvent.setPublished(false);
 
-            // Event at Update
-            roomEvent.setAtUpdate(true);
+            if (getCurrentEvent().getValue().isPublished()){
+                // Event at Update
+                roomEvent.setAtUpdate(true);
+            }
+            else {
+                // Event at Create
+                roomEvent.setAtCreate(true);
+            }
 
             // Update Event iN Room DataBase
             executor.execute(() -> {
@@ -370,45 +379,73 @@ public class EventViewModel extends ViewModel {
         return eventFireStore;
     }
 
+    // Methods for processing photos of an event
+    //-------------------------------------------
+    // 1_ Process the photos of the event one by one : public void publishPhotos()
+    // 2_ Upload a picture in FireBase : private void uploadPhotoInFireBase(int i)
+    //
+    // 1_ Process the photos of the event one by one
     public void publishPhotos() {
         Log.d(TAG, "publishPhotos: ");
 
         // get current event
         Event event = getCurrentEvent().getValue();
 
+        Log.d(TAG, "publishPhotos: event.getPhotos().size() = " + event.getPhotos().size());
+
+        // Initialize number of photos already processed
+        mNumberPhotoProcessed.setValue(0);
+
+        // Observe the number of photos already processed
+        mNumberPhotoProcessed.observeForever(new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer numberPhotoProcessed) {
+                Log.d(TAG, "onChanged() called with: numberPhotoProcessed = [" + numberPhotoProcessed + "]");
+
+                // if all photos have been processed
+                if (numberPhotoProcessed == event.getPhotos().size()){
+                    Log.d(TAG, "onChanged() ALL Photos have been processed");
+
+                    // Unsubscribe the Observer
+                    mNumberPhotoProcessed.removeObserver(this);
+
+                    // Update Event in Room
+                    executor.execute(() -> {
+                        eventDataRoomSource.updateEvent(getCurrentEvent().getValue());
+
+                        // we publish the event in FireStore
+                        mode.postValue(EventMode.PUBLISH);
+                    });
+                }
+            }
+        });
+
+        // Creation photos of the event in FireBase if there are any
         if (event.getPhotos().size() !=0) {
-            int photoCount = 0;
 
-            // Creation photos of the event in FireBase
-            Log.d(TAG, "publishPhotos: event.getPhotos().size() = " + event.getPhotos().size());
-
+            // Loop that processes photos one after the other
             for (int i = 0; i < event.getPhotos().size(); i++) {
                 Log.d(TAG, "publishPhotos: photoPath : " + event.getPhotos().get(i));
-                Log.d(TAG, "publishPhotos: event.getPhotos().get(i).indexOf(\"room_\") = "
-                        + event.getPhotos().get(i).indexOf("room_"));
+                Log.d(TAG, "publishPhotos: event.getPhotos().get(i).contains(\"firebasestorage\") = "
+                        + event.getPhotos().get(i).contains("firebasestorage"));
 
-                // only save new photos
-                if (event.getPhotos().get(i).indexOf("firebasestorage") == -1) {
+                // Only save new photos (URI not contains "firebasestorage")
+                if (!event.getPhotos().get(i).contains("firebasestorage")) {
                     Log.d(TAG, "publishPhotos: i = " + i);
                     uploadPhotoInFireBase(i);
-                } else photoCount++;
+                } else mNumberPhotoProcessed.setValue(mNumberPhotoProcessed.getValue() + 1);
             }
-            // If no photo is to be published, we publish the event
-            Log.d(TAG, "publishPhotos: photoCount = "+photoCount);
-            if (photoCount == event.getPhotos().size()) mode.postValue(EventMode.PUBLISH);
-        } else  //if there is no photo for the event
-                // we publish the event
-                mode.postValue(EventMode.PUBLISH);
+        }
     }
 
-
-    // Upload a picture in FireBase
+    // 2_ Upload a picture in FireBase
     private void uploadPhotoInFireBase(int i) {
         Log.d(TAG, "uploadPhotoInFireBase: ");
 
         Uri photoURI;
 
-        if (getCurrentEvent().getValue().getPhotos().get(i).indexOf("content://") != -1){
+        // If URI contains "content://", then parse URI
+        if (getCurrentEvent().getValue().getPhotos().get(i).contains("content://")){
             photoURI = Uri.parse(getCurrentEvent().getValue().getPhotos().get(i));
         } else{
             String photoPath = getCurrentEvent().getValue().getPhotos().get(i);
@@ -439,18 +476,11 @@ public class EventViewModel extends ViewModel {
                                 // Update photo Reference in Current Event
                                 getCurrentEvent().getValue().getPhotos().set(i, photoStringLink);
 
-                                // If this is the last updated photo
-                                // then we can create/update the event in Room and FireStore
-                                if (i == getCurrentEvent().getValue().getPhotos().size() -1) {
+                                // The number of processed photos is increased by 1
+                                mNumberPhotoProcessed.setValue(mNumberPhotoProcessed.getValue() + 1);
 
-                                    // Update Event in Room
-                                    executor.execute(() -> {
-                                        eventDataRoomSource.updateEvent(getCurrentEvent().getValue());
-
-                                        mode.postValue(EventMode.PUBLISH);
-
-                                    });
-                                }
+                                Log.d(TAG, "onSuccess()  mNumberPhotoProcessed = "
+                                        +mNumberPhotoProcessed.getValue());
                             }
                         });
                     }

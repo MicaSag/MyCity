@@ -1,93 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="@dimen/nav_header_height"
-    android:background="@color/colorAccent"
-    android:scaleX="1.3"
-    android:scaleY="1.3">
+    android:background="@drawable/screen_town_hall"
+    android:scaleX="1"
+    android:scaleY="1"
+    android:orientation="vertical">
 
-        <!-- BACKGROUND PICTURE -->
+    <!-- MAIN CONTAINER -->
+
+    <!-- APP Name -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center_horizontal|center_vertical"
+        android:text="City"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="20dip"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <!-- Photo Profile User -->
         <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/screen_town_hall"
-            android:contentDescription="Town Hall Picture" />
+            android:id="@+id/navigation_header_user_photo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dip"
+            android:layout_weight="0.70"
+            android:background="@drawable/baseline_portrait_black_48"
+            android:backgroundTint="@color/colorBackground"/>
 
-        <!-- MAIN CONTAINER -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="15dip"
-            android:background="@color/alpha_grey"
-            android:gravity="center"
+            android:layout_weight="0.3"
             android:orientation="vertical">
 
-            <!-- APP Name -->
+            <!-- User Name -->
             <TextView
+                android:id="@+id/navigation_header_user_name"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="center_horizontal|center_vertical"
-                android:layout_marginTop="50dip"
-                android:textSize="30sp"
-                android:textStyle="bold"
-                android:textColor="@android:color/white"
-                android:text="City"/>
+                android:ellipsize="end"
+                android:gravity="bottom"
+                android:hint="User Name"
+                android:maxLines="1"
+                android:textColor="@color/colorBackground"
+                android:textSize="14sp"
+                android:textStyle="bold" />
 
-            <LinearLayout
+            <!-- User Email -->
+            <TextView
+                android:id="@+id/navigation_header_user_email"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_margin="20dip"
-                android:orientation="horizontal">
-
-                <!-- Photo Profile User -->
-                <ImageView
-                    android:id="@+id/navigation_header_user_photo"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="5dip"
-                    android:layout_weight="0.70"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:layout_weight="0.3">
-
-                    <!-- User Name -->
-                    <TextView
-                        android:id="@+id/navigation_header_user_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="bottom"
-                        android:textStyle="bold"
-                        android:textSize="12sp"
-                        android:maxLines="1"
-                        android:ellipsize="end"
-                        android:textColor="@android:color/white"
-                        android:hint="User Name"/>
-
-                    <!-- User Email -->
-                    <TextView
-                        android:id="@+id/navigation_header_user_email"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textSize="12sp"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:textColor="@android:color/white"
-                        android:hint="email"/>
-
-                </LinearLayout>
-
-            </LinearLayout>
+                android:ellipsize="end"
+                android:hint="email"
+                android:maxLines="1"
+                android:textColor="@color/colorBackground"
+                android:textSize="14sp" />
 
         </LinearLayout>
 
-</FrameLayout>
+    </LinearLayout>
+
+</LinearLayout>

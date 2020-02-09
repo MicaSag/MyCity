@@ -5,15 +5,19 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/activity_real_estate_manager_map"
+            android:id="@+id/activity_town_hall_sign_out_user"
             android:icon="@drawable/baseline_perm_identity_black_24"
-            android:title="Location" />
+            android:title="Sign Out" />
+        <item
+            android:id="@+id/activity_town_hall_delete_user"
+            android:icon="@drawable/baseline_delete_black_24"
+            android:title="Delete account" />
     </group>
     <group android:id="@+id/group_article_search">
         <item
             android:id="@+id/activity_real_estate_manager_search"
             android:icon="@drawable/com_facebook_send_button_icon"
-            android:title="Search Articles" />
+            android:title="To Do ..." />
     </group>
 
 </menu>

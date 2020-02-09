@@ -1,24 +1,29 @@
 package com.lastproject.mycity.controllers.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 
+import com.bumptech.glide.Glide;
+import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
 import com.lastproject.mycity.R;
 import com.lastproject.mycity.adapter.eventslist.EventsListAdapter;
@@ -34,7 +39,6 @@ import com.lastproject.mycity.repositories.CurrentEventIDDataRepository;
 import com.lastproject.mycity.utils.Toolbox;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 
 /**
  * Created by Michaël SAGOT on 28/12/2019.
@@ -52,6 +56,11 @@ public class TownHallActivity extends BaseActivity implements  NavigationView.On
     // Fragments Declarations
     private TownHallFragment mTownHallFragment;
     private EventsListFragment mEventsListFragment;
+
+    // For data
+    // Identify each Http Request
+    private static final int SIGN_OUT_TASK = 10;
+    private static final int DELETE_USER_TASK = 20;
 
 
     // Adding @BindView in order to indicate to ButterKnife to get & serialise it
@@ -200,6 +209,25 @@ public class TownHallActivity extends BaseActivity implements  NavigationView.On
     // Configure NavigationView
     private void configureNavigationView() {
         Log.d(TAG, "configureNavigationView: ");
+
+        // =>> Fill in user data
+        View navigationHeader = mNavigationView.inflateHeaderView(R.layout.activity_mayor_nav_view_header);
+        ImageView userPhotoIV = navigationHeader.findViewById(R.id.navigation_header_user_photo);
+        TextView userNameTV = navigationHeader.findViewById(R.id.navigation_header_user_name);
+        TextView userEmailTV = navigationHeader.findViewById(R.id.navigation_header_user_email);
+        // Fill User Photo
+        String userPhoto = mTownHallViewModel.getCurrentUser().getUrlPicture();
+        if (userPhoto !=null ) {
+            Log.d(TAG, "configureNavigationView: Display User Photo");
+            Glide.with(this).load(userPhoto).into(userPhotoIV);
+        }
+        // Fill User Name
+        String userName = mTownHallViewModel.getCurrentUser().getUserName();
+        userNameTV.setText(userName);
+        // Fill User Email
+        String userEmail = mTownHallViewModel.getCurrentUser().getEmail();
+        userEmailTV.setText(userEmail);
+
         // Subscribes to listen the navigationView
         mNavigationView.setNavigationItemSelectedListener(this);
         // Mark as selected the menu item
@@ -221,54 +249,41 @@ public class TownHallActivity extends BaseActivity implements  NavigationView.On
 
         // Handle Navigation Item Click
         int id = item.getItemId();
-/*
+
         switch (id) {
-            case R.id.activity_real_estate_manager_map:
-                Utils.startActivity(this,MapActivity.class);
+            case R.id.activity_town_hall_sign_out_user:
+                new AlertDialog.Builder(this)
+                        .setMessage("Sign Out ?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                signOutUserFromFireBase();
+                            }
+                        })
+                        .setNegativeButton("Cancel", null)
+                        .show();
                 break;
-            case R.id.activity_real_estate_manager_search:
-                // Create a intent for call Activity
-                Intent searchIntent = new Intent(this, SearchEstateActivity.class);
-                // Go to SearchEstateActivity
-                startActivityForResult(searchIntent, SEARCH_ACTIVITY_REQUEST_CODE);
+            case R.id.activity_town_hall_delete_user:
+                new AlertDialog.Builder(this)
+                        .setMessage("Delete your Account ?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                deleteUserFromFireBase();
+                            }
+                        })
+                        .setNegativeButton("Cancel", null)
+                        .show();
                 break;
             default:
                 break;
-        }*/
+        }
         // Close menu drawer
         this.mDrawerLayout.closeDrawer(GravityCompat.START);
 
         return true;
     }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        //Handle actions on menu items
-        /*switch (item.getItemId()) {
-            case R.id.menu_activity_real_estate_manager_search:
-                // Create a intent for call Activity
-                Intent searchIntent = new Intent(this, SearchEstateActivity.class);
 
-                // Go to SearchEstateActivity
-                startActivityForResult(searchIntent, SEARCH_ACTIVITY_REQUEST_CODE);
-                return true;
-            case R.id.menu_activity_real_estate_manager_edit:
-                // Create a intent for call Activity
-                Intent updateIntent = new Intent(this, UpdateEstateActivity.class);
-
-                // Go to CreateEstateActivity
-                startActivityForResult(updateIntent, UPDATE_ACTIVITY_REQUEST_CODE);
-                return true;
-            case R.id.menu_activity_real_estate_manager_add:
-                // Create a intent for call Activity
-                Intent createIntent = new Intent(this, CreateEstateActivity.class);
-
-                // Go to CreateEstateActivity
-                startActivityForResult(createIntent, CREATE_ACTIVITY_REQUEST_CODE);
-            default:
-                return super.onOptionsItemSelected(item);
-        }*/
-        return true;
-    }
     @Override
     public void onEventClick(Event event) {
         Log.d(TAG, "onEventClick: ");
@@ -280,5 +295,44 @@ public class TownHallActivity extends BaseActivity implements  NavigationView.On
                                     EventActivity.class,
                                     EventViewModel.MODE,
                                     EventViewModel.EventMode.VIEW.name());
+    }
+
+    // --------------------
+    // REST REQUESTS
+    // --------------------
+    // Create http requests (SignOut & Delete)
+
+    private void signOutUserFromFireBase(){
+        AuthUI.getInstance()
+                .signOut(this)
+                .addOnSuccessListener(this, this.updateUIAfterRESTRequestsCompleted(SIGN_OUT_TASK));
+    }
+
+    private void deleteUserFromFireBase(){
+        if (mTownHallViewModel.getCurrentUser() != null) {
+            AuthUI.getInstance()
+                    .delete(this)
+                    .addOnSuccessListener(this, this.updateUIAfterRESTRequestsCompleted(DELETE_USER_TASK));
+        }
+    }
+
+    // Create OnCompleteListener called after tasks ended
+    private OnSuccessListener<Void> updateUIAfterRESTRequestsCompleted(final int origin){
+        return new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                switch (origin){
+                    case SIGN_OUT_TASK:
+                    case DELETE_USER_TASK:
+                        Intent i = new Intent(TownHallActivity.this, AuthenticationActivity.class);
+                        // set the new task and clear flags
+                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(i);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        };
     }
 }

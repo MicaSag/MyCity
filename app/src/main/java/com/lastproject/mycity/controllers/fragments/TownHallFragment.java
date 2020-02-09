@@ -1,6 +1,7 @@
 package com.lastproject.mycity.controllers.fragments;
 
 
+import android.Manifest;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
@@ -22,10 +24,13 @@ import com.lastproject.mycity.controllers.activities.TownHallActivity;
 import com.lastproject.mycity.controllers.activities.WebViewActivity;
 import com.lastproject.mycity.firebase.database.firestore.models.TownHallFireStore;
 import com.lastproject.mycity.models.views.TownHallViewModel;
+import com.lastproject.mycity.utils.Toolbox;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
 
 /**
  * Created by Michaël SAGOT on 28/12/2019.
@@ -37,6 +42,7 @@ public class TownHallFragment extends Fragment {
 
     // Adding @BindView in order to indicate to ButterKnife to get & serialise it
     // -- LAYOUT : fragment_town_hall
+    public @BindView(R.id.fragment_town_hall_root) ConstraintLayout mRoot;
     public @BindView(R.id.fragment_town_hall_name) TextView mName;
     public @BindView(R.id.fragment_town_hall_mcv_hours) MaterialCardView mMCV_Hours;
     // -- LAYOUT : mcv_hours
@@ -62,6 +68,12 @@ public class TownHallFragment extends Fragment {
 
     // Declare ViewModel
     private TownHallViewModel mTownHallViewModel;
+
+    // For use CALL_PHONE permission
+    // 1 _ Permission name
+    public static final String PERMISSION_CALL_PHONE = Manifest.permission.CALL_PHONE;
+    // 2 _ Request Code
+    public static final int RC_CALL_PHONE_PERMISSION = 1;
 
     public TownHallFragment() {
         // Required empty public constructor
@@ -108,6 +120,18 @@ public class TownHallFragment extends Fragment {
         mTownHallViewModel.getCurrentTownHall().observe(getActivity(), this::updateUI);
     }
     // ---------------------------------------------------------------------------------------------
+    //                                   REQUEST PERMISSION
+    // ---------------------------------------------------------------------------------------------
+    /**
+     * Method to ask the user for permission to make calls
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        // Forward results to EasyPermissions
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+    // ---------------------------------------------------------------------------------------------
     //                                          ACTIONS
     // ---------------------------------------------------------------------------------------------
     @OnClick(R.id.fragment_town_hall_url)
@@ -119,6 +143,45 @@ public class TownHallFragment extends Fragment {
         Log.d(TAG, "onUrlClick: mUrlAddress.getText() = "+mUrl.getText().toString());
         myIntent.putExtra(WebViewActivity.KEY_TOWN_HALL_WEB_SITE_URL, mUrl.getText().toString());
         this.startActivity(myIntent);
+    }
+
+    @OnClick(R.id.fragment_town_hall_phone)
+    // Ask permission when accessing to this listener
+    @AfterPermissionGranted(RC_CALL_PHONE_PERMISSION)
+    public void onPhoneClick() {
+        Log.d(TAG, "onPhoneClick: ");
+        // Action only possible if an internet connection is available
+        if (Toolbox.isInternetAvailable(getActivity())) {
+            if (!EasyPermissions.hasPermissions(getActivity(), PERMISSION_CALL_PHONE)) {
+                EasyPermissions.requestPermissions(this, "Permission CALL_PHONE", RC_CALL_PHONE_PERMISSION, PERMISSION_CALL_PHONE);
+                return;
+            }
+            try {
+                Log.d(TAG, "submitCallButton: Permission GRANTED :-)");
+                Intent callIntent = new Intent(Intent.ACTION_CALL);
+                String phoneNumber = "tel:" + mTownHallViewModel.getCurrentTownHall().getValue()
+                        .getPhoneNumber().replaceAll(" ", "");
+                Log.d(TAG, "submitCallButton: phoneNumber = " + phoneNumber);
+                callIntent.setData(Uri.parse(phoneNumber));
+                startActivity(callIntent);
+            } catch (SecurityException e) {
+                Log.d(TAG, "submitCallButton: EXCEPTION ALERT ALERT ALERT");
+            }
+        }else{Toolbox.showSnackBar(mRoot,getString(R.string.common_not_network));}
+    }
+
+    @OnClick(R.id.fragment_town_hall_email)
+    public void onEmailClick(View v) {
+        Log.d(TAG, "onEmailClick: ");
+        Log.d(TAG, "onEmailClick: email = "+mTownHallViewModel.getCurrentTownHall().getValue().getEmail());
+
+        Intent intent = new Intent(Intent.ACTION_SENDTO);
+        intent.setData(Uri.parse("mailto:"+mTownHallViewModel.getCurrentTownHall().getValue().getEmail())); // only email apps should handle this
+        intent.putExtra(Intent.EXTRA_EMAIL, mTownHallViewModel.getCurrentTownHall().getValue().getEmail());
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Information request");
+        if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+            startActivity(intent);
+        }
     }
     // ---------------------------------------------------------------------------------------------
     //                                             UI

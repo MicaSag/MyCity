@@ -5,7 +5,8 @@
     <!-- Using by Network Provider Wifi or Data phone -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- Using By Network Provider and Gps Provider -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!-- Using for make internet requests (necessary for Glide) -->
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- Using for make internet requests -->
+    <uses-permission android:name="android.permission.CALL_PHONE" /> <!-- Using for Call Number -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- Used to store files -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -21,13 +22,16 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".controllers.activities.TownHallSelectionActivity"></activity>
         <!-- GOOGLE Maps APi Key -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="${googleMapsApiKey}" /> <!-- 0 => ENTRY Activity : AUTHENTICATION -->
+            android:value="${googleMapsApiKey}" />
+
+        <!-- 0 => ENTRY Activity : AUTHENTICATION -->
         <activity
             android:name=".controllers.activities.AuthenticationActivity"
             android:theme="@style/AppThemeFirebase">
@@ -36,10 +40,21 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- 1 => TOWN HALL Activity -->
+        </activity>
+
+        <!-- 1 => TOWN HALL Activity -->
         <activity
             android:name=".controllers.activities.TownHallActivity"
-            android:label="Town Hall" /> <!-- 3 => EVENTS Activity -->
+            android:label="Town Hall"
+            android:parentActivityName=".controllers.activities.AuthenticationActivity">
+
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".controllers.activities.AuthenticationActivity" />
+        </activity>
+
+        <!-- 3 => EVENTS Activity -->
         <!-- 3.1 => A child of the Events Activity -->
         <!-- EVENT Activity -->
         <activity
@@ -51,7 +66,9 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".controllers.activities.TownHallActivity" />
-        </activity> <!-- FULL SCREEN IMAGE Activity -->
+        </activity>
+
+        <!-- FULL SCREEN IMAGE Activity -->
         <activity
             android:name=".controllers.activities.FullScreenImageActivity"
             android:label="Full Screen Image"
@@ -62,6 +79,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".controllers.activities.EventActivity" />
         </activity>
+
         <!-- WEB VIEW Activity -->
         <!-- A child of the Welcome Activity -->
         <activity

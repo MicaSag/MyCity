@@ -6,13 +6,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
@@ -29,8 +28,6 @@ import com.lastproject.mycity.models.Event;
 import com.lastproject.mycity.models.views.EventViewModel;
 import com.lastproject.mycity.repositories.CurrentEventIDDataRepository;
 
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -45,6 +42,9 @@ public class EventActivity extends AppCompatActivity {
 
     // For toolBar configuration
     protected ActionBar mActionBar;
+
+    // For Upload Wait
+    private AlertDialog mAlertDialog;
 
     // Declare EventViewModel
     private EventViewModel mEventViewModel;
@@ -118,6 +118,7 @@ public class EventActivity extends AppCompatActivity {
 
                     case FINISH:
                         Snackbar.make(mConstraintLayout,"Finish",Snackbar.LENGTH_LONG).show();
+                        mAlertDialog.cancel();
                         finish();
                         break;
                 }
@@ -325,6 +326,11 @@ public class EventActivity extends AppCompatActivity {
 
             case R.id.menu_activity_event_PUBLISH:
                 Log.d(TAG, "onOptionsItemSelected: PUBLISH");
+
+                mAlertDialog = new AlertDialog.Builder(this)
+                        .setMessage("UPLOAD IN PROGRESS")
+                        .setCancelable(false)
+                        .show();
 
                 // Create/Update Event in FireBase
                 mEventViewModel.publishPhotos();
