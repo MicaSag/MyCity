@@ -10,7 +10,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
@@ -112,11 +111,8 @@ public class AuthenticationActivity  extends AppCompatActivity
                                 break;
 
                             case FINISH_ACTIVITY:
-                                /*Intent intent = new Intent();
-                                intent.putExtra(BUNDLE_UPDATE_OK, true);
-                                setResult(RESULT_OK, intent);
                                 // Close Activity and go back to previous activity
-                                finish();*/
+                                finish();
                                 break;
                         }
                     }

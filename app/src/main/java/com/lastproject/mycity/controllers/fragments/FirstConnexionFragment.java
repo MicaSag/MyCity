@@ -151,7 +151,7 @@ public class FirstConnexionFragment extends Fragment {
             getInseeList();
         } else{
             mValidateBt.setEnabled(false);
-            mAutoCityList.setText("bad research");
+            mAutoCityList.setText(getString(R.string.bad_research));
         }
     }
 
@@ -289,9 +289,9 @@ public class FirstConnexionFragment extends Fragment {
         // Displays in the comboBox the number of cities found
         if (inseeList.size() > 0) {
             mAutoCityList.setEnabled(true);
-            mAutoCityList.setText(inseeList.size() + " city found");
+            mAutoCityList.setText(inseeList.size() + getString(R.string.city_found));
         }else{
-            mAutoCityList.setText("no city found");
+            mAutoCityList.setText(getString(R.string.no_city_found));
             mValidateBt.setEnabled(false);
         }
 

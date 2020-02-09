@@ -41,7 +41,7 @@
                         android:orientation="vertical"
                         >
 
-                        <!-- FRAGMENT FIRST CONNEXION/TOWN HALL -->
+                        <!-- FRAGMENT TOWN HALL -->
                         <FrameLayout
                             android:id="@+id/activity_town_hall_fragment_details"
                             android:layout_width="match_parent"

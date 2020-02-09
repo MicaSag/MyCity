@@ -40,7 +40,7 @@ public class TownHallSelectionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        this.setContentView(R.layout.activity_town_hall_selection);
+        this.setContentView(R.layout.activity_townhall_selection);
 
         // Get & serialise all views
         ButterKnife.bind(this);
@@ -71,16 +71,16 @@ public class TownHallSelectionActivity extends AppCompatActivity {
                         switch (viewAction) {
 
                             case TOWN_HALL_NOT_FOUND:
-                                Toolbox.showSnackBar(mConstraintLayout,"No Town Hall found in FireStore Database");
+                                Toolbox.showSnackBar(mConstraintLayout,getString(R.string.no_town_hall_fs));
                                 break;
 
                             case CALL_TOWN_HALL_ACTIVITY:
-                                Toolbox.showSnackBar(mConstraintLayout,"CALL_TOWN_HALL_ACTIVITY");
+                                Toolbox.showSnackBar(mConstraintLayout,getString(R.string.call_town_hall_activity));
                                 startActivity(TownHallActivity.class);
                                 break;
 
                             case FIRE_STORE_ERROR:
-                                Toolbox.showSnackBar(mConstraintLayout,"error during the search of the town hall in the fireStore base");
+                                Toolbox.showSnackBar(mConstraintLayout,getString(R.string.fs_error));
                                 break;
 
                             case FINISH_ACTIVITY:

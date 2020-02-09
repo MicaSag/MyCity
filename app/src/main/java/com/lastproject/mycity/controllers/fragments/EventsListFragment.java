@@ -116,7 +116,7 @@ public class EventsListFragment extends Fragment {
                 .get(ListEventsViewModel.class);
 
         mListEventsViewModel.getViewAction().
-                observe(this,new Observer<ListEventsViewModel.ViewAction>() {
+                observe(getActivity(),new Observer<ListEventsViewModel.ViewAction>() {
                     @Override
                     public void onChanged (ListEventsViewModel.ViewAction viewAction){
                         if (viewAction == null) {
@@ -143,10 +143,10 @@ public class EventsListFragment extends Fragment {
         mListEventsViewModel.getAllEventsRoomByInseeID(
                 mListEventsViewModel.getCurrentTownHall().getValue().getInseeID(),
                 mListEventsViewModel.getCurrentUser().getUserID())
-                .observe(this, this::updateEventsList);
+                .observe(getActivity(), this::updateEventsList);
 
         // Observe a change of Current Event (for update selected event)
-        CurrentEventIDDataRepository.getInstance().getCurrentEventID().observe(this, this::updateEventsList);
+        CurrentEventIDDataRepository.getInstance().getCurrentEventID().observe(getViewLifecycleOwner(), this::updateEventsList);
     }
     // --------------------------------------------------------------------------------------------
     //                                    CONFIGURATION
@@ -218,7 +218,7 @@ public class EventsListFragment extends Fragment {
         Log.d(TAG, "configureEventMessage: ");
 
         // The information text changes depending on the presence or not of upcoming events
-        if (eventListSize == 0) mInformation.setText("aucun événement a venir pour le moment");
-        else mInformation.setText(eventListSize+" événements a venir");
+        if (eventListSize == 0) mInformation.setText(getString(R.string.no_upcoming_event));
+        else mInformation.setText(eventListSize+" "+getString(R.string.future_event));
     }
 }

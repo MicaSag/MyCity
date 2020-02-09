@@ -41,7 +41,7 @@ public class TownHallFragment extends Fragment {
     private static final String TAG = TownHallFragment.class.getSimpleName();
 
     // Adding @BindView in order to indicate to ButterKnife to get & serialise it
-    // -- LAYOUT : fragment_town_hall
+    // -- LAYOUT : fragment_townhall
     public @BindView(R.id.fragment_town_hall_root) ConstraintLayout mRoot;
     public @BindView(R.id.fragment_town_hall_name) TextView mName;
     public @BindView(R.id.fragment_town_hall_mcv_hours) MaterialCardView mMCV_Hours;
@@ -97,7 +97,7 @@ public class TownHallFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_town_hall, container, false);
+        View view =  inflater.inflate(R.layout.fragment_townhall, container, false);
 
         // Initialize ButterKnife
         ButterKnife.bind(this, view);

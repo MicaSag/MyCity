@@ -1,30 +1,36 @@
 <resources>
 
-    <!-- Manifest -->
-    <string name="app_name">My City</string>
-
-    <!-- FACEBOOK PURPOSE -->
-    <string name="facebook_application_id" translatable="false">776394502877839</string>
-    <string name="facebook_login_protocol_scheme" translatable="false">fb776394502877839</string>
-
-    <!-- Common TEXT -->
+    <!-- Network Connection -->
     <string name="common_not_network">Not Network Connection</string>
 
     <!-- AUTHENTICATION ACTIVITY -->
+    <!-- TexView -->
     <string name="main_activity_description">My City in my pocket</string>
     <string name="email_login">Sign in with Email</string>
     <string name="facebook_login">Sign in with Facebook</string>
     <string name="twitter_login">Sign in with Twitter</string>
     <string name="google_login">Sign in with Google</string>
     <string name="error_not_connected">You need to log in !</string>
-    <string name="error_authentication_canceled">Authentication canceled&#8230;</string>
+    <!-- Error Authentication -->
+    <string name="error_authentication_canceled">Authentication canceled …</string>
     <string name="error_no_internet">No Internet connection !</string>
     <string name="error_provider">Provider error !</string>
-    <string name="error_unknown_error">An unknown error occurred&#8230;</string>
-    <string name="error_developer_error">Developer Error&#8230;</string>
+    <string name="error_unknown_error">An unknown error occurred …</string>
+    <string name="error_developer_error">Developer Error …</string>
+    <!-- Successful Authentication -->
     <string name="connection_succeed">Successful authentication !</string>
-    <string name="button_login_text_logged">View Profile</string>
-    <string name="button_login_text_not_logged">Connection</string>
+
+    <!-- Registration : UserProfileChoiceDialog FRAGMENT -->
+    <string name="registration_succeed">Successful registration !</string>
+    <string name="registration_mayor_update_user_failed">Mayor update User FAILED !</string>
+    <string name="registration_mayor_wrong_code_id">WRONG Mayor Code ID !</string>
+    <string name="registration_error">Error registration !</string>
+    <string name="mayor_id_wrong">Wrong Mayor ID !</string>
+    <string name="citizen">Citizen</string>
+    <string name="mayor">Mayor</string>
+    <string name="mayor_s_id">mayor\'s ID</string>
+    <string name="create">CREATE</string>
+    <string name="who_are_you">Who are you ?</string>
 
     <!-- FIRST CONNEXION ACTIVITY -->
     <string name="city_choice_mayor_message_1">Hello Mayor, is this your first connection?</string>
@@ -32,28 +38,83 @@
     <string name="city_choice_citizen_message_1">Hello Citizen, is this your first connection?</string>
     <string name="city_choice_citizen_message_2">The first thing to do is to choose your city of residence.</string>
     <string name="city_choice_message_3">Enter it below.</string>
+    <string name="no_town_hall_fs">No Town Hall found in FireStore Database</string>
+    <string name="call_town_hall_activity">CALL_TOWN_HALL_ACTIVITY</string>
+    <string name="fs_error">error during the search of the town hall in the fireStore base</string>
+    <string name="bad_research">bad research</string>
+    <string name="city_found">city found</string>
+    <string name="no_city_found">no city found</string>
+    <string name="city">City</string>
+    <string name="search">SEARCH</string>
+    <string name="city_list">City list</string>
+    <string name="validate">VALIDATE</string>
 
-    <!-- Registration -->
-    <string name="registration_succeed">Successful registration !</string>
-    <string name="registration_mayor_update_user_failed">Mayor update User FAILED !</string>
-    <string name="registration_mayor_wrong_code_id">WRONG Mayor Code ID !</string>
-    <string name="registration_error">Error registration !</string>
-    <string name="mayor_id_wrong">Wrong Mayor ID !</string>
+    <!-- HOURS Material Card View -->
+    <string name="opening_hours">Opening hours</string>
+    <string name="hours_1">Hours 1</string>
+    <string name="hours_2">Hours 2</string>
+    <string name="hours_3">Hours 3</string>
+    <string name="hours_4">Hours 4</string>
+    <string name="hours_5">Hours 5</string>
+    <string name="hours_6">Hours 6</string>
+    <string name="hours_7">Hours 7</string>
 
-    <!-- Used in NavigationDrawer -->
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <!-- ADDRESS Material Card View -->
+    <string name="contact_information">Contact information</string>
+    <string name="address_line_1">address line 1</string>
+    <string name="address_line_2">address line 2</string>
+    <string name="address_line_3">address line 3</string>
+    <string name="address_line_4">address line 4</string>
+    <string name="email">email</string>
+    <string name="phone">phone</string>
+    <string name="url">url</string>
 
-    <!-- Used in events list view holder -->
-    <string name="start_date_label">Start Date :</string>
-    <string name="end_date_label">End Date   :</string>
+    <!-- == TOWN HALL ACTIVITY == -->
+    <!-- 1_ TOWN HALL FRAGMENT -->
+    <string name="name_municipality">name of the municipality</string>
+    <!-- 2_ EVENTS LIST FRAGMENT -->
+    <string name="no_upcoming_event">No upcoming event at the moment</string>
+    <string name="future_event"> upcoming event(s)</string>
+    <string name="start_date_label">Start Date :&#160;</string>
+    <string name="end_date_label">End Date&#160;&#160;&#160;:&#160;</string>
     <string name="start_date_hint_value">value Date</string>
     <string name="end_date_hint_value">value date</string>
     <string name="title_event_hint_value">EVENT TITLE</string>
 
+    <!-- == EVENT ACTIVITY && EVENT VIEW/EVENT CREATE == -->
+    <string name="view_mode">View MODE</string>
+    <string name="create_update_mode">Create/Update MODE</string>
+    <string name="delete_mode">Delete MODE</string>
+    <string name="publish_mode">PUBLISH Event</string>
+    <string name="finish">Finish</string>
+    <string name="location_title">Location</string>
+    <string name="number_and_the_way_of_wording">number and the way of wording</string>
+    <string name="additional_address">additional address</string>
+    <string name="postal_code">postal code</string>
+    <string name="hint_city">city</string>
+    <string name="hint_state">state</string>
+    <string name="hint_description_text">Description text</string>
+    <string name="hint_description">Description</string>
+    <string name="event_title">EVENT TITLE</string>
+    <string name="upload_progress">UPLOAD IN PROGRESS …</string>
+
+    <!-- Used in NavigationDrawer -->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="delete_account">Delete account</string>
+    <string name="to_do">To Do …</string>
+
+    <!-- ======================================================================================= -->
+    <!-- Manifest -->
+    <string name="app_name">My City</string>
+
     <!-- Display Modes -->
     <bool name="is_w1280">false</bool>
 
+    <!-- FACEBOOK PURPOSE -->
+    <string name="facebook_application_id" translatable="false">776394502877839</string>
+    <string name="facebook_login_protocol_scheme" translatable="false">fb776394502877839</string>
     <!-- FONT ID -->
     <string name="Roboto_Bold">Roboto-Bold</string>
     <string name="Roboto_Medium">Roboto-Medium</string>
@@ -62,13 +123,5 @@
 
     <!-- For Animation -->
     <string name="animation_full_screen_image" translatable="false">AnimationFullScreenImage</string>
-    <string name="contact_information">contact information</string>
-    <string name="address_line_1">address line 1</string>
-    <string name="address_line_2">address line 2</string>
-    <string name="address_line_3">address line 3</string>
-    <string name="address_line_4">address line 4</string>
-    <string name="email">email</string>
-    <string name="phone">phone</string>
-    <string name="url">url</string>
 
 </resources>

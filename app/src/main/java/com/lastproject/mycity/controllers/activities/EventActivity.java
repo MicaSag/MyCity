@@ -94,30 +94,30 @@ public class EventActivity extends AppCompatActivity {
 
                 switch (eventMode) {
                     case VIEW:
-                        Snackbar.make(mConstraintLayout,"View MODE",Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(mConstraintLayout,getString(R.string.view_mode),Snackbar.LENGTH_LONG).show();
                         // Configure Mode
                         configureMode_VIEW();
                         break;
 
                     case CREATE:
                     case UPDATE:
-                        Snackbar.make(mConstraintLayout,"Create/Update MODE",Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(mConstraintLayout,getString(R.string.create_update_mode),Snackbar.LENGTH_LONG).show();
                         // Configure Mode
                         configureMode_CREATEorUPDATE();
                         break;
 
                     case DELETE:
-                        Snackbar.make(mConstraintLayout,"Delete MODE",Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(mConstraintLayout,getString(R.string.delete_mode),Snackbar.LENGTH_LONG).show();
                         finish();
                         break;
 
                     case PUBLISH:
-                        Snackbar.make(mConstraintLayout,"PUBLISH Event",Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(mConstraintLayout,getString(R.string.publish_mode),Snackbar.LENGTH_LONG).show();
                         mEventViewModel.publishEvent(mEventViewModel.getCurrentEvent().getValue());
                         break;
 
                     case FINISH:
-                        Snackbar.make(mConstraintLayout,"Finish",Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(mConstraintLayout,getString(R.string.finish),Snackbar.LENGTH_LONG).show();
                         mAlertDialog.cancel();
                         finish();
                         break;
@@ -328,7 +328,7 @@ public class EventActivity extends AppCompatActivity {
                 Log.d(TAG, "onOptionsItemSelected: PUBLISH");
 
                 mAlertDialog = new AlertDialog.Builder(this)
-                        .setMessage("UPLOAD IN PROGRESS")
+                        .setMessage(getString(R.string.upload_progress))
                         .setCancelable(false)
                         .show();
 

@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:text="Who are you ?"
+        android:text="@string/who_are_you"
         android:textSize="16sp"
         android:maxLines="1"
         android:ellipsize="end"
@@ -42,14 +42,14 @@
             android:id="@+id/fragment_user_profile_choice_rb_citizen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Citizen"/>
+            android:text="@string/citizen"/>
 
         <!-- Mayor Choice -->
         <RadioButton
             android:id="@+id/fragment_user_profile_choice_rb_mayor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Mayor"/>
+            android:text="@string/mayor"/>
     </RadioGroup>
 
     <!-- Mayor Profile complements -->
@@ -61,7 +61,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
-        android:hint="mayor's ID"
+        android:hint="@string/mayor_s_id"
         app:helperText="*ID Required"
         app:helperTextEnabled="true"
 
@@ -83,7 +83,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="number"
-            android:hint="mayor's ID"
+            android:hint="@string/mayor_s_id"
             android:maxLines="1" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -100,6 +100,6 @@
 
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
-        android:text="CREATE"/>
+        android:text="@string/create"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

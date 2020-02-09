@@ -103,7 +103,7 @@
                 android:layout_marginStart="32dp"
                 android:layout_marginEnd="32dp"
                 style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
-                android:hint="City"
+                android:hint="@string/city"
                 app:layout_constraintEnd_toEndOf="@+id/fragment_first_connexion_guideline_vertical_02"
                 app:layout_constraintStart_toStartOf="@+id/fragment_first_connexion_guideline_vertical_01"
                 app:layout_constraintTop_toBottomOf="@+id/fragment_first_connexion_message_3">
@@ -126,7 +126,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="32dp"
                 android:layout_marginEnd="32dp"
-                android:text="SEARCH"
+                android:text="@string/search"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/fragment_first_connexion_tf_city_value" />
@@ -141,7 +141,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="32dp"
                 android:layout_marginEnd="32dp"
-                android:hint="City list"
+                android:hint="@string/city_list"
                 app:layout_constraintEnd_toEndOf="@+id/fragment_first_connexion_guideline_vertical_02"
                 app:layout_constraintStart_toStartOf="@+id/fragment_first_connexion_guideline_vertical_01"
                 app:layout_constraintTop_toBottomOf="@+id/fragment_first_connexion_bt_search">
@@ -165,7 +165,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="32dp"
                 android:layout_marginEnd="32dp"
-                android:text="VALIDATE"
+                android:text="@string/validate"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/fragment_first_connexion_tf_city_list" />

@@ -7,17 +7,17 @@
         <item
             android:id="@+id/activity_town_hall_sign_out_user"
             android:icon="@drawable/baseline_perm_identity_black_24"
-            android:title="Sign Out" />
+            android:title="@string/sign_out" />
         <item
             android:id="@+id/activity_town_hall_delete_user"
             android:icon="@drawable/baseline_delete_black_24"
-            android:title="Delete account" />
+            android:title="@string/delete_account" />
     </group>
     <group android:id="@+id/group_article_search">
         <item
             android:id="@+id/activity_real_estate_manager_search"
             android:icon="@drawable/com_facebook_send_button_icon"
-            android:title="To Do ..." />
+            android:title="@string/to_do" />
     </group>
 
 </menu>
