@@ -25,7 +25,7 @@
         android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".controllers.activities.TownHallSelectionActivity"></activity>
+
         <!-- GOOGLE Maps APi Key -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -40,6 +40,13 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <!-- 0.5 => TOWN HALL SELECTION Activity -->
+        <activity android:name=".controllers.activities.TownHallSelectionActivity"
+            android:label="Town Hall Selection"
+            android:parentActivityName=".controllers.activities.AuthenticationActivity">
+
         </activity>
 
         <!-- 1 => TOWN HALL Activity -->
@@ -91,6 +98,18 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".controllers.activities.TownHallActivity" />
+        </activity>
+
+        <!-- MAP Activity -->
+        <activity android:name=".controllers.activities.MapActivity"
+            android:label="Map"
+            android:parentActivityName=".controllers.activities.TownHallActivity">
+
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".controllers.activities.TownHallActivity" />
+
         </activity>
 
         <!-- FOR SAVE FILES -->

@@ -31,7 +31,7 @@ public class TestData {
                 "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/brocante1/room_brocante1_02.jpg\"," +
                 "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/brocante1/room_brocante1_03.jpg\"]");
         contentValues.put("location", "");
-        contentValues.put("address", Arrays.asList("\"3 rue de la chesnaie\"", "\"\"", "\"Cagneux\"", "\"Bailleval\"", "\"France\"").toString());
+        contentValues.put("address", Arrays.asList("\"10 rue Jacques Isoré\"", "\"\"", "\"\"", "\"Bailleval\"", "\"France\"").toString());
         contentValues.put("startDate", "01/10/2020");
         contentValues.put("endDate", "04/10/2020");
         contentValues.put("userID", userID);
@@ -62,7 +62,7 @@ public class TestData {
                 "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/marchenoel1/room_marchenoel1_06.jpg\"," +
                 "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/marchenoel1/room_marchenoel1_07.jpg\"]");
         contentValues.put("location", "");
-        contentValues.put("address", Arrays.asList("\"3 rue de la chesnaie\"", "\"\"", "\"Cagneux\"", "\"Bailleval\"", "\"France\"").toString());
+        contentValues.put("address", Arrays.asList("\"15 rue de la fontaine Tartarin\"", "\"\"", "\"\"", "\"Bailleval\"", "\"France\"").toString());
         contentValues.put("startDate", "02/10/2020");
         contentValues.put("endDate", "06/10/2020");
         contentValues.put("canceled", false);
@@ -88,7 +88,7 @@ public class TestData {
                 "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/loto1/room_loto1_03.jpg\"," +
                 "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/loto1/room_loto1_04.jpg\"," +
                 "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/loto1/room_loto1_05.jpg\"]");
-        contentValues.put("address", Arrays.asList("\"3 rue de la chesnaie\"", "\"\"", "\"Cagneux\"", "\"Bailleval\"", "\"France\"").toString());
+        contentValues.put("address", Arrays.asList("\"17 rue du Grand Aulnois\"", "\"\"", "\"\"", "\"Bailleval\"", "\"France\"").toString());
         contentValues.put("startDate", "12/10/2020");
         contentValues.put("endDate", "16/10/2020");
         contentValues.put("canceled", false);
@@ -114,7 +114,7 @@ public class TestData {
                 "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/velo1/room_velo1_03.jpg\"," +
                 "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/velo1/room_velo1_04.jpg\"," +
                 "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/velo1/room_velo1_05.jpg\"]");
-        contentValues.put("address", Arrays.asList("\"3 rue de la chesnaie\"", "\"\"", "\"Cagneux\"", "\"Bailleval\"", "\"France\"").toString());
+        contentValues.put("address", Arrays.asList("\"28 rue des Boues\"", "\"\"", "\"\"", "\"Bailleval\"", "\"France\"").toString());
         contentValues.put("startDate", "02/10/2021");
         contentValues.put("endDate", "06/11/2021");
         contentValues.put("canceled", false);
@@ -139,7 +139,7 @@ public class TestData {
                 "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/porte1/room_porte1_02.jpg\"," +
                 "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/porte1/room_porte1_03.jpg\"," +
                 "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/porte1/room_porte1_04.jpg\"]");
-        contentValues.put("address", Arrays.asList("\"3 rue de la chesnaie\"", "\"\"", "\"Cagneux\"", "\"Bailleval\"", "\"France\"").toString());
+        contentValues.put("address", Arrays.asList("\"9 rue du Pont Mathieu\"", "\"\"", "\"\"", "\"Bailleval\"", "\"France\"").toString());
         contentValues.put("startDate", "02/01/2019");
         contentValues.put("endDate", "16/01/2019");
         contentValues.put("canceled", false);
@@ -164,7 +164,7 @@ public class TestData {
                 "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/musique1/room_musique1_02.jpg\"," +
                 "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/musique1/room_musique1_03.jpg\"," +
                 "\"/sdcard/Android/data/com.lastproject.mycity/files/Pictures/musique1/room_musique1_04.jpg\"]");
-        contentValues.put("address", Arrays.asList("\"3 rue de la chesnaie\"", "\"\"", "\"Cagneux\"", "\"Bailleval\"", "\"France\"").toString());
+        contentValues.put("address", Arrays.asList("\"17 rue aux dames\"", "\"\"", "\"\"", "\"Bailleval\"", "\"France\"").toString());
         contentValues.put("startDate", "02/11/2019");
         contentValues.put("endDate", "06/11/2019");
         contentValues.put("canceled", false);

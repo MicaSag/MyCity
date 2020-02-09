@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -112,7 +113,7 @@ public class EventsListFragment extends Fragment {
         Log.d(TAG, "configureViewModel: ");
 
         ViewModelFactory mViewModelFactory = Injection.provideViewModelFactory(getContext());
-        mListEventsViewModel = ViewModelProviders.of(this, mViewModelFactory)
+        mListEventsViewModel = new ViewModelProvider(this, mViewModelFactory)
                 .get(ListEventsViewModel.class);
 
         mListEventsViewModel.getViewAction().
@@ -143,7 +144,7 @@ public class EventsListFragment extends Fragment {
         mListEventsViewModel.getAllEventsRoomByInseeID(
                 mListEventsViewModel.getCurrentTownHall().getValue().getInseeID(),
                 mListEventsViewModel.getCurrentUser().getUserID())
-                .observe(getActivity(), this::updateEventsList);
+                .observe(getViewLifecycleOwner(), this::updateEventsList);
 
         // Observe a change of Current Event (for update selected event)
         CurrentEventIDDataRepository.getInstance().getCurrentEventID().observe(getViewLifecycleOwner(), this::updateEventsList);

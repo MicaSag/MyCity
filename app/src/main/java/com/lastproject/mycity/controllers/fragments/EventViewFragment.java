@@ -110,7 +110,7 @@ public class EventViewFragment extends Fragment implements  PhotosListAdapter.On
 
         // Observe a change of Current Event
         Log.d(TAG, "configureEventViewModel: mEventViewModel.getCurrentEvent() = "+mEventViewModel);
-        mEventViewModel.getCurrentEvent().observe(this, this::updateUI);
+        mEventViewModel.getCurrentEvent().observe(getViewLifecycleOwner(), this::updateUI);
     }
     // --------------------------------------------------------------------------------------------
     //                                    CONFIGURATION

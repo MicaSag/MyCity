@@ -8,6 +8,7 @@ import com.lastproject.mycity.models.views.AuthenticationViewModel;
 import com.lastproject.mycity.models.views.CitizenViewModel;
 import com.lastproject.mycity.models.views.EventViewModel;
 import com.lastproject.mycity.models.views.ListEventsViewModel;
+import com.lastproject.mycity.models.views.MapViewModel;
 import com.lastproject.mycity.models.views.TownHallSelectionViewModel;
 import com.lastproject.mycity.models.views.TownHallViewModel;
 import com.lastproject.mycity.repositories.EventDataFireStoreRepository;
@@ -85,6 +86,9 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
                 return (T) new ListEventsViewModel( this.eventDataRoomSource,
                                                     this.eventDataFireStoreSource,
                                                     this.executor);
+        }
+        if (modelClass.isAssignableFrom(MapViewModel.class)) {
+            return (T) new MapViewModel(    this.eventDataRoomSource);
         }
         throw new IllegalArgumentException("Unknown ViewModel class");
     }

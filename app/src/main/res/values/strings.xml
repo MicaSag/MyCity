@@ -50,7 +50,7 @@
     <string name="validate">VALIDATE</string>
 
     <!-- HOURS Material Card View -->
-    <string name="opening_hours">Opening hours</string>
+    <string name="opening_hours">Opening Hours</string>
     <string name="hours_1">Hours 1</string>
     <string name="hours_2">Hours 2</string>
     <string name="hours_3">Hours 3</string>
@@ -60,7 +60,7 @@
     <string name="hours_7">Hours 7</string>
 
     <!-- ADDRESS Material Card View -->
-    <string name="contact_information">Contact information</string>
+    <string name="contact_information">Contact Information</string>
     <string name="address_line_1">address line 1</string>
     <string name="address_line_2">address line 2</string>
     <string name="address_line_3">address line 3</string>
@@ -72,13 +72,17 @@
     <!-- == TOWN HALL ACTIVITY == -->
     <!-- 1_ TOWN HALL FRAGMENT -->
     <string name="name_municipality">name of the municipality</string>
+    <string name="sign_out_p">Sign Out ?</string>
+    <string name="delete_account_p">Delete your Account ?</string>
+    <string name="yes">Yes</string>
+    <string name="cancel">Cancel</string>
     <!-- 2_ EVENTS LIST FRAGMENT -->
     <string name="no_upcoming_event">No upcoming event at the moment</string>
     <string name="future_event"> upcoming event(s)</string>
     <string name="start_date_label">Start Date :&#160;</string>
     <string name="end_date_label">End Date&#160;&#160;&#160;:&#160;</string>
     <string name="start_date_hint_value">value Date</string>
-    <string name="end_date_hint_value">value date</string>
+    <string name="end_date_hint_value">value Date</string>
     <string name="title_event_hint_value">EVENT TITLE</string>
 
     <!-- == EVENT ACTIVITY && EVENT VIEW/EVENT CREATE == -->
@@ -104,6 +108,9 @@
     <string name="sign_out">Sign Out</string>
     <string name="delete_account">Delete account</string>
     <string name="to_do">To Do …</string>
+
+    <!-- == MAP ACTIVITY == -->
+    <string name="town_hall_location">Town Hall Location</string>
 
     <!-- ======================================================================================= -->
     <!-- Manifest -->

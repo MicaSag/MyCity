@@ -124,11 +124,11 @@ public class EventCreateFragment extends Fragment implements    PhotosListAdapte
         mEventViewModel = ((EventActivity)getActivity()).getEventViewModel();
 
         // Observe a change of Start Date
-        mEventViewModel.getStartDate().observe(getActivity(),this::refreshStartDate);
+        mEventViewModel.getStartDate().observe(getViewLifecycleOwner(),this::refreshStartDate);
         // Observe a change of End Date
-        mEventViewModel.getEndDate().observe(getActivity(),this::refreshEndDate);
+        mEventViewModel.getEndDate().observe(getViewLifecycleOwner(),this::refreshEndDate);
         // Observe a change of the photo list
-        mEventViewModel.getPhotos().observe(getActivity(),this::refreshPhotos);
+        mEventViewModel.getPhotos().observe(getViewLifecycleOwner(),this::refreshPhotos);
     }
     // --------------------------------------------------------------------------------------------
     //                                    CONFIGURATION

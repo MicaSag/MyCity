@@ -20,6 +20,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.card.MaterialCardView;
 import com.lastproject.mycity.BuildConfig;
 import com.lastproject.mycity.R;
+import com.lastproject.mycity.controllers.activities.MapActivity;
 import com.lastproject.mycity.controllers.activities.TownHallActivity;
 import com.lastproject.mycity.controllers.activities.WebViewActivity;
 import com.lastproject.mycity.firebase.database.firestore.models.TownHallFireStore;
@@ -117,7 +118,7 @@ public class TownHallFragment extends Fragment {
         mTownHallViewModel = ((TownHallActivity) getActivity()).getTownHallViewModel();
 
         // Observe a change of Current TownHallFireStore
-        mTownHallViewModel.getCurrentTownHall().observe(getActivity(), this::updateUI);
+        mTownHallViewModel.getCurrentTownHall().observe(getViewLifecycleOwner(), this::updateUI);
     }
     // ---------------------------------------------------------------------------------------------
     //                                   REQUEST PERMISSION
@@ -182,6 +183,14 @@ public class TownHallFragment extends Fragment {
         if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
             startActivity(intent);
         }
+    }
+
+    @OnClick(R.id.fragment_town_hall_static_map)
+    public void onStaticMapClick(View v) {
+        Log.d(TAG, "onStaticMapClick: ");
+
+        // Open MAP Activity
+        Toolbox.startActivity(getActivity(), MapActivity.class);
     }
     // ---------------------------------------------------------------------------------------------
     //                                             UI

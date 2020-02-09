@@ -10,15 +10,12 @@ import android.widget.CompoundButton;
 import android.widget.RadioButton;
 
 import androidx.fragment.app.DialogFragment;
-import androidx.lifecycle.Observer;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.lastproject.mycity.R;
 import com.lastproject.mycity.controllers.activities.AuthenticationActivity;
-import com.lastproject.mycity.controllers.activities.TownHallActivity;
 import com.lastproject.mycity.controllers.activities.TownHallSelectionActivity;
-import com.lastproject.mycity.models.TownHall;
 import com.lastproject.mycity.models.views.AuthenticationViewModel;
 import com.lastproject.mycity.utils.Toolbox;
 
@@ -88,7 +85,7 @@ public class UserProfileChoiceDialogFragment extends DialogFragment {
 
         mAuthenticationViewModel = ((AuthenticationActivity) getActivity()).getAuthenticationViewModel();
 
-        mAuthenticationViewModel.getRegistrationStatus().observe(this, registrationStatus -> {
+        mAuthenticationViewModel.getRegistrationStatus().observe(getViewLifecycleOwner(), registrationStatus -> {
             if (registrationStatus == null)  {
                 return;
             }

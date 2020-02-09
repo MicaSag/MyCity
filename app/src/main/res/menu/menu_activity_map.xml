@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_activity_map_HELP"
+        android:icon="@drawable/baseline_delete_black_24"
+        app:showAsAction="ifRoom"
+        android:title="Help">
+    </item>
+
+</menu>

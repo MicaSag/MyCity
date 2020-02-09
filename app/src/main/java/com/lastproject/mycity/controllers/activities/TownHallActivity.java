@@ -253,26 +253,26 @@ public class TownHallActivity extends BaseActivity implements  NavigationView.On
         switch (id) {
             case R.id.activity_town_hall_sign_out_user:
                 new AlertDialog.Builder(this)
-                        .setMessage("Sign Out ?")
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        .setMessage(getString(R.string.sign_out_p))
+                        .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 signOutUserFromFireBase();
                             }
                         })
-                        .setNegativeButton("Cancel", null)
+                        .setNegativeButton(getString(R.string.cancel), null)
                         .show();
                 break;
             case R.id.activity_town_hall_delete_user:
                 new AlertDialog.Builder(this)
-                        .setMessage("Delete your Account ?")
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        .setMessage(getString(R.string.delete_account_p))
+                        .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 deleteUserFromFireBase();
                             }
                         })
-                        .setNegativeButton("Cancel", null)
+                        .setNegativeButton(getString(R.string.cancel), null)
                         .show();
                 break;
             default:
