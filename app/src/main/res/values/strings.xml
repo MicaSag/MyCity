@@ -131,4 +131,11 @@
     <!-- For Animation -->
     <string name="animation_full_screen_image" translatable="false">AnimationFullScreenImage</string>
 
+    <!-- For Authentication TWITTER -->
+    <!-- Twitter consumer key and secret -->
+    <string name="twitter_consumer_key" translatable="false">pTEOXlxRz8uGVaTHZ5hoXIWZ7</string>
+    <string name="twitter_consumer_secret" translatable="false">tb6W0WorJRaqmcYupefamAvcFHxC7lQsyzT7Mk1tNOByCtaebN</string>
+    <!-- <string name ="com.twitter.sdk.android.CONSUMER_KEY">1071881556350984192-Kxu9ymyfP6jSizYgeWSJHaPLdNSZiF</string>
+    <string name ="com.twitter.sdk.android.CONSUMER_SECRET">HcVwM6WFS3idwYatzXGtWYDt2lSu7EmQxjR7Ic7GJ6m41</string> -->
+
 </resources>
