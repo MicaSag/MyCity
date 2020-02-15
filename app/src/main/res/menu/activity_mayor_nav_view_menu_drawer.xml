@@ -13,11 +13,11 @@
             android:icon="@drawable/baseline_delete_black_24"
             android:title="@string/delete_account" />
     </group>
-    <group android:id="@+id/group_article_search">
+    <!-- <group android:id="@+id/group_article_search">
         <item
             android:id="@+id/activity_real_estate_manager_search"
             android:icon="@drawable/com_facebook_send_button_icon"
             android:title="@string/to_do" />
-    </group>
+    </group> -->
 
 </menu>

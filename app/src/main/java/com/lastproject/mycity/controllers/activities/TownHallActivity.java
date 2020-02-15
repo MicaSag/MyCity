@@ -114,11 +114,6 @@ public class TownHallActivity extends BaseActivity implements  NavigationView.On
 
         // Search and Show Town Hall Fragment
         mTownHallViewModel.searchAndShowTownHall();
-
-        /*ConstraintLayout.LayoutParams params =
-                (ConstraintLayout.LayoutParams)mFragmentEventList.getLayoutParams();
-        params.topToBottom = mTownHallFragment.mHoursMCV.getId();
-        mFragmentEventList.requestLayout();*/
     }
 
     // ---------------------------------------------------------------------------------------------

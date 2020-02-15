@@ -4,12 +4,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/Widget.MaterialComponents.CardView"
-    android:id="@+id/fragment_list_estate_root"
+    android:id="@+id/fragment_list_event_root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardBackgroundColor="@color/colorBackground">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/fragment_list_events_cl"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".controllers.fragments.EventsListFragment">
@@ -17,18 +18,46 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
             android:orientation="vertical">
 
-            <!-- TITLE -->
-            <TextView
-                android:id="@+id/fragment_event_list_information"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:gravity="center"
-                android:text="@string/no_upcoming_event"
-                android:textSize="20sp"
-                android:textStyle="bold"/>
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <!-- DECLARING FLOATING ACTION BUTTON -->
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fragment_list_events_fab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:clickable="true"
+                    android:src="@drawable/baseline_add_white_24"
+                    app:rippleColor="@android:color/white"
+                    app:layout_anchor="@id/fragment_list_events_recycler_view"
+                    app:layout_anchorGravity="top"
+                    app:backgroundTint="@color/colorAccent"
+                    app:elevation="0dp"
+                    app:fabSize="normal"
+                    app:cardElevation="0dp"
+                    android:focusable="true" />
+
+                <!-- TITLE -->
+                <TextView
+                    android:id="@+id/fragment_list_events_information"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center"
+                    android:text="@string/no_upcoming_event"
+                    android:textSize="20sp"
+                    android:textStyle="bold"/>
+
+
+            </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/fragment_list_events_recycler_view"
@@ -37,24 +66,6 @@
                 android:layout_gravity="center"/>
 
         </LinearLayout>
-
-        <!-- DECLARING FLOATING ACTION BUTTON -->
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fragment_list_events_fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:clickable="true"
-            android:src="@drawable/baseline_add_white_24"
-            app:rippleColor="@android:color/white"
-            app:layout_anchor="@id/fragment_list_events_recycler_view"
-            app:layout_anchorGravity="top"
-            app:backgroundTint="@color/colorAccent"
-            app:borderWidth="0dp"
-            app:elevation="6dp"
-            app:fabSize="normal"
-            app:cardElevation="8dp"
-            />
 
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

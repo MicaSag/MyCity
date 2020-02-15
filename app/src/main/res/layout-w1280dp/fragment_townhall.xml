@@ -11,7 +11,9 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintBottom_toBottomOf="parent"
-    app:cardBackgroundColor="@color/colorBackground">
+    app:cardBackgroundColor="@color/colorBackground"
+    app:cardElevation="0dp"
+    app:cardCornerRadius="0dp">
 
     <LinearLayout
         android:layout_width="match_parent"

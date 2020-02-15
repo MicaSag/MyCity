@@ -28,7 +28,7 @@
     <string name="mayor_id_wrong">Wrong Mayor ID !</string>
     <string name="citizen">Citizen</string>
     <string name="mayor">Mayor</string>
-    <string name="mayor_s_id">mayor\'s ID</string>
+    <string name="mayor_s_id">&#160;&#160;&#160;&#160;mayor\'s ID&#160;&#160;&#160;&#160;</string>
     <string name="create">CREATE</string>
     <string name="who_are_you">Who are you ?</string>
 

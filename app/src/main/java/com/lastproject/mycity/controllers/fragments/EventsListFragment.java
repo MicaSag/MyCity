@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -62,7 +63,8 @@ public class EventsListFragment extends Fragment {
     // For Design
     public @BindView(R.id.fragment_list_events_recycler_view) RecyclerView mRecyclerView;
     public @BindView(R.id.fragment_list_events_fab) FloatingActionButton mButtonCreateEvent;
-    public @BindView(R.id.fragment_event_list_information) TextView mInformation;
+    public @BindView(R.id.fragment_list_events_information) TextView mInformation;
+    public @BindView(R.id.fragment_list_events_cl) CoordinatorLayout mCoordinatorLayout;
 
     public LinearLayout getRootActivity() {
         return ((TownHallActivity) getActivity()).mRoot;
@@ -212,6 +214,9 @@ public class EventsListFragment extends Fragment {
             mButtonCreateEvent.setVisibility(View.VISIBLE);
         else mButtonCreateEvent.setVisibility(View.GONE);
 
+        /*CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams)mButtonCreateEvent.getLayoutParams();
+        layoutParams.setMargins(0,60,0,0);
+        mButtonCreateEvent.setLayoutParams(layoutParams);*/
     }
 
     // configure event message
