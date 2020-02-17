@@ -39,7 +39,7 @@
     <string name="city_choice_citizen_message_2">The first thing to do is to choose your city of residence.</string>
     <string name="city_choice_message_3">Enter it below.</string>
     <string name="no_town_hall_fs">No Town Hall found in FireStore Database</string>
-    <string name="call_town_hall_activity">CALL_TOWN_HALL_ACTIVITY</string>
+    <string name="call_town_hall_activity" translatable="false">CALL_TOWN_HALL_ACTIVITY</string>
     <string name="fs_error">error during the search of the town hall in the fireStore base</string>
     <string name="bad_research">bad research</string>
     <string name="city_found">city found</string>
@@ -123,10 +123,10 @@
     <string name="facebook_application_id" translatable="false">776394502877839</string>
     <string name="facebook_login_protocol_scheme" translatable="false">fb776394502877839</string>
     <!-- FONT ID -->
-    <string name="Roboto_Bold">Roboto-Bold</string>
-    <string name="Roboto_Medium">Roboto-Medium</string>
-    <string name="Roboto_Light">Roboto-Light</string>
-    <string name="Roboto_Thin">Roboto-Thin</string>
+    <string name="Roboto_Bold" translatable="false">Roboto-Bold</string>
+    <string name="Roboto_Medium" translatable="false">Roboto-Medium</string>
+    <string name="Roboto_Light" translatable="false">Roboto-Light</string>
+    <string name="Roboto_Thin" translatable="false">Roboto-Thin</string>
 
     <!-- For Animation -->
     <string name="animation_full_screen_image" translatable="false">AnimationFullScreenImage</string>
@@ -135,7 +135,5 @@
     <!-- Twitter consumer key and secret -->
     <string name="twitter_consumer_key" translatable="false">pTEOXlxRz8uGVaTHZ5hoXIWZ7</string>
     <string name="twitter_consumer_secret" translatable="false">tb6W0WorJRaqmcYupefamAvcFHxC7lQsyzT7Mk1tNOByCtaebN</string>
-    <!-- <string name ="com.twitter.sdk.android.CONSUMER_KEY">1071881556350984192-Kxu9ymyfP6jSizYgeWSJHaPLdNSZiF</string>
-    <string name ="com.twitter.sdk.android.CONSUMER_SECRET">HcVwM6WFS3idwYatzXGtWYDt2lSu7EmQxjR7Ic7GJ6m41</string> -->
 
 </resources>
